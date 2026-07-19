@@ -1,13 +1,15 @@
-# Copywriting - Human Copy Rules & Humanizer Fallback
+# Copywriting - Human Copy Rules & Humanizer Pass
 
-All user-facing copy passes through the `humanizer` skill before it ships. This file
-sets the writing rules and carries a condensed fallback ruleset for environments
-where humanizer is not installed and cannot be.
+All user-facing copy passes a humanizer check before it ships. The full ruleset is
+bundled in this repo at `references/humanizer/humanizer.md` - use it for the pass.
+This file sets Leviathan's own writing rules and keeps a condensed quick-reference
+of the most common patterns.
 
 ## Process
 
 1. Draft copy in the DESIGN.md voice, for the interviewed audience.
-2. Run the humanizer pass (or the fallback ruleset below).
+2. Run the humanizer pass: load `references/humanizer/humanizer.md` and apply it to
+   the draft (the quick-reference below covers the most frequent offenders).
 3. Apply the read-aloud test: any sentence that could sit on a thousand other sites
    gets rewritten or cut. "We help businesses grow" is nobody; "We reupholster
    mid-century chairs in Douala, two-week turnaround" is somebody.
@@ -28,9 +30,10 @@ where humanizer is not installed and cannot be.
   site for clothing customers may not say "SKU."
 - No em dashes anywhere (standing rule). Use periods, commas, or parentheses.
 
-## Fallback humanizer ruleset (condensed)
+## Quick-reference: the most common AI-writing fingerprints
 
-Hunt and fix these AI-writing fingerprints:
+The full pattern catalog lives in `references/humanizer/humanizer.md`; these are the
+ones that show up in nearly every draft:
 
 - **Inflated significance:** "elevate," "unleash," "seamless," "effortless,"
   "empower," "revolutionize," "delve," "landscape," "realm," "testament to."
