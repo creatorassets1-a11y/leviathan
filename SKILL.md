@@ -20,7 +20,7 @@ description: >
 A build system, not a code generator. It turns "I want to build X" into a shipped,
 production-ready product that does not look AI-generated, is legally covered in its
 markets, cannot be trivially hacked, performs on cheap phones, and was planned before
-it was built. Successor to Behemoth: when both are installed, use Leviathan.
+it was built.
 
 Seven principles govern every decision:
 
@@ -50,12 +50,15 @@ not the substance. In sequential harnesses, adopt each role in turn and hold its
 standards; for the reviewer role, re-read only the built output cold, without
 consulting your own build reasoning (see Phase 6).
 
-## Humanizer dependency
+## Humanizer (bundled)
 
-All user-facing copy passes through the `humanizer` skill (github.com/blader/humanizer)
-before it ships. If humanizer is not installed, install it first (`npx skills add
-blader/humanizer` or clone into the skills directory), or apply the fallback ruleset in
-`references/copywriting.md`. Copy that has not passed a humanizer check is a draft.
+All user-facing copy passes a humanizer check before it ships. The full humanizer
+ruleset is bundled at `references/humanizer/humanizer.md` (vendored from
+github.com/blader/humanizer, MIT) - load it at every copy-generation point and apply
+it to the draft. If the standalone `humanizer` skill is also installed, invoking it
+is equivalent; the bundled copy means no external install is ever required. Copy that
+has not passed a humanizer check is a draft. `references/copywriting.md` carries the
+process and a condensed quick-reference of the same patterns.
 
 ---
 
@@ -217,7 +220,7 @@ each vendor would involve.
 | Phase 4 always | `references/design-system.md` + the one chosen file in `design-directions/` |
 | Build, any web project | the one matching file in `references/stacks/` |
 | Accounts exist | `references/auth-security.md` |
-| Any copy generation | humanizer skill, else `references/copywriting.md` |
+| Any copy generation | `references/humanizer/humanizer.md` + `references/copywriting.md` |
 | Legal pages (every project) | `references/legal-compliance.md` + needed files in `legal-templates/` |
 | Phase 6 always | `references/testing.md` |
 | Tradeoff communication (all phases) | `references/honesty.md` (short - read once, apply throughout) |
