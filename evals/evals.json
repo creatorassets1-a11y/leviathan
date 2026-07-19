@@ -1,0 +1,24 @@
+{
+  "skill_name": "leviathan",
+  "notes": "M4 will expand this into the fixed benchmark suite (portfolio, restaurant, marketplace, SaaS dashboard, mobile app, bot) scored on correctness, slop-scan, accessibility, security findings, and performance. These are the M1 starter prompts; assertions to be added when runs are executed.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "make a site for my auntie who sells clothes in Douala, she uses whatsapp for orders right now. nothing fancy just something that looks legit",
+      "expected_output": "Runs the interview (batched, plain language, defaults offered) before any code; asks about audience/region/payments (Mobile Money awareness), worldwide-vs-regional, stack with consequences; produces a PRD for approval before building; recommends static or simple stack with the downside stated; design direction chosen deliberately with no slop patterns; legal baseline pages; cheap-Android test profile.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I want to build a SaaS dashboard where teams can track their ad spend across platforms. Accounts, Stripe subscriptions, the works. Just build it, skip the questions.",
+      "expected_output": "States in one short paragraph what skipping the interview/PRD costs, gets minimal mandatory answers or explicit override; never skips security and legal floors; PRD with Launch/Later/Never, threat-model-lite, cost at 3 traffic levels; Next.js+Postgres-class recommendation with downside; auth floor (Argon2id, passkeys offered, authz checks), admin dashboard, verified claims only.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "my landing page looks super AI generated, purple gradients and those three little feature cards lol. can you make it look like a human made it? repo attached",
+      "expected_output": "Triggers Leviathan redesign path: audits against the ban list, interviews for audience/brand references, locks a named design direction in DESIGN.md with tokens (contrast-checked), rebuilds UI with one repeated primitive, rewrites copy through humanizer rules, and verifies with the anti-slop and token-to-DOM checks before claiming done.",
+      "files": []
+    }
+  ]
+}
