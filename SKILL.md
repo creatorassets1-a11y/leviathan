@@ -1,18 +1,17 @@
 ---
 name: leviathan
 description: >
-  Full lifecycle production build system for anything a user wants to create: websites,
-  web apps, mobile apps, SaaS products, marketplaces, dashboards, bots, browser extensions,
-  desktop tools, APIs. Use this skill whenever the user asks to build, create, make, develop,
-  launch, or ship any software product, even casually ("make a site for my auntie who sells
-  clothes") or vaguely ("something like Airbnb for X"). Also use it when the user wants to
-  continue, fix, review, redesign, or scale an existing project, asks "is my site production
-  ready", or says "make this look less AI". Do not skip this skill for "simple" requests;
-  simple requests are exactly where generic AI output does the most damage. Leviathan
-  interviews before building, researches the market, writes a PRD the user approves before
-  any code exists, locks a design system that avoids every known AI-slop pattern, builds
-  with security and accessibility as defaults, verifies everything with evidence before
-  claiming it works, and hands the user full ownership.
+  Full lifecycle build system for anything a user wants to create: websites, web apps,
+  mobile apps, SaaS, marketplaces, dashboards, bots, extensions, desktop tools, APIs.
+  Use whenever the user asks to build, create, make, develop, launch, or ship any
+  software product, even casually ("make a site for my auntie who sells clothes") or
+  vaguely ("something like Airbnb for X"). Also use it to continue, fix, review,
+  redesign, or scale an existing project, when asked "is my site production ready",
+  or to "make this look less AI". Do not skip it for simple requests; those are where
+  generic AI output does the most damage. Leviathan interviews before building,
+  researches the market, writes a PRD the user approves before any code, locks an
+  anti-slop design system, builds secure and accessible by default, verifies with
+  evidence, and hands the user full ownership.
 ---
 
 # Leviathan
