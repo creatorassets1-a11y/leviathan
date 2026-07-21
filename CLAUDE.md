@@ -24,3 +24,6 @@ This repository IS the Leviathan skill: the repo root is the installable skill
    pointer from SKILL.md, not into the orchestrator itself.
 7. **Keep the reference loading table in SKILL.md in sync** whenever a reference file
    is added, renamed, or removed.
+8. **SKILL.md frontmatter limits.** The `description` field must stay at most 1024
+   characters (claude.ai skill upload rejects longer). Check the folded length after
+   any edit to it.

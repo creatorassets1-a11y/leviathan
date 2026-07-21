@@ -96,6 +96,11 @@ evals/                        starter eval prompts (benchmark suite lands in M4)
 
 This section is updated with every change to the skill. Newest first.
 
+### 1.1.1 (2026-07-21)
+- SKILL.md frontmatter description shortened to fit the 1024-character limit
+  enforced by claude.ai skill upload (same triggers and meaning, tighter wording).
+- CLAUDE.md gains a rule encoding that limit so it cannot regress.
+
 ### 1.1 (2026-07-19)
 - **Humanizer bundled.** The full humanizer ruleset (v2.5.1) is now vendored at
   `references/humanizer/`, with its README and MIT license. Leviathan no longer
