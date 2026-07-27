@@ -90,11 +90,37 @@ references/
   humanizer/                  bundled humanizer ruleset (vendored, MIT)
 assets/checklists/            launch checklists
 evals/                        starter eval prompts (benchmark suite lands in M4)
+scripts/                      maintainer tooling, not loaded by the skill at runtime
 ```
+
+## Maintainer tooling
+
+`scripts/download-1k-plus.js` is a standalone maintainer script, not part of the
+skill's runtime behavior. It calls the public [skills.sh API](https://skills.sh/docs/api)
+and the official `skills` CLI to bulk-install every skills.sh skill above an install
+threshold (1000 by default) into a target directory, alongside a generated
+`INDEX.json` lookup file. It exists to help a maintainer build a local library of
+third-party skills to evaluate; it does not run as part of a normal build and nothing
+it downloads is bundled into this skill automatically.
+
+```
+node scripts/download-1k-plus.js [targetDir]   # default targetDir: ./leviathan/skills
+MIN_INSTALLS=1000 CONCURRENCY=5 node scripts/download-1k-plus.js
+```
+
+Requires Node 18+ and `npx` on PATH. Progress is checkpointed to
+`skills-1k-progress.json` in the current directory so interrupted runs can resume.
 
 ## What's new
 
 This section is updated with every change to the skill. Newest first.
+
+### 1.1.2 (2026-07-27)
+- `scripts/download-1k-plus.js` added: a maintainer-only tool that bulk-installs
+  skills.sh skills above an install threshold into a target directory and writes an
+  `INDEX.json` lookup file. Not part of the skill's runtime pipeline.
+- README gains a "Maintainer tooling" section and `scripts/` is documented in the
+  repo layout.
 
 ### 1.1.1 (2026-07-21)
 - SKILL.md frontmatter description shortened to fit the 1024-character limit
