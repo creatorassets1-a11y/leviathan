@@ -275,6 +275,12 @@ evidence ledger.
   processes, or transmits cardholder data, regardless of region. Region-specific
   non-compliance penalties are not part of this verification; confirm those with the
   relevant payment association before quoting a figure.
+- **X-Frame-Options** (MDN): `DENY` blocks all framing; superseded by CSP
+  `frame-ancestors` for granular control but still set alongside it for browsers
+  without CSP support.
+- **DNSSEC** (IETF RFC 4033): signs DNS responses so resolvers can detect forged or
+  tampered records; does not protect against denial-of-service and is not a
+  substitute for TLS.
 - **WCAG 2.2** adds nine criteria over 2.1 (two A, four AA, three AAA), including
   Target Size minimum 24×24 CSS px, Focus Not Obscured, Dragging Movements, Redundant
   Entry, Consistent Help, Accessible Authentication. Build to 2.2 AA.

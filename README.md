@@ -96,6 +96,22 @@ evals/                        starter eval prompts (benchmark suite lands in M4)
 
 This section is updated with every change to the skill. Newest first.
 
+### 1.1.3 (2026-08-08)
+- **Security floor extended further**, from a second checklist review: defense-in-
+  depth clickjacking headers (`X-Frame-Options: DENY` alongside CSP
+  `frame-ancestors`, verified against MDN), DNSSEC at the registrar/DNS host
+  (verified against IETF RFC 4033), CDN-as-origin-shield framing in server
+  hardening, file-integrity monitoring for stacks with a writable plugin
+  ecosystem, offsite backup storage made explicit, and an admin-route IP
+  allowlisting option (with a documented break-glass path, since it is a real
+  lockout risk).
+- Two items from the same checklist were deliberately not adopted: "avoid open
+  source unless from a verified marketplace" (inaccurate advice inconsistent with
+  using official package registries, which this skill already requires) and
+  PHP-specific runtime hardening (no PHP stack exists in `references/stacks/` yet).
+- SKILL.md's verified-external-standards list gains the X-Frame-Options and DNSSEC
+  entries with their primary sources.
+
 ### 1.1.2 (2026-08-08)
 - **Security floor extended.** `references/auth-security.md` gains three sections:
   file upload handling (allow-listed types, signature validation, storage outside

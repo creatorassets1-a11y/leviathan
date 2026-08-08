@@ -61,17 +61,23 @@ probes on every parameterized route - build expecting them.
 
 TLS everywhere + HSTS; CSP tuned per app (start strict, loosen deliberately);
 X-Content-Type-Options: nosniff; Referrer-Policy: strict-origin-when-cross-origin;
-frame-ancestors 'none' unless embedding is a feature. Dependency audit in CI, acting
-on criticals before ship. Secrets only in env/secret manager; `.env.example`
-committed; a secret scan runs before every commit the skill makes.
+frame-ancestors 'none' unless embedding is a feature, paired with
+`X-Frame-Options: DENY` for browsers that predate CSP support (frame-ancestors is
+the modern control per MDN; the header is defense-in-depth, not a replacement).
+Dependency audit in CI, acting on criticals before ship. Secrets only in env/secret
+manager; `.env.example` committed; a secret scan runs before every commit the skill
+makes. DNSSEC enabled at the registrar/DNS host when the domain and provider support
+it: it signs DNS responses so resolvers can detect forged or tampered records (RFC
+4033); it does not stop denial-of-service and is not a substitute for TLS.
 
 ## Database
 
 Parameterized queries always. Least-privilege DB users (the app user cannot DROP).
 Supabase: RLS on every table with tested policies (see `nextjs.md`). Encrypted
-backups on schedule **with one restore actually executed** - a backup that has never
-been restored is a hope, not a backup. Point-in-time recovery confirmed available on
-the chosen tier.
+backups on schedule, stored offsite from the primary host (not just a snapshot on
+the same box), **with one restore actually executed** - a backup that has never been
+restored is a hope, not a backup. Point-in-time recovery confirmed available on the
+chosen tier.
 
 ## File uploads
 
@@ -90,9 +96,15 @@ Directory listing/indexing disabled on every web server: no folder contents expo
 when an index file is missing. WAF in front of production, tuned to the app rather
 than left on vendor defaults (OWASP: a WAF filters common attacks such as XSS and
 SQL injection at the HTTP layer; it is one layer, not a substitute for the fixes
-above). Error logs reviewed on a schedule, not only when something breaks; wire
-4xx/5xx spikes into the monitoring stack from Phase 6 rather than relying on a
-manual log tail.
+above). The CDN required by the scale defaults (`SKILL.md`) doubles as a security
+control here: traffic reaches the origin only through it, so the origin host itself
+is not a direct target. Error logs reviewed on a schedule, not only when something
+breaks; wire 4xx/5xx spikes into the monitoring stack from Phase 6 rather than
+relying on a manual log tail. File-integrity monitoring on production (scheduled
+hash comparison against the last known-good deploy) for stacks that write files
+outside the normal deploy pipeline, e.g. CMS installs with a plugin ecosystem;
+skip it for stacks where every deploy is an immutable build artifact, since there
+is nothing for it to detect.
 
 ## Payment compliance
 
@@ -112,4 +124,7 @@ regulator before stating one.
 Non-obvious route, admin auth + mandatory 2FA, append-only audit log (who, what,
 when, before/after) that the dashboard cannot delete, no password visibility ever
 (one-way hashes mean there is nothing to view), read-only view-as-user for support -
-logged. Full principle set in SKILL.md.
+logged. IP allowlisting on the admin route is an option to offer, not a default:
+it stops opportunistic scanning but locks out a legitimate admin on a new network,
+so pair it with a documented break-glass path if it ships. Full principle set in
+SKILL.md.
