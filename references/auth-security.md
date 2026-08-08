@@ -73,6 +73,40 @@ backups on schedule **with one restore actually executed** - a backup that has n
 been restored is a hope, not a backup. Point-in-time recovery confirmed available on
 the chosen tier.
 
+## File uploads
+
+OWASP File Upload Cheat Sheet baseline: allow-list extensions and content types tied
+to business need (deny-lists are bypassable); validate the actual file signature, not
+just the declared Content-Type header (trivially spoofed); store outside the webroot
+or on a separate host, serve through an ID-to-filename map rather than exposing real
+paths; rename to an application-generated filename on save. Enforce size limits,
+including on decompressed size (blocks zip-bomb style exhaustion). Scan for malware
+where feasible. Require authentication and authorization before any upload endpoint
+is reachable. Least-privilege filesystem permissions on the storage location.
+
+## Server hardening
+
+Directory listing/indexing disabled on every web server: no folder contents exposed
+when an index file is missing. WAF in front of production, tuned to the app rather
+than left on vendor defaults (OWASP: a WAF filters common attacks such as XSS and
+SQL injection at the HTTP layer; it is one layer, not a substitute for the fixes
+above). Error logs reviewed on a schedule, not only when something breaks; wire
+4xx/5xx spikes into the monitoring stack from Phase 6 rather than relying on a
+manual log tail.
+
+## Payment compliance
+
+Any build that stores, processes, or transmits cardholder data falls under PCI DSS
+(PCI Security Standards Council), regardless of region. Default recommendation:
+never touch card data directly, route through a compliant processor (Stripe, Adyen,
+or the regional equivalent) so the processor's compliance covers the transaction and
+the product's own scope narrows to the lightest self-assessment tier. Only take on
+direct PCI DSS scope when the user explicitly needs it, and say the audit and cost
+burden out loud before building it. Regional non-compliance penalties vary by payment
+association; a specific fine figure cannot be quoted here without confirming it
+against that region's regulator, so ask the user's payment processor or local
+regulator before stating one.
+
 ## Admin surface
 
 Non-obvious route, admin auth + mandatory 2FA, append-only audit log (who, what,

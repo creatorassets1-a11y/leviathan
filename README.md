@@ -96,6 +96,20 @@ evals/                        starter eval prompts (benchmark suite lands in M4)
 
 This section is updated with every change to the skill. Newest first.
 
+### 1.1.2 (2026-08-08)
+- **Security floor extended.** `references/auth-security.md` gains three sections:
+  file upload handling (allow-listed types, signature validation, storage outside
+  the webroot, size limits), server hardening (directory listing disabled, WAF
+  guidance, error-log monitoring), and payment compliance (PCI DSS scope, default
+  to a compliant processor rather than handling card data directly).
+- SKILL.md's verified-external-standards list gains OWASP File Upload Cheat Sheet,
+  OWASP's WAF definition, and PCI DSS applicability, each checked against its
+  primary source (owasp.org, PCI Security Standards Council) on 2026-08-08.
+- A region-specific non-compliance penalty figure from a secondary source (a
+  hosting company's blog) was deliberately left out for failing the primary-source
+  allowlist; the new payment-compliance section instead tells the build process to
+  confirm real penalty figures with the user's payment processor or regulator.
+
 ### 1.1.1 (2026-07-21)
 - SKILL.md frontmatter description shortened to fit the 1024-character limit
   enforced by claude.ai skill upload (same triggers and meaning, tighter wording).

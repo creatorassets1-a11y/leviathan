@@ -254,7 +254,7 @@ trust signals of any kind - invented testimonials, unearned badges, fabricated s
 Infinite spinners (every loading state has a timeout and an error path). Text baked
 into images.
 
-## Verified external standards (checked 2026-07 against primary sources)
+## Verified external standards (checked 2026-08 against primary sources)
 
 Re-verify against the allowlist when a build depends on them; record the check in the
 evidence ledger.
@@ -265,6 +265,16 @@ evidence ledger.
 - **Password storage** (OWASP Password Storage Cheat Sheet): Argon2id, minimum
   m=19 MiB, t=2, p=1 (or m=46 MiB, t=1, p=1); tune so a hash costs ~250–500ms on
   production hardware. bcrypt cost 12+ only where Argon2id is impractical.
+- **File uploads** (OWASP File Upload Cheat Sheet): allow-list extensions/content
+  types, verify actual file signature, store outside the webroot or on a separate
+  host, enforce size limits including decompressed size, auth-gate every upload
+  endpoint.
+- **Web Application Firewall** (OWASP): an HTTP-layer filter for common attacks
+  (XSS, SQL injection); a layer on top of secure code, not a replacement for it.
+- **PCI DSS** (PCI Security Standards Council): applies to any entity that stores,
+  processes, or transmits cardholder data, regardless of region. Region-specific
+  non-compliance penalties are not part of this verification; confirm those with the
+  relevant payment association before quoting a figure.
 - **WCAG 2.2** adds nine criteria over 2.1 (two A, four AA, three AAA), including
   Target Size minimum 24×24 CSS px, Focus Not Obscured, Dragging Movements, Redundant
   Entry, Consistent Help, Accessible Authentication. Build to 2.2 AA.
