@@ -49,6 +49,31 @@ A report must never upgrade `not_run`, `not_available`, `simulated`, or `unknown
 
 A critical blocker includes an exploitable authorization bypass, cross-tenant data exposure, exposed privileged secret, authentication/MFA bypass, payment fulfillment bypass, or equivalent high-impact failure. It cannot be marked accepted merely because exploitation requires an unusual UI path.
 
+### Legal, trust, and support
+
+For R2+ products with users, accounts, personal data, payments, or UGC, verify the required surface inventory from `references/legal-compliance.md` and `references/support-surfaces.md`.
+
+- Terms and Privacy exist where required and accurately describe implementation;
+- cookie/tracking notice and preference controls exist where required;
+- AUP/community rules exist where accounts or UGC make them necessary;
+- refund/cancellation/shipping policies exist where the product behavior requires them;
+- accessibility statement exists where required by product/market analysis;
+- UGC/takedown process exists where applicable;
+- Contact/Support is reachable;
+- Help/FAQ covers real product questions;
+- Product Guide/Walkthrough exists for non-trivial products;
+- first-run and recovery guidance exists where applicable;
+- legal/privacy/accessibility/security request routes work where promised;
+- every required page has a Last updated date and version identifier;
+- plain-language summary does not contradict the formal policy;
+- legal links are reachable from appropriate footer/account/signup/checkout surfaces;
+- policy text matches actual data flows, cookies, analytics, processors, retention, payment behavior, AI behavior, and enforcement;
+- data access/export/deletion controls work or are explicitly documented as unavailable/limited;
+- legal status is recorded and required human review is completed before release;
+- enforcement/moderation is server-side, auditable, attributable, and appealable where applicable.
+
+Missing required higher-risk legal surfaces, materially inaccurate policy text, unreachable required contact paths, or unresolved mandatory legal review are release blockers unless a documented time-limited exception is explicitly permitted by the applicable risk tier.
+
 ### Accessibility
 
 - automated scan where applicable;
@@ -94,6 +119,44 @@ Automated accessibility tools are not proof of full accessibility.
 ### Operations
 
 Production backends need health/readiness checks, structured safe logs, error tracking, useful metrics, alerting, version/build identity, rollback instructions, and an incident path.
+
+## Legal and support probe batteries
+
+### LEGAL-001: required-surface inventory
+
+Using the product's actual markets, users, data, payments, UGC, AI features, and regulated activities, produce the required legal/trust/support inventory. Verify every required page or system exists. Record explicit `not_applicable` reasons for omitted surfaces.
+
+### LEGAL-002: implementation-policy consistency
+
+Compare the generated Privacy, Terms, tracking notice, AUP, refund/cancellation, and other applicable policies against the actual data model, analytics, cookies, processors, retention, authentication, payment flows, AI behavior, UGC, moderation, and support systems. Any material mismatch is a finding.
+
+### LEGAL-003: reachability/version/readability
+
+Open each required page from the relevant footer, signup, checkout, account, and settings paths. Verify the page has a Last updated date, version identifier, plain-language summary, accessible headings, and working links. Verify the summary does not contradict the formal text.
+
+### SUPPORT-001: help coverage
+
+Enumerate the product's major user tasks and predictable failures. Verify Help/FAQ covers onboarding, core workflows, account recovery, permissions, billing/cancellation where applicable, privacy/data controls, and troubleshooting. Links must resolve to current UI/features.
+
+### SUPPORT-002: guide/first-run coverage
+
+Execute first-run and at least one core workflow. Verify the guide/walkthrough matches the current interface and covers a useful first task plus common recovery paths. Verify empty states and onboarding links point to relevant guidance.
+
+### SUPPORT-003: contact escalation
+
+Submit a controlled support request. Verify the advertised channel is reachable, creates the promised tracking/acknowledgement if applicable, and routes privacy/legal/accessibility/security requests correctly. Do not send real sensitive data during testing.
+
+### LEGAL-004: data-rights flow
+
+Where applicable, execute access/export/deletion/correction/consent-withdrawal flows using a test account. Verify authorization, scope, completion state, retention/legal-hold behavior, and that the system does not expose another person's data.
+
+### LEGAL-005: enforcement/audit/appeal
+
+For products with accounts or UGC, trigger controlled warning, soft-limit, suspension, and ban paths where implemented. Verify server-side enforcement, attributable reason/rule, durable audit record, expiry behavior, appeal/review path, and protection against ordinary-user deletion or silent client bypass.
+
+### LEGAL-006: moderation abuse resistance
+
+Where reporting/moderation exists, test duplicate/abusive reports, reporter targeting, moderator privilege boundaries, appeal loops, and automated moderation false-positive recovery. Verify consequential automated actions cannot bypass the documented review model.
 
 ## Security probe batteries
 
