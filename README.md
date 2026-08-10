@@ -1,143 +1,367 @@
 # Leviathan
 
-The complete build system skill for Claude. It turns "I want to build X" into a
-shipped, production-ready product: websites and web apps today, with mobile apps,
-bots, extensions, and desktop tools on the roadmap.
+**Universal AI software engineering protocol for Claude, Codex, Kimi, Lovable, and other coding agents.**
 
-## What it is
+Current release: **2.0.0**  
+Policy version: **2**  
+Artifact schema version: **1**
 
-Leviathan is a Claude skill (SKILL.md + reference library) that governs the entire
-lifecycle of a build. Instead of generating code on request, it runs a pipeline with
-hard gates:
+Leviathan turns an idea or existing repository into software that is planned, designed,
+implemented, reviewed, tested, secured, observed, released, and handed over with evidence.
+It is deliberately **host-neutral**. The same policy travels with the project when you move
+between coding agents.
 
-```
-Interview → Research → PRD (user approves) → Design system → Build → Verify → Ship
-```
+> Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable.
+> It reports evidence and limitations instead of manufacturing certainty.
 
-What every build gets, enforced rather than suggested:
+## Why 2.0 is different
 
-- **Planned before built.** An adaptive interview (plain language, defaults offered,
-  consequences attached), market research, and a written PRD you approve. No code
-  exists before approval; the gate is absolute.
-- **No AI slop.** A locked design system (`DESIGN.md`) replaces every default that
-  marks a product as AI-made: no purple gradients, no Inter-only typography, no hero
-  plus three feature cards, no colored left borders, no fake testimonials, ever. Four
-  named design directions ship with real type pairings and layout systems.
-- **Human copy.** Every piece of user-facing text passes the bundled humanizer
-  ruleset, which detects and removes the documented fingerprints of AI writing.
-- **Secure by default.** Argon2id at current OWASP parameters, passkeys first,
-  object-level authorization checks, rate limits, security headers, secrets
-  discipline, supply-chain vetting. The security floor is never skippable.
-- **Legally covered.** Privacy, terms, and cookie pages that match the actual
-  codebase, per-region logic (GDPR, EAA, CCPA and siblings), consent that genuinely
-  blocks scripts pre-consent, and lawyer-review flags for regulated sectors.
-- **Verified, not vibed.** Nothing is called working until it has been exercised.
-  Every claim in the final report links to evidence. Hard ship gates cover security,
-  accessibility (WCAG 2.2 AA), anti-slop, and performance budgets stricter than Core
-  Web Vitals, tested on the audience's real device profile.
-- **Owned by you.** Handoff includes a runbook, decisions log, dependency ledger,
-  launch checklist, and an exit strategy for every vendor.
+The first generation was a detailed build protocol. 2.0 turns that protocol into a portable
+engineering system with explicit state, evidence, risk tiers, adapters, machine-readable schemas,
+self-validation, stronger security, observability, recovery, child-safety analysis, supply-chain
+controls, and regression benchmarks.
 
-## How to use it
+### The architectural change
 
-**Install** into your Claude skills directory:
-
-```
-npx skills add creatorassets1-a11y/leviathan
-```
-
-or clone this repo into `~/.claude/skills/leviathan` (Claude Code) or upload it as a
-skill on claude.ai. Everything it needs is bundled; there are no external skill
-dependencies.
-
-**Then just ask Claude to build something.** The skill triggers on any build request,
-however casual or vague:
-
-- "Make a site for my auntie who sells clothes in Douala"
-- "I want something like Airbnb for photography studios"
-- "Build me a SaaS dashboard with accounts and Stripe"
-- "Is my site production ready?"
-- "Make this look less AI"
-
-**What to expect:** Claude will interview you first (a few batched questions with
-suggested defaults; answering "your call" is always allowed), research your market,
-and present a PRD for approval before writing any code. You will see and approve the
-design direction before the full build. At the end you get a verification report
-where every claim carries evidence, plus the full ownership handoff. If you ask it to
-skip steps, it will tell you the cost in one paragraph and comply, except for the
-security and legal floors, which are non-negotiable.
-
-**Works in** Claude Code and Cowork (full pipeline with parallel agent roles),
-claude.ai with the code container (full pipeline, sequential), and claude.ai
-artifacts (honestly scoped to frontend-only, and it says so).
-
-## Repo layout
-
-```
-SKILL.md                      orchestrator: pipeline, gates, routing, floors
-references/
-  interview.md                adaptive elicitation engine (ten mandatory topics)
-  prd-template.md             the 20-section PRD every project gets
-  design-system.md            anti-slop rules + DESIGN.md token locking
-  design-directions/          editorial, brutalist, industrial-mono, clean-product
-  stacks/                     html-static, react-vite, nextjs, node-express
-  auth-security.md            the security floor
-  legal-compliance.md         per-region legal engine
-  legal-templates/            privacy, terms, cookie skeletons
-  testing.md                  verification protocol, evidence ledger, ship gates
-  honesty.md                  tradeoff communication protocol
-  copywriting.md              human copy rules + humanizer quick-reference
-  humanizer/                  bundled humanizer ruleset (vendored, MIT)
-assets/checklists/            launch checklists
-evals/                        starter eval prompts (benchmark suite lands in M4)
+```text
+USER / PRODUCT OWNER
+        |
+ discovery + approval
+        v
+LEVIATHAN POLICY
+        |
+   state machine
+        v
+ research -> design -> build
+        |       |       |
+        +-------+-------+
+                v
+        independent review
+                |
+     security / a11y / performance
+                |
+         evidence ledger
+                |
+          release gate
+                |
+       release + operations
 ```
 
-## What's new
+The key idea is that **rules become state, checks, evidence, and gates**, rather than remaining
+only as prose instructions.
 
-This section is updated with every change to the skill. Newest first.
+## Supported agent model
 
-### 1.1.1 (2026-07-21)
-- SKILL.md frontmatter description shortened to fit the 1024-character limit
-  enforced by claude.ai skill upload (same triggers and meaning, tighter wording).
-- CLAUDE.md gains a rule encoding that limit so it cannot regress.
+Leviathan does not require one vendor's agent API.
 
-### 1.1 (2026-07-19)
-- **Humanizer bundled.** The full humanizer ruleset (v2.5.1) is now vendored at
-  `references/humanizer/`, with its README and MIT license. Leviathan no longer
-  depends on any external skill; the copy pass always has the complete pattern
-  catalog available.
-- README rewritten: what the skill is, how to use it, and this changelog.
-- `CLAUDE.md` added with repo maintenance rules, including the standing rule that
-  this README (and this changelog) is updated every time anything is added or
-  changed.
+| Agent / host | Adapter | Core mechanism |
+| --- | --- | --- |
+| Claude Code / Cowork | `CLAUDE.md` + `SKILL.md` | skills, subagents, hooks, shell |
+| OpenAI Codex | `AGENTS.md` | repository instructions + terminal/editing |
+| Kimi Code / CLI | `AGENTS.md` + `LEVIATHAN.md` | repository instructions + available tools |
+| Lovable | project instructions + repo artifacts | project knowledge, app/backend tools, preview |
+| Other coding agents | `AGENTS.md` + `LEVIATHAN.md` | strongest available native mechanism |
 
-### 1.0 (2026-07-19) - M1 core
-- Initial release: full pipeline for websites and web apps.
-- SKILL.md orchestrator with seven phase gates, harness routing, context
-  partitioning, floor and ban lists, and the primary-source allowlist.
-- Interview engine, PRD template, anti-slop design system with four directions,
-  four stack references, auth/security floor, legal engine with three templates,
-  testing protocol with evidence ledger and hard ship gates, honesty protocol,
-  copywriting rules.
-- External standards verified against primary sources at build time: Core Web
-  Vitals thresholds, OWASP Argon2id minimums, WCAG 2.2 criteria, DOJ ADA Title II
-  extended deadlines, EAA scope and dates.
+The adapter never creates a second policy. `LEVIATHAN.md` is canonical. See
+`references/adapters.md`.
+
+## The pipeline
+
+```text
+CLASSIFY
+  -> DISCOVER
+  -> RESEARCH
+  -> PRD APPROVAL
+  -> DESIGN APPROVAL
+  -> PLAN / BUILD
+  -> INDEPENDENT REVIEW
+  -> QA / SECURITY
+  -> RELEASE DECISION
+  -> HANDOFF / OPERATE
+```
+
+Emergency fixes can enter implementation sooner, but the exception is recorded and the security
+and data-safety floors remain mandatory.
+
+## What 2.0 fixes
+
+### Prose-only gates
+
+**Before:** the agent was told not to skip gates.  
+**Now:** `.leviathan/state.json` records phase state, schemas define the contract, and the
+portable checker validates it. Missing evidence is not a pass.
+
+### Fake evidence risk
+
+**Before:** evidence was specified but not structurally enforced.  
+**Now:** `.leviathan/evidence/ledger.json` has a machine-readable schema, statuses, artifacts,
+commands, timestamps, and limitations.
+
+### One-size-fits-all severity
+
+**Before:** security, accessibility, and dependency findings were combined into one count.  
+**Now:** categories have separate release rules and security exceptions require an owner,
+justification, mitigation, expiration, approval, and residual risk.
+
+### Security advice without enough automation
+
+**Now:** Leviathan explicitly requires authorization/IDOR probes, secret scans, dependency review,
+rate-limit exercise, AI-specific threat testing, safe secret lifecycle, and recovery procedures.
+
+### Legal overconfidence
+
+**Before:** language could imply generated pages meant a product was legally covered.  
+**Now:** legal status is explicitly risk-assessment based and can require human legal review.
+Current rules must be rechecked against authoritative sources.
+
+### Missing observability
+
+**Now:** production backends need safe structured logs, errors, health/readiness, metrics,
+alerts, deployment identity, rollback, incident response, and appropriate RPO/RTO.
+
+### Weak disaster recovery
+
+**Now:** material systems define backup/restore behavior, RPO/RTO, recovery steps, and actual
+restore verification.
+
+### Supply-chain gaps
+
+**Now:** dependency provenance, lockfiles, install-script review, vulnerability scanning, SBOM
+where supported, license tracking, secret scanning, and compromised-dependency response are part
+of the protocol.
+
+### Minor safety
+
+**Now:** projects involving minors can activate a dedicated safety mode covering age assurance,
+privacy, discoverability, messaging, location, moderation, reporting, and legal review.
+
+### Anti-slop becoming another template
+
+**Now:** Leviathan does not prescribe a single visual style. Anti-slop rules require deliberate,
+product-specific choices and brand rationale instead of banning a small list of colors/fonts.
+
+### No cost or rollback controls
+
+**Now:** projects can define agent time/token/tool-call budgets and use verified checkpoints.
+Failed changes return to the last known-good checkpoint instead of accumulating uncertain patches.
+
+### No build provenance
+
+Every generated project records Leviathan version, policy version, artifact schema version,
+host capabilities, decisions, evidence, and release information.
+
+### Weak self-testing
+
+Leviathan now has self-validation CI plus a benchmark/evaluation strategy covering security,
+accessibility, performance, requirements coverage, false claims, cost, human intervention,
+and adversarial prompt-injection attempts.
+
+## Portable project artifacts
+
+A production build should contain:
+
+```text
+.leviathan/
+  state.json
+  decisions.json
+  evidence/
+    ledger.json
+    checks/
+  provenance.json
+  risk-register.json
+  release.json
+
+PRD.md
+DESIGN.md
+RUNBOOK.md
+SECURITY.md
+DECISIONS.md
+DEPENDENCIES.md
+```
+
+The `.leviathan/` directory contains no secrets. It is the audit trail for the build.
+
+## Verification philosophy
+
+Leviathan refuses to say "working" merely because code looks plausible.
+
+A release claim needs evidence such as:
+
+```text
+command/tool action
++ actual result
++ timestamp
++ environment
++ artifact
++ limitations
+```
+
+If the current agent cannot perform browser testing, real-device testing, payment capture,
+production deployment, or another required check, the report says **not available**. It does not
+pretend.
+
+## Security floor
+
+The security baseline includes strong password hashing using maintained primitives,
+passkeys/WebAuthn where appropriate, secure sessions and recovery, object-level authorization and
+IDOR testing, rate limiting, input/output validation, secret lifecycle and rotation, TLS/security
+headers, least-privilege database access, dependency/secret scanning, AI tool authorization,
+prompt-injection defenses, and backup restore verification for material systems.
+
+See `references/auth-security.md` and `references/threat-model.md`.
+
+## Accessibility and performance
+
+Accessibility is built during implementation and verified with both automated and manual checks.
+Typical checks include keyboard flows, focus, names/labels, contrast, zoom/reflow, reduced motion,
+and screen-reader spot tests.
+
+Performance budgets are chosen from the actual audience and product rather than from a convenient
+flagship device. Multiple measurements are preferred. Lab results and real-user evidence are
+reported separately.
+
+## AI-specific engineering
+
+If the product itself contains AI, Leviathan adds tests for prompt injection, retrieval/context
+leakage, tool overreach, cross-tenant leakage, unsafe tool arguments, secret exposure in prompts
+or logs, output validation, model/provider failure, and abuse/cost exhaustion.
+
+## Install / use
+
+### Generic
+
+Make the agent read:
+
+```text
+LEVIATHAN.md
+AGENTS.md
+```
+
+If the host supports skills, also install/use `SKILL.md`.
+
+### Claude Code
+
+Use the repository as a Claude skill or make the project's `CLAUDE.md` point to `LEVIATHAN.md`.
+
+### Codex
+
+Keep `AGENTS.md` in the repository and load `LEVIATHAN.md` as the canonical policy.
+
+### Kimi
+
+Use the repository instruction mechanism available in the Kimi environment and preserve
+`AGENTS.md` + `LEVIATHAN.md`.
+
+### Lovable
+
+Add the canonical policy to the project's supported instructions/knowledge and keep portable
+artifacts in the generated repository. If a verification capability is unavailable, record it
+instead of claiming it happened.
+
+## Self-checker
+
+The repository includes a dependency-free checker:
+
+```bash
+node tools/leviathan-check.mjs
+```
+
+It validates generated-project state/evidence, recommended handoff artifacts, and several
+secret/release safety conditions. It is intentionally small so any coding agent can run it.
+
+## Repository layout
+
+```text
+SKILL.md                         compact skill entrypoint
+LEVIATHAN.md                    canonical universal policy
+AGENTS.md                       universal repository entrypoint
+CLAUDE.md                       repository maintenance rules
+references/adapters.md          host adapters
+references/policy-engine.md     gates and release policy
+references/threat-model.md      structured threat modeling
+references/auth-security.md     security floor
+references/testing.md           verification protocol
+references/observability.md     production observability
+references/supply-chain.md      dependency/supply-chain security
+references/child-safety.md      minor-safety mode
+references/cost-and-recovery.md cost, rollback, disaster recovery
+references/benchmarking.md      self-evaluation and regression strategy
+schemas/                        portable state/evidence contracts
+tools/leviathan-check.mjs       dependency-free checker
+evals/                          benchmark/evaluation inputs
+.github/workflows/              Leviathan self-validation CI
+```
+
+## Release model
+
+Versioning has three layers:
+
+- **Leviathan version:** overall feature/behavior release.
+- **Policy version:** changes that alter gates, safety requirements, or required behavior.
+- **Artifact schema version:** changes to machine-readable project artifacts.
+
+A gate-changing release must bump the policy version and include a migration note. A schema
+breaking change must bump the artifact schema version and include migration guidance.
+
+## Changelog
+
+### 2.0.0 - 2026-08-10
+
+- Reframed Leviathan as a universal, host-neutral AI coding-agent protocol.
+- Added canonical `LEVIATHAN.md` and universal `AGENTS.md` entrypoint.
+- Added cross-agent adapter guidance for Claude, Codex, Kimi, Lovable, and other hosts.
+- Added explicit state-machine and evidence-ledger architecture.
+- Added machine-readable state and evidence schemas.
+- Added dependency-free `leviathan-check.mjs` gate/evidence checker.
+- Added self-validation GitHub Actions workflow.
+- Split security, accessibility, dependency, and performance release policies.
+- Added structured threat modeling and AI-specific security testing.
+- Added production observability requirements.
+- Added supply-chain/SBOM/provenance guidance.
+- Added minor-safety mode.
+- Added cost budgets, build checkpoints, rollback, recovery, RPO/RTO, and vendor-exit guidance.
+- Added benchmark and adversarial-evaluation strategy.
+- Reworked legal guidance to avoid false claims of legal compliance.
+- Strengthened authentication, authorization, secret lifecycle, and recovery guidance.
+- Reworked anti-slop guidance so Leviathan does not develop a recognizable house style.
+- Added versioned policy/schema model and build provenance requirements.
+
+### 1.1.1 - 2026-07-21
+
+- Tightened the Claude skill frontmatter description for host upload limits.
+
+### 1.1 - 2026-07-19
+
+- Bundled the humanizer ruleset and updated the documentation.
+
+### 1.0 - 2026-07-19
+
+- Initial lifecycle build protocol for websites and web applications.
 
 ## Roadmap
 
-- **M2:** admin-dashboard deep spec, full accessibility and i18n checklists,
-  performance and scale references, audit scripts (a11y, perf, security, slop-scan),
-  remaining design directions.
-- **M3:** React Native/Expo, bots, browser and CEP extensions, Electron/Tauri, real
-  3D reference, legal region expansion (LGPD, POPIA, NDPR), SBOM output.
-- **M4:** fixed benchmark suite (portfolio, restaurant, marketplace, SaaS dashboard,
-  mobile app, bot) with regression gating, trigger-rate optimization, packaging.
-- **M5 (on demand):** enterprise mode: IaC, OpenTelemetry with SLOs, canary deploys,
-  formal DR objectives, ASVS-grade verification.
+### 2.1
+
+- More executable scanners for authorization, headers, dependency risk, accessibility, and
+  anti-slop checks.
+- Project migration/upgrade command for older Leviathan artifacts.
+- Expanded benchmark corpus and regression scoring.
+- More deployment/provider adapters.
+
+### 2.2
+
+- Portable SBOM generation adapters.
+- More framework stacks and mobile/bot/extension guidance.
+- Structured incident-response and observability templates.
+
+### 3.0
+
+- Optional standalone orchestration runtime with deterministic state transitions, artifact
+  signing, multi-agent scheduling, remote evidence storage, and policy packs.
 
 ## Credits and license
 
 The bundled humanizer ruleset in `references/humanizer/` is vendored from
-[blader/humanizer](https://github.com/blader/humanizer) by Siqi Chen, MIT licensed
-(license preserved in that directory). Everything else in this repo is covered by the
-repository [LICENSE](LICENSE).
+[blader/humanizer](https://github.com/blader/humanizer) by Siqi Chen under its MIT license,
+with the license preserved in that directory. Everything else is covered by the repository
+`LICENSE`.
