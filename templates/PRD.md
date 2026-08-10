@@ -28,6 +28,105 @@ Document the happy path and the failure/degraded path for each critical journey.
 - RLS/object-level authorization approach:
 - Export/deletion/retention requirements:
 
+## 4A. Privacy engineering
+
+Complete this section for every product that processes personal data. Read `references/privacy-engineering.md` and `references/legal-compliance.md` before implementation.
+
+### Data inventory
+
+- Personal-data categories:
+- Sensitive/regulated categories:
+- Data owner/system of record:
+- Collection points:
+- Database/storage locations:
+- Search indexes/caches/queues:
+- Logs/analytics/observability destinations:
+- AI/model/retrieval destinations:
+- Payment/support/email/SMS processors:
+- Backup/replica locations:
+- Processing purpose + legal basis where required:
+- Retention period/deletion trigger:
+- Legal-hold/statutory-retention exceptions:
+- Last inventory review:
+
+### Minimization
+
+- Minimum data required at signup:
+- Progressive profiling fields:
+- Fields rejected/discarded by APIs:
+- Telemetry redaction/minimization:
+- Third-party payload minimization:
+
+### Consent and preferences
+
+- Consent required? yes/no/assessed:
+- Consent scopes/versions:
+- Consent storage:
+- Processing blocked before consent:
+- Withdrawal behavior:
+- Cookie/tracking preference enforcement:
+
+### Data rights
+
+- Access/export flow:
+- Export format/protection/expiry:
+- Correction flow:
+- Deletion/erasure flow:
+- Deletion propagation targets:
+- Residual backup/legal-hold data:
+- Account closure semantics:
+- Identity verification:
+- Rate limiting/audit:
+
+### Retention and lifecycle
+
+- Account/profile retention:
+- Security/authentication retention:
+- Analytics retention:
+- Logs/error telemetry retention:
+- Support/UGC retention:
+- AI prompt/output retention:
+- Payment/financial retention:
+- Export/temporary-file retention:
+- Backup overwrite/expiry:
+- Lifecycle job/trigger:
+- Legal-hold mechanism:
+
+### Processors and transfers
+
+- Processor/sub-processor inventory:
+- DPA/contract status where applicable:
+- Processing/storage regions:
+- Cross-border transfer mechanism/assessment:
+- Residency commitment:
+- Vendor-exit deletion/return evidence:
+
+### AI privacy
+
+- Personal data sent to models:
+- Redaction/tokenization:
+- Provider retention/training behavior:
+- User opt-out/control:
+- AI log/conversation retention:
+- Retrieval/tenant isolation:
+- Deletion propagation:
+
+### Privacy evidence
+
+- Data inventory evidence:
+- Consent-gating test:
+- Export test:
+- Deletion propagation test:
+- Correction test:
+- Retention-job test:
+- Processor drift check:
+- AI data-flow test:
+- Residency/transfer test:
+- Privileged-data-access audit:
+- Privacy-policy consistency review:
+
+Do not replace missing privacy evidence with assumptions. Record `not_run`, `not_available`, `simulated`, or `unknown` explicitly.
+
 ## 5. Money movement / billing
 
 Complete this section for every product that accepts, moves, refunds, or grants value based on money. Read `references/payments.md` before implementation.
@@ -215,11 +314,12 @@ If users or UGC are present:
 - RPO/RTO:
 - Observability:
 - Scalability:
+- Privacy/data lifecycle: see §4A; no unsupported minimization, deletion, residency, or retention claim
 - Localization:
 
 ## 9. Verification plan
 
-List exact evidence required before release. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, and `SCALE-*` probes from `references/scale/performance-probes.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows.
+List exact evidence required before release. For privacy-sensitive products, include the applicable `PRIV-*` probes from `references/privacy-engineering.md`. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, and `SCALE-*` probes from `references/scale/performance-probes.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows.
 
 ## 10. Human approvals
 
