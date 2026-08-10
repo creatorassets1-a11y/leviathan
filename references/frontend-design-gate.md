@@ -6,18 +6,18 @@
 ## 1. Design before implementation
 Before broad UI implementation, the agent MUST create or update `DESIGN.md` and record:
 
-1. **Subject** — what the product/page actually is.
-2. **Audience** — the primary user and their context.
-3. **Single primary job** — the one outcome the screen must make easy.
-4. **Information architecture** — hierarchy, navigation, content priority, and important states.
-5. **Aesthetic direction** — one coherent direction with a rationale tied to the subject and audience.
-6. **Rejected defaults** — explicitly consider and reject or justify the common AI defaults: untouched component-library styling, generic hero/three-card layouts, decorative gradients, excessive glass/blur, neon-on-dark, and other statistically convenient choices.
-7. **Palette** — 4–6 named colors with semantic roles and contrast intent. Use actual tokens, not ad-hoc color values.
-8. **Typography** — deliberate display/body pairing with rationale. Inter, Roboto, Arial, and pure system stacks MUST NOT be the unexamined primary choice. A prohibited/default typeface may be used only when the product direction genuinely requires it and the rationale is recorded.
-9. **Layout concept** — include a compact wireframe or structural description before implementation.
-10. **Signature element** — exactly one primary visual/interaction risk or memorable device, justified by the product. Everything else should support it rather than compete with it.
-11. **Motion model** — what moves, why, timing principles, and reduced-motion behavior.
-12. **Content voice** — concrete vocabulary, CTA conventions, and rules for product copy.
+1. **Subject**: what the product/page actually is.
+2. **Audience**: the primary user and their context.
+3. **Single primary job**: the one outcome the screen must make easy.
+4. **Information architecture**: hierarchy, navigation, content priority, and important states.
+5. **Aesthetic direction**: one coherent direction with a rationale tied to the subject and audience.
+6. **Rejected defaults**: explicitly consider and reject or justify the common AI defaults: untouched component-library styling, generic hero/three-card layouts, decorative gradients, excessive glass/blur, neon-on-dark, and other statistically convenient choices.
+7. **Palette**: 4–6 named colors with semantic roles and contrast intent. Use actual tokens, not ad-hoc color values.
+8. **Typography**: deliberate display/body pairing with rationale. Inter, Roboto, Arial, and pure system stacks MUST NOT be the unexamined primary choice. A prohibited/default typeface may be used only when the product direction genuinely requires it and the rationale is recorded.
+9. **Layout concept**: include a compact wireframe or structural description before implementation.
+10. **Signature element**: exactly one primary visual/interaction risk or memorable device, justified by the product. Everything else should support it rather than compete with it.
+11. **Motion model**: what moves, why, timing principles, and reduced-motion behavior.
+12. **Content voice**: concrete vocabulary, CTA conventions, and rules for product copy.
 
 ## 2. Self-critique before code
 The design plan MUST answer:

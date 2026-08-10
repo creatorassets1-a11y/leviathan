@@ -1,4 +1,4 @@
-# DESIGN.md — Project Design Contract
+# DESIGN.md: Project Design Contract
 
 ## Product
 - Name:

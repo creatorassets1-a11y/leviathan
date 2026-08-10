@@ -20,11 +20,11 @@ This gives Leviathan the breadth of the ecosystem without turning Leviathan itse
 
 ## Canonical files
 
-- `catalog-sync.mjs` — discovers the current skills.sh catalog.
-- `apply.mjs` — selects and records relevant skills for a project.
-- `policy.md` — security, provenance, selection, and activation rules.
-- `catalog.json` — optional generated local catalog snapshot; do not hand-edit.
-- `packs/` — Leviathan-native capability packs that summarize stable, cross-agent practices.
+- `catalog-sync.mjs`: discovers the current skills.sh catalog.
+- `apply.mjs`: selects and records relevant skills for a project.
+- `policy.md`: security, provenance, selection, and activation rules.
+- `catalog.json`: optional generated local catalog snapshot; do not hand-edit.
+- `packs/`: Leviathan-native capability packs that summarize stable, cross-agent practices.
 
 ## Discover
 

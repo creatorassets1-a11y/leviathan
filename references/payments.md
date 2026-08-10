@@ -1,4 +1,4 @@
-# Payments & Billing — Canonical Production Policy
+# Payments & Billing: Canonical Production Policy
 
 Payments are **R3 by default** and **R4** when the product materially moves money for third parties, operates a marketplace/payout system, handles regulated financial activity, or creates high-impact financial consequences.
 
@@ -119,7 +119,7 @@ Provide a provider Customer Portal or equivalent for, as applicable:
 
 The UI must clearly state when access ends for immediate versus end-of-period cancellation.
 
-## 5. Webhooks — critical reliability boundary
+## 5. Webhooks: critical reliability boundary
 
 For every side-effecting webhook:
 

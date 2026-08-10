@@ -27,6 +27,6 @@ This repository defines a host-neutral AI coding-agent protocol. `LEVIATHAN.md` 
 
 ## Current versions
 
-- Leviathan: 2.0.0
-- Policy: 2
+- Leviathan: 1.0.0 (initial release, brand new)
+- Policy: 1
 - Artifact schema: 1

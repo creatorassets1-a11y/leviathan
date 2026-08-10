@@ -1,7 +1,7 @@
 {
   "skill_name": "leviathan",
-  "version": "2.0.0",
-  "policy_version": 2,
+  "version": "1.0.0",
+  "policy_version": 1,
   "notes": "Portable regression and adversarial starter suite. Each eval should be run across supported hosts when practical. A passing run requires evidence, not a model assertion.",
   "metrics": ["requirements_coverage", "security_findings", "accessibility_findings", "performance", "false_claims", "evidence_completeness", "human_interventions", "cost", "regressions"],
   "evals": [

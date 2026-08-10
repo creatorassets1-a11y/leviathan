@@ -2,18 +2,20 @@
 
 **Universal, evidence-driven AI software engineering protocol for Claude Code, Codex, Kimi, Lovable, Cursor, Windsurf, Copilot, Gemini/Cline-class agents, and future coding agents.**
 
-**Current release:** 2.5.0  
-**Policy:** 7  
+**Current release:** 1.0.0  
+**Policy:** 1  
 **Artifact schema:** 1  
 **Skills ecosystem:** skills.sh discovery + audited selection
+
+> **Status: version 1, brand new.** This is the initial release of Leviathan. It has not yet been field-tested across multiple real releases, so treat the policy as an evolving draft: expect gaps, apply judgment, and report what does not hold up in practice.
 
 Leviathan helps AI coding agents ship software that is not merely functional, but **secure, correctly authorized, accessible, resilient, payment-safe, product-specific, observable, supportable, recoverable, scalable, and evidence-backed**.
 
 > Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable. Unknown is not passed. A test that was not run is not a test that passed.
 
-## What changed in 2.5.0
+## What 1.0.0 includes
 
-The production-hardening pass now treats the remaining operational product surfaces as first-class, evidence-backed contracts when applicable:
+The initial release treats the full set of operational product surfaces as first-class, evidence-backed contracts when applicable:
 
 - Email, notifications and messaging: delivery state, consent/preferences, suppression, retries, provider webhooks, abuse and spend controls.
 - Onboarding and activation: first-value definition, progressive disclosure, resumable setup, recovery, and activation measurement.
@@ -31,7 +33,7 @@ The production-hardening pass now treats the remaining operational product surfa
 - Advanced accessibility: complex widgets, focus management, live regions, forms, reflow and real assistive-technology evidence.
 - Testing strategy: risk-based unit/integration/contract/E2E/security/performance/visual/manual layers.
 
-## Existing production-hardening floor
+## Production-hardening floor
 
 Security, payments, privacy, legal/trust, observability/recovery, scaling, internationalization, admin/support, stack selection, handoff, threat modeling, supply chain, and evidence gates remain mandatory according to project scope.
 
@@ -40,7 +42,7 @@ See the canonical policy in `LEVIATHAN.md` and the compact agent entrypoint in `
 ## Architecture
 
 ```text
-                         LEVIATHAN 2.5
+                         LEVIATHAN 1.0
                               |
           +-------------------+-------------------+
           |                   |                   |
@@ -244,51 +246,14 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 
 ## Changelog
 
-### 2.5.0 — 2026-08-10
+### 1.0.0 (2026-08-10)
 
-- Added first-class contracts for messaging, onboarding/activation, feature flags/progressive delivery, analytics/product telemetry, SEO/public surfaces, database migrations, background jobs/queues, search, file/media pipelines, multi-region/residency, developer experience, release communication, deeper AI evaluation, advanced accessibility, and testing strategy.
-- Integrated the new contracts into `LEVIATHAN.md`, `SKILL.md`, `templates/PRD.md`, threat modeling, testing probes, evidence expectations, and applicable release blockers.
-- Bumped policy version from 6 to 7.
-
-### 2.4.0 — 2026-08-10
-
-- Added canonical `references/payments.md` for production money movement.
-- Added one-time payment, subscription, usage-based, refund, dispute, tax, dunning and entitlement contracts.
-- Added marketplace/payout/connected-account/KYC guidance.
-- Added payment provider webhook state-machine and reconciliation requirements.
-- Added `PAY-*` executable payment verification probes.
-- Added payment-specific threat-model cases and automatic release blockers.
-- Added `templates/PRD.md` with a required money-movement decision contract.
-- Bumped policy version from 5 to 6.
-
-### 2.3.0 — 2026-08-10
-
-- Added production-completeness matrix mapping failure modes to artifacts, evidence and risk-tier gates.
-- Added first-class UI state/resilience contract.
-- Added accessibility depth and internationalization/localization contract.
-- Added data integrity, concurrency and API contract.
-- Added hostile-upload/media contract.
-- Added operations, resilience and deployment contract.
-- Added trust/support/dark-pattern/content contract.
-- Added AI-product UX/safety contract.
-- Added explicit multi-tenancy/admin/impersonation contract.
-- Expanded payment, security, reliability and evidence requirements.
-
-### 2.2.0 — 2026-08-10
-
-- Hardened RLS/object authorization, sessions, MFA, rate limiting and browser security.
-- Added production payment architecture and evidence requirements.
-- Added product-specific DESIGN.md and contextual anti-slop review.
-- Added support/trust and reliability guidance.
-
-### 2.1.0 — 2026-08-10
-
-- Added skills.sh discovery, selection, lock/provenance and least-privilege integration.
-- Added universal host support beyond Claude.
-
-### 2.0.0 — 2026-08-10
-
-- Established canonical host-neutral policy, state machine, evidence model, security/accessibility/performance gates, observability, recovery, provenance and adversarial evaluation strategy.
+Initial release. Version 1, brand new: this is the first published version of Leviathan, not yet
+field-tested across multiple real releases. It establishes the canonical host-neutral policy, state
+machine, evidence model, risk tiers, security/payments/accessibility floors, and the full set of
+operational product surfaces (messaging, onboarding, feature flags, analytics, SEO, migrations,
+background jobs, search, media pipelines, multi-region operations, developer experience, release
+communication, AI evaluation, advanced accessibility, and testing strategy).
 
 ## License and external content
 

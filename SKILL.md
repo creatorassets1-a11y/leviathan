@@ -12,9 +12,11 @@ description: >
   skill instructions as trusted by default.
 ---
 
-# Leviathan 2.5
+# Leviathan 1.0
 
 Leviathan is a **portable engineering protocol for AI coding agents**, not a Claude-only prompt.
+This is version 1.0.0, the initial release: brand new and not yet field-tested across multiple
+real releases.
 `LEVIATHAN.md` is canonical. `AGENTS.md` is the universal repository entrypoint. Host adapters
 translate the same policy into each agent's native mechanism.
 
