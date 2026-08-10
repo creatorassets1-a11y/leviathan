@@ -6,12 +6,12 @@ AI slop is a convergence problem: repeated defaults produce interchangeable prod
 
 For substantial UI, complete this sequence before broad implementation:
 
-1. **Subject** — what the product/surface actually is.
-2. **Audience** — primary user and context.
-3. **Single primary job** — the one outcome this surface must make easy.
-4. **Information architecture** — hierarchy, navigation, content priority, and critical states.
-5. **One aesthetic direction** — choose a coherent direction tied to the subject/audience and record the rationale.
-6. **Reject or justify defaults** — explicitly consider common AI defaults such as untouched component-library styling, generic hero/three-card layouts, decorative gradients, excessive glass/blur, and neon-on-dark.
+1. **Subject**: what the product/surface actually is.
+2. **Audience**: primary user and context.
+3. **Single primary job**: the one outcome this surface must make easy.
+4. **Information architecture**: hierarchy, navigation, content priority, and critical states.
+5. **One aesthetic direction**: choose a coherent direction tied to the subject/audience and record the rationale.
+6. **Reject or justify defaults**: explicitly consider common AI defaults such as untouched component-library styling, generic hero/three-card layouts, decorative gradients, excessive glass/blur, and neon-on-dark.
 7. **Lock 4–6 semantic color tokens** with values, roles, and contrast intent.
 8. **Lock deliberate typography** including display/body roles, type scale, line-height, letter-spacing, measure, weights, fallbacks, loading strategy, licensing, and language coverage.
 9. **Define layout** with spacing rhythm, responsive priorities, and a compact wireframe/structural description.

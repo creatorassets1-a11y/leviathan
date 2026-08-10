@@ -70,6 +70,6 @@ jobs:
           tmp=$(mktemp -d)
           mkdir -p "$tmp/.leviathan/evidence"
           cp tools/leviathan-check.mjs "$tmp/"
-          printf '%s\n' '{"leviathan_version":"2.0.0","policy_version":2,"artifact_schema_version":1,"phase":"VERIFIED","risk_tier":"R1"}' > "$tmp/.leviathan/state.json"
+          printf '%s\n' '{"leviathan_version":"1.0.0","policy_version":1,"artifact_schema_version":1,"phase":"VERIFIED","risk_tier":"R1"}' > "$tmp/.leviathan/state.json"
           printf '%s\n' '{"schema_version":1,"checks":[]}' > "$tmp/.leviathan/evidence/ledger.json"
           (cd "$tmp" && node leviathan-check.mjs)

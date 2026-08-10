@@ -8,7 +8,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const ignore = new Set(['.git', 'node_modules', '.next', 'dist', 'build', 'coverage', '.leviathan/evidence']);
+// tools/ holds this scanner's own source (and sibling checkers). Their code intentionally
+// contains the detection patterns as literal strings, so scanning it self-triggers every rule
+// with no security value; exclude it rather than report on the scanner's own implementation.
+const ignore = new Set(['.git', 'node_modules', '.next', 'dist', 'build', 'coverage', '.leviathan/evidence', 'tools']);
 const textExt = new Set(['.js','.jsx','.ts','.tsx','.mjs','.cjs','.vue','.svelte','.html','.css','.sql','.md','.json','.yaml','.yml']);
 const findings = [];
 
@@ -23,12 +26,24 @@ function walk(dir) {
 }
 
 function add(id, severity, file, message, line) { findings.push({id,severity,file,message,line}); }
+// Markdown documentation legitimately discusses these anti-patterns in prose and inline code
+// spans (e.g. "never use `isAdmin: true`"). Only scan fenced code blocks in .md files so real
+// pasted code/secrets are still caught without flagging every mention of the pattern in prose.
+function scannableLines(file, text) {
+  const lines = text.split(/\r?\n/);
+  if (path.extname(file).toLowerCase() !== '.md') return lines.map((line, i) => ({ line, n: i + 1 }));
+  const out = [];
+  let inFence = false;
+  lines.forEach((line, i) => {
+    if (/^\s*```/.test(line)) { inFence = !inFence; return; }
+    if (inFence) out.push({ line, n: i + 1 });
+  });
+  return out;
+}
 function scan(file, rel) {
   let text;
   try { text = fs.readFileSync(file, 'utf8'); } catch { return; }
-  const lines = text.split(/\r?\n/);
-  lines.forEach((line, i) => {
-    const n = i + 1;
+  scannableLines(file, text).forEach(({ line, n }) => {
     if (/localStorage\s*\.\s*setItem\s*\(\s*['\"](?:token|access|refresh|jwt|session)/i.test(line) || /sessionStorage\s*\.\s*setItem\s*\(/i.test(line))
       add('SESSION-LOCALSTORAGE','high',rel,'Potential browser token/session storage; review and prove it is not a long-lived sensitive credential.',n);
     if (/dangerouslySetInnerHTML|innerHTML\s*=|insertAdjacentHTML/i.test(line))

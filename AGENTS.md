@@ -1,6 +1,7 @@
 # Leviathan Agent Instructions
 
-This repository uses **Leviathan 2.1.0** as a host-neutral engineering protocol.
+This repository uses **Leviathan 1.0.0** as a host-neutral engineering protocol. This is the
+initial release: brand new and not yet field-tested across multiple real releases.
 
 1. Read `LEVIATHAN.md` before modifying the project.
 2. Read `SKILL.md` when operating as a skill-capable agent.

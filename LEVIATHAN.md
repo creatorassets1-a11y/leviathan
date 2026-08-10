@@ -1,7 +1,7 @@
 # LEVIATHAN Universal Specification
 
-Version: 2.5.0
-Policy version: 7
+Version: 1.0.0
+Policy version: 1
 Artifact schema version: 1
 Skills ecosystem integration: skills.sh
 
@@ -272,45 +272,12 @@ The repository must not become a dump of third-party skill files. External skill
 
 ## Version history
 
-### 2.5.0 — 2026-08-10
+### 1.0.0 (2026-08-10)
 
-- Added first-class production contracts for messaging, onboarding/activation, feature flags/progressive delivery, privacy-aligned analytics, SEO/public surfaces, schema evolution, background jobs, search, media pipelines, multi-region/residency operations, developer experience, release communication, deeper AI evaluation, advanced accessibility, and risk-based testing strategy.
-- Integrated the new references into the agent entrypoint, canonical policy, release evidence model, and applicable release blockers.
-- Bumped policy version to 7.
-
-### 2.4.0 — 2026-08-10
-
-- Added canonical `references/payments.md` covering one-time payments, subscriptions, usage billing, webhooks, reconciliation, dunning, tax, refunds, disputes, payouts/connected accounts, KYC/capabilities, entitlements, mobile billing, operations, evidence, and release blockers.
-- Added executable `PAY-001` through `PAY-023` verification probes to the testing protocol.
-- Expanded payment threat modeling for concurrency, provider outages, entitlement drift, tax, payout, metering, credential crossover, and ledger risks.
-- Strengthened R3/R4 payment release blockers.
-- Bumped policy version to 6.
-
-### 2.3.0 — 2026-08-10
-
-- Added production-completeness matrix mapping failure modes to artifacts, evidence and risk-tier gates.
-- Added first-class UI state/resilience contract.
-- Added accessibility depth and internationalization/localization contract.
-- Added data integrity, concurrency and API contract.
-- Added hostile-upload/media contract.
-- Added operations, resilience and deployment contract.
-- Added trust/support/dark-pattern/content contract.
-- Added AI-product UX/safety contract.
-- Added explicit multi-tenancy/admin/impersonation contract.
-- Expanded payment, security, reliability and evidence requirements.
-
-### 2.2.0 — 2026-08-10
-
-- Hardened RLS/object authorization, sessions, MFA, rate limiting and browser security.
-- Added production payment architecture and evidence requirements.
-- Added product-specific DESIGN.md and contextual anti-slop review.
-- Added support/trust and reliability guidance.
-
-### 2.1.0 — 2026-08-10
-
-- Added skills.sh discovery, selection, lock/provenance and least-privilege integration.
-- Added universal host support beyond Claude.
-
-### 2.0.0 — 2026-08-10
-
-- Established canonical host-neutral policy, state machine, evidence model, security/accessibility/performance gates, observability, recovery, provenance and adversarial evaluation strategy.
+Initial release. Leviathan is brand new: this is the first published version of the canonical
+policy, covering the state machine, evidence contract, risk tiers, security/payments/accessibility
+floors, and the operational product surfaces (messaging, onboarding, feature flags, analytics, SEO,
+migrations, background jobs, search, media pipelines, multi-region operations, developer experience,
+release communication, AI evaluation, advanced accessibility, and testing strategy). It has not yet
+been field-tested across multiple releases; treat gaps and untested edges as expected at this stage,
+and report them so the policy can improve.
