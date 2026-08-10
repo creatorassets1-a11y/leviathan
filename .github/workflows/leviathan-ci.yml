@@ -32,9 +32,26 @@ jobs:
               print('valid:', p)
           PY
       - name: Secret scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import pathlib, re, subprocess
+          files = subprocess.check_output(['git','ls-files'], text=True).splitlines()
+          patterns = [
+              re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----'),
+              re.compile(r'(?<![A-Z0-9])(AKIA|ASIA)[A-Z0-9]{16}(?![A-Z0-9])'),
+              re.compile(r'github_pat_[A-Za-z0-9_]{20,}'),
+              re.compile(r'ghp_[A-Za-z0-9]{30,}')
+          ]
+          bad=[]
+          for name in files:
+              p=pathlib.Path(name)
+              try: text=p.read_text(encoding='utf-8')
+              except (UnicodeDecodeError, OSError): continue
+              if any(rx.search(text) for rx in patterns): bad.append(name)
+          assert not bad, f'Possible secrets found in: {bad}'
+          print('secret scan passed')
+          PY
       - name: Frontmatter and size checks
         shell: bash
         run: |
