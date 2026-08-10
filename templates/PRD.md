@@ -69,6 +69,74 @@ Complete this section for every product that accepts, moves, refunds, or grants 
 - Prices, balances, entitlements, and usage are server-authoritative.
 - Live/test credentials are strictly separated.
 
+## 5A. Performance, capacity, and scaling
+
+Complete this section for production-bound products or any product making material performance/scalability claims. Read `references/scale/performance-and-reliability.md` before implementation.
+
+### Critical journey budgets
+
+For each critical journey record:
+
+- Journey:
+- Target device class:
+- Network condition:
+- Cold/warm cache state:
+- Representative payload/data volume:
+- Expected concurrency/traffic:
+- p50 target:
+- p75 target:
+- p95 target:
+- p99 target, if tail latency matters:
+- Error-rate target:
+- Frontend LCP/INP/CLS targets, where applicable:
+- Backend saturation/queueing constraint, where applicable:
+
+### Capacity assumptions
+
+- Expected steady-state traffic:
+- Expected peak traffic:
+- Burst profile:
+- Read/write mix:
+- Largest expected collection/payload:
+- Expensive endpoints:
+- Dependency assumptions:
+- Current tested concurrency ceiling:
+- Known bottlenecks:
+
+### Architecture decisions
+
+- Stateless application tier:
+- Horizontal scaling trigger:
+- CDN/edge caching:
+- Application cache:
+- Cache invalidation/stale-data policy:
+- Queue/worker boundaries:
+- Database indexes and query-plan evidence:
+- Pagination strategy:
+- Connection-pool sizing rationale:
+- Read replica decision and replication-lag tolerance:
+- Partitioning/sharding decision and measured justification:
+- Multi-region decision and measured justification:
+- Graceful degradation behavior:
+- Timeout/retry/circuit-breaker policy:
+
+### Measurement and evidence
+
+- Lab performance evidence:
+- Real-user/production evidence:
+- Load/concurrency test evidence:
+- p50/p75/p95/p99 results:
+- Core Web Vitals evidence:
+- Hot-query plans/index evidence:
+- N+1 evidence:
+- Connection-pool utilization/wait evidence:
+- Queue lag/throughput evidence:
+- Dependency-failure/degradation evidence:
+- Cost/capacity assumptions:
+- Tested limit and limitations:
+
+Do not replace missing measurements with estimates. If the environment cannot reproduce the target workload, record the tested ceiling and limitation explicitly.
+
 ## 6. AI behavior
 
 If the product uses AI:
@@ -142,7 +210,7 @@ If users or UGC are present:
 
 - Security:
 - Accessibility:
-- Performance budgets:
+- Performance budgets: see §5A; no unmeasured “fast” or “scales to X users” claim
 - Availability/SLO:
 - RPO/RTO:
 - Observability:
@@ -151,7 +219,7 @@ If users or UGC are present:
 
 ## 9. Verification plan
 
-List exact evidence required before release. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows.
+List exact evidence required before release. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, and `SCALE-*` probes from `references/scale/performance-probes.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows.
 
 ## 10. Human approvals
 
