@@ -2,8 +2,8 @@
 
 **Universal, evidence-driven AI software engineering protocol for Claude Code, Codex, Kimi, Lovable, Cursor, Windsurf, Copilot, Gemini/Cline-class agents, and future coding agents.**
 
-**Current release:** 2.4.0  
-**Policy:** 6  
+**Current release:** 2.5.0  
+**Policy:** 7  
 **Artifact schema:** 1  
 **Skills ecosystem:** skills.sh discovery + audited selection
 
@@ -11,62 +11,36 @@ Leviathan helps AI coding agents ship software that is not merely functional, bu
 
 > Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable. Unknown is not passed. A test that was not run is not a test that passed.
 
-## What changed in the production-hardening pass
+## What changed in 2.5.0
 
-The production-hardening pass closes the remaining major protocol gaps by making privacy engineering, internationalization, admin/support tooling, stack selection, and operational handoff first-class contracts. It also wires those contracts into the PRD, skill entrypoint, evidence expectations, and release workflow.
+The production-hardening pass now treats the remaining operational product surfaces as first-class, evidence-backed contracts when applicable:
 
-### Security and data
+- Email, notifications and messaging: delivery state, consent/preferences, suppression, retries, provider webhooks, abuse and spend controls.
+- Onboarding and activation: first-value definition, progressive disclosure, resumable setup, recovery, and activation measurement.
+- Feature flags and progressive delivery: safe defaults, server-side authorization, staged rollout, experiments, kill switches, audit and expiry.
+- Analytics/product telemetry: event schemas, consent, minimization, retention/deletion, identity, quality, and AI telemetry safety.
+- SEO/public surfaces: crawl boundaries, metadata, canonicalization, structured data, social cards, locale URLs, accessibility and performance.
+- Database migrations: expand/contract, bounded backfills, compatibility, lock/replication analysis, and recovery evidence.
+- Background jobs/queues: idempotency, retries, dead letters, backpressure, lag, fairness and replay.
+- Search: tenant isolation, index consistency, deletion propagation, relevance, query-abuse resistance and performance.
+- File/media pipelines: quarantine, validation, scanning, safe transformation, private delivery, variants, quotas and lifecycle deletion.
+- Multi-region/residency: geography inventory, routing, consistency, failover/failback and residency evidence.
+- Developer experience: clean setup, safe seed data, CI parity, architecture docs and new-developer verification.
+- Release communication: changelog, material-change notices, support alignment and provenance.
+- AI product evaluation: versioned evaluation harnesses, prompt/model lifecycle, human review, tool/output validation and cost guardrails.
+- Advanced accessibility: complex widgets, focus management, live regions, forms, reflow and real assistive-technology evidence.
+- Testing strategy: risk-based unit/integration/contract/E2E/security/performance/visual/manual layers.
 
-- Deny-by-default RLS/object authorization, server-side privilege checks, session lifecycle, MFA/recovery, rate-limit exercise, upload isolation, webhook authenticity, and secret scanning are mandatory where applicable.
-- Privacy engineering covers living data inventory, minimization, consent enforcement, export/deletion/correction, retention automation, processors, residency, AI data flows, and executable privacy probes.
-- Personal-data policy claims must match actual implementation; missing evidence remains `not_run`, `not_available`, `simulated`, or `unknown`.
+## Existing production-hardening floor
 
-### Payments
+Security, payments, privacy, legal/trust, observability/recovery, scaling, internationalization, admin/support, stack selection, handoff, threat modeling, supply chain, and evidence gates remain mandatory according to project scope.
 
-- PSP state is authoritative; local payment/entitlement state is a reconcilable projection.
-- Client success redirects can never grant paid access or fulfill an order.
-- Webhooks require raw-body signature verification, durable event-ID deduplication, idempotent side effects, replay protection, and out-of-order handling.
-- R3/R4 payment systems require reconciliation with zero unexplained drift.
-- One-time payments, subscriptions, usage billing, refunds, disputes, tax, dunning, marketplace payouts/KYC, mobile billing decisions, and operational runbooks are covered where applicable.
-
-See `references/payments.md` and `references/testing.md`.
-
-### UX, accessibility, and localization
-
-- Major async journeys cover loading, success, empty, validation error, server error, timeout, offline/reconnect, unauthorized, forbidden, rate-limited, partial/degraded, duplicate/in-flight, rollback, and retry-exhausted states where applicable.
-- Accessibility is tested on meaningful journeys, not only automated scans.
-- Internationalization externalizes strings, uses locale-aware formatting, supports fallback and text expansion, and requires RTL evidence where relevant.
-
-See `references/i18n-and-l10n.md`.
-
-### Performance and reliability
-
-- Performance claims require product-specific budgets, repeated percentile measurements, realistic device/network evidence, and representative concurrency/load results.
-- Hot queries require query-plan/index evidence; N+1 behavior, pool saturation, queue failure, dependency degradation, and graceful recovery are tested.
-- Production observability requires structured correlation, safe redaction, health/readiness, golden signals, business/dependency metrics, actionable alerts, rollback, backup restore, and incident procedures.
-
-See `references/scale/performance-and-reliability.md`, `references/scale/performance-probes.md`, and `references/observability.md`.
-
-### Trust, support, and administration
-
-- Terms, Privacy, tracking, AUP, refunds/cancellation, contact, Help/FAQ, guides, accessibility, security/trust, and status surfaces are generated according to actual product behavior and market risk.
-- Moderation/enforcement is server-side, auditable, attributable, and appealable where applicable.
-- Admin/support tooling uses least privilege, strong authentication, server-side authorization, append-only audit evidence, safe impersonation, billing controls, moderation workflows, privacy operations, anomaly detection, and access review.
-
-See `references/legal-compliance.md`, `references/support-surfaces.md`, and `references/admin-and-support-tooling.md`.
-
-### Stack selection and handoff
-
-- Stack choices are evidence-based and recorded with constraints, alternatives, operational consequences, and rationale.
-- Production systems require `HANDOFF.md`, `RUNBOOK.md`, `DECISIONS.md`, ownership, escalation, deployment/recovery procedures, known limitations, and maintainability instructions.
-- The original agent conversation is never the sole source of operational knowledge.
-
-See `references/stack-selection.md`, `references/handoff-and-operations.md`, `templates/HANDOFF.md`, `templates/RUNBOOK.md`, and `templates/DECISIONS.md`.
+See the canonical policy in `LEVIATHAN.md` and the compact agent entrypoint in `SKILL.md`.
 
 ## Architecture
 
 ```text
-                         LEVIATHAN 2.4
+                         LEVIATHAN 2.5
                               |
           +-------------------+-------------------+
           |                   |                   |
@@ -178,12 +152,19 @@ Read:
 - `references/uploads-media.md`
 - `references/multi-tenancy-admin.md`
 - `references/privacy-engineering.md`
+- `references/file-media-pipeline.md` when media processing/delivery is in scope
+- `references/search.md` when search/retrieval is in scope
+- `references/database-migrations-and-schema-evolution.md` for production schema evolution
 
 Never trust client-supplied ownership, tenant, role, price, balance, entitlement or security claims.
 
 ## Trust and support
 
 Read `references/legal-compliance.md` and `references/support-surfaces.md`. User-facing policy and support surfaces must be synchronized with actual behavior. Legal review is escalated when the risk warrants it; generated pages never prove legal compliance.
+
+## Product operations
+
+Load the applicable references for messaging, onboarding, feature flags, analytics, SEO/public surfaces, jobs, search, media, multi-region, developer experience, release communication, AI evaluation, advanced accessibility, and testing strategy. Scope them during Discover/PRD and record explicit `not_applicable` or `out_of_scope` decisions rather than silently omitting them.
 
 ## Internationalization
 
@@ -263,15 +244,11 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 
 ## Changelog
 
-### Production-hardening pass — 2026-08-10
+### 2.5.0 — 2026-08-10
 
-- Added canonical internationalization/localization contract with string externalization, locale formatting, translation workflow, RTL, legal/support localization, and `I18N-*` evidence.
-- Added secure admin/internal support tooling contract with least privilege, server-side authorization, auditability, impersonation controls, billing/privacy operations, moderation, anomaly detection, and `ADMIN-*` evidence.
-- Added evidence-based stack/language/framework selection guidance and required decision records.
-- Added final handoff, RUNBOOK, ownership, maintainability, and continuity requirements.
-- Added `HANDOFF.md`, `RUNBOOK.md`, and `DECISIONS.md` templates.
-- Added executable performance/scaling probe coverage and wired production contracts into the PRD and skill entrypoint.
-- Preserved existing security, payments, legal/trust, observability, scaling, and privacy contracts while making the remaining major operational surfaces first-class.
+- Added first-class contracts for messaging, onboarding/activation, feature flags/progressive delivery, analytics/product telemetry, SEO/public surfaces, database migrations, background jobs/queues, search, file/media pipelines, multi-region/residency, developer experience, release communication, deeper AI evaluation, advanced accessibility, and testing strategy.
+- Integrated the new contracts into `LEVIATHAN.md`, `SKILL.md`, `templates/PRD.md`, threat modeling, testing probes, evidence expectations, and applicable release blockers.
+- Bumped policy version from 6 to 7.
 
 ### 2.4.0 — 2026-08-10
 
