@@ -2,8 +2,8 @@
 
 **Universal, evidence-driven AI software engineering protocol for Claude Code, Codex, Kimi, Lovable, Cursor, Windsurf, Copilot, Gemini/Cline-class agents, and future coding agents.**
 
-**Current release:** 2.3.0  
-**Policy:** 5  
+**Current release:** 2.4.0  
+**Policy:** 6  
 **Artifact schema:** 1  
 **Skills ecosystem:** skills.sh discovery + audited selection
 
@@ -11,9 +11,25 @@ Leviathan helps AI coding agents ship software that is not merely functional, bu
 
 > Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable. Unknown is not passed. A test that was not run is not a test that passed.
 
-## What changed in 2.3.0
+## What changed in 2.4.0
 
-This release expands the production gate from security/payment/UI principles into a broader **production-completeness contract**. The goal is to make the common failures of AI-generated products explicit, testable, and difficult to ship accidentally.
+This release makes **payments and money movement a first-class production contract** rather than a high-level threat-model item. It adds canonical payment architecture, concrete provider/webhook invariants, subscription and metered-billing lifecycle rules, reconciliation, dunning, tax, refunds/disputes, marketplace payouts/KYC, mobile billing decisions, operational runbooks, executable `PAY-*` probes, and automatic release blockers.
+
+### Payments and money safety
+
+- PSP state is the authoritative payment source; local payment/entitlement state is a reconcilable projection.
+- Client success redirects can never grant paid access or fulfill an order.
+- Webhooks must use raw-body signature verification, durable event-ID deduplication, idempotent side effects, replay protection, and out-of-order handling.
+- R3/R4 payment systems require reconciliation with zero unexplained drift, not merely a reconciliation job that ran.
+- One-time payments, subscriptions, trials, upgrades/downgrades, quantity changes, proration, cancellation timing, failed-payment/dunning and payment recovery are explicitly modeled.
+- Refunds, partial refunds, disputes/chargebacks and entitlement reversal require authorization and audit trails.
+- Tax treatment must be defined for served markets and evidenced in representative test invoices.
+- Marketplace/connected-account flows require onboarding/KYC/capability, payout, reserve/negative-balance and account-state handling where applicable.
+- Usage/metered billing must be server-authoritative, idempotent, abuse-resistant and reconcilable.
+- Sandbox/live credentials are strictly separated and payment secrets/card data are release-gated out of client bundles, logs and artifacts.
+- Payment initiation, refunds, payout operations and customer billing sessions receive abuse/rate-limit testing.
+
+See `references/payments.md`, `references/payments/production-payments.md`, and `references/testing.md`.
 
 ### UI, UX, and accessibility
 
@@ -21,7 +37,7 @@ This release expands the production gate from security/payment/UI principles int
 - Double-submit/race protection is required for mutations.
 - User-facing errors must explain what happened and the next safe action without leaking internals.
 - First-run/onboarding and progressive disclosure are required for products with meaningful workflows.
-- Accessibility now explicitly covers dynamic `aria-live`, focus management, landmarks/headings, error association, touch targets, forced colors, reduced motion, and representative screen-reader journeys.
+- Accessibility explicitly covers dynamic `aria-live`, focus management, landmarks/headings, error association, touch targets, forced colors, reduced motion, and representative screen-reader journeys.
 - Internationalization/localization is a first-class contract when multiple locales or markets are targeted.
 - RTL, text expansion, locale formatting, pluralization, timezone/DST, sorting/search and missing-translation behavior must be considered.
 
@@ -55,32 +71,28 @@ This release expands the production gate from security/payment/UI principles int
 
 For products that themselves use AI:
 
-- accessible streaming and cancellation
-- uncertainty/verification cues where meaningful
-- edit/reject/regenerate/undo
-- explicit model data/tool visibility
-- least-privilege tool authorization independent of prompts
-- per-user/tenant token/spend/rate limits
-- prompt/indirect injection and retrieval-isolation tests
-- human confirmation for irreversible/high-impact actions
-- consequential-action audit trails and provider-failure fallbacks
-
-### Production completeness
-
-The new `references/production-completeness.md` converts the above into a matrix of **decision -> artifact -> evidence -> risk-tier gate**. `not_run`, `unknown`, `simulated`, and `not_available` remain non-passes.
+- accessible streaming and cancellation;
+- uncertainty/verification cues where meaningful;
+- edit/reject/regenerate/undo;
+- explicit model data/tool visibility;
+- least-privilege tool authorization independent of prompts;
+- per-user/tenant token/spend/rate limits;
+- prompt/indirect injection and retrieval-isolation tests;
+- human confirmation for irreversible/high-impact actions;
+- consequential-action audit trails and provider-failure fallbacks.
 
 ## Architecture
 
 ```text
-                         LEVIATHAN 2.3
+                         LEVIATHAN 2.4
                               |
           +-------------------+-------------------+
           |                   |                   |
     UNIVERSAL POLICY    SKILLS ECOSYSTEM    PROJECT CONTEXT
+          |                   |               PRD + DESIGN
+     STATE MACHINE       discover/audit          SECURITY
+          |              select/lock             DECISIONS
           |                   |                   |
-     STATE MACHINE       discover/audit       PRD + DESIGN
-          |              select/lock          SECURITY
-          |                   |               DECISIONS
           +-------------------+-------------------+
                               |
                     VERIFICATION ENGINE
@@ -159,9 +171,22 @@ It generates evidence but is **not** a substitute for stack-specific security te
 
 ## Payments
 
-Payments are R3 by default. Fulfillment must come from verified server-side provider events, never from a browser success redirect. Webhooks must be signature-verified, idempotent, replay-safe, and order-independent. Reconciliation, entitlement/ledger consistency, refunds, disputes, subscription transitions, dunning, tax treatment, money-safe arithmetic and sandbox/live separation must be addressed.
+Payments are R3 by default and R4 for material marketplace, payout, regulated, or high-impact financial risk. The canonical policy is `references/payments.md`.
 
-Read `references/payments-money.md` and the existing payment-specific reference pack.
+Core invariants:
+
+- provider state is authoritative;
+- client redirects never fulfill;
+- webhooks use raw-body signature verification;
+- event IDs are durably deduplicated;
+- payment and entitlement mutations are idempotent;
+- duplicate, concurrent, replayed and out-of-order events are safe;
+- reconciliation detects zero unexplained drift;
+- subscriptions, dunning, refunds, disputes, tax, payouts/KYC, usage metering and mobile billing decisions are explicit where applicable;
+- sandbox/live credentials are isolated;
+- money uses safe arithmetic and authoritative server-side values.
+
+Run the payment evidence battery in `references/testing.md` (`PAY-001` through `PAY-023`). A passing checkout UI is not evidence of payment correctness.
 
 ## Design and anti-slop
 
@@ -237,6 +262,8 @@ DEPENDENCIES.md
 RUNBOOK.md
 ```
 
+For money-moving products, `PRD.md` must contain the money-movement decisions described by `templates/PRD.md` and reference `references/payments.md`.
+
 No secrets belong in `.leviathan/`.
 
 ## Self-check
@@ -258,6 +285,17 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 
 ## Changelog
 
+### 2.4.0 — 2026-08-10
+
+- Added canonical `references/payments.md` for production money movement.
+- Added one-time payment, subscription, usage-based, refund, dispute, tax, dunning and entitlement contracts.
+- Added marketplace/payout/connected-account/KYC guidance.
+- Added payment provider webhook state-machine and reconciliation requirements.
+- Added `PAY-001` through `PAY-023` executable payment verification probes.
+- Added payment-specific threat-model cases and automatic release blockers.
+- Added `templates/PRD.md` with a required money-movement decision contract.
+- Bumped policy version from 5 to 6.
+
 ### 2.3.0 — 2026-08-10
 
 - Added production-completeness matrix mapping failure modes to artifacts, evidence and risk-tier gates.
@@ -270,7 +308,6 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 - Added AI-product UX/safety contract.
 - Added explicit multi-tenancy/admin/impersonation contract.
 - Expanded payment, security, reliability and evidence requirements.
-- Bumped policy version from 4 to 5.
 
 ### 2.2.0 — 2026-08-10
 
@@ -290,23 +327,16 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 
 ## Roadmap
 
-### 2.4
+### 2.5
 
 - Stack-specific executable RLS/authz probes for major database providers.
 - Accessibility runner integration with representative screen-reader harnesses.
 - SBOM/dependency/license evidence runner.
-- Payment test harness adapters.
+- Payment provider test-harness adapters.
 - Performance/load evidence adapters.
 - Mechanical copy/UI anti-slop scoring.
 - Skills.sh audit ingestion and hash pinning.
 - Automated UI-state matrix generation from routes/actions.
-
-### 2.5
-
-- Cross-agent benchmark corpus with quantitative regression scoring.
-- Signed evidence/provenance and artifact attestations.
-- Capability-aware multi-agent delegation.
-- Concurrency/failure-injection harnesses.
 
 ### 3.0
 
