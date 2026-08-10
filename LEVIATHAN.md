@@ -1,7 +1,7 @@
 # LEVIATHAN Universal Specification
 
-Version: 2.2.1
-Policy version: 4.1
+Version: 2.4.0
+Policy version: 6
 Artifact schema version: 1
 Skills ecosystem integration: skills.sh
 
@@ -44,9 +44,9 @@ Use `skills/catalog-sync.mjs`, `skills/apply.mjs`, and `skills/policy.md`. See `
 `R1` static UI or isolated local change.
 `R2` application logic or data read/write.
 `R3` authentication, payments, personal data, external integrations, or production deployment.
-`R4` safety-critical, regulated, destructive, financial, or high-impact automation.
+`R4` safety-critical, regulated, destructive, financial, marketplace/payout, or high-impact automation.
 
-Higher risk means deeper discovery, threat modeling, independent review, stronger evidence, tighter skill permissions, and more human approval.
+Higher risk means deeper discovery, threat modeling, independent review, stronger evidence, tighter skill permissions, and more human approval. Any product that accepts, moves, refunds, or grants material value based on money is R3 at minimum; marketplace/payout or regulated financial flows may require R4.
 
 ## State machine
 
@@ -102,13 +102,33 @@ Use maintained cryptographic primitives. No secrets in client bundles, client-ex
 
 ## Payments floor
 
-Payments are R3 by default. Never fulfill from a client redirect. Fulfill from verified provider events/server-to-server confirmation only. Verify webhook signatures against the raw body. Use provider idempotency keys and an internal unique event-ID/idempotency table. Handle duplicate, retry, out-of-order, failed, refund, dispute, and subscription events. Maintain an entitlement model and a scheduled reconciliation job. Use integer minor units/appropriate money types, minimize PCI scope, separate sandbox/live secrets, and maintain an audit trail.
+Payments are R3 by default and R4 when material financial, marketplace/payout, regulated, or high-impact financial risk exists. The PSP is the source of truth for payment state; local payment/entitlement state is a projection that must be reconcilable.
 
-See `references/payments/production-payments.md`.
+Non-negotiable controls:
+
+- never fulfill from a client redirect or local `paid=true` flag;
+- fulfill only from verified provider webhook/server-to-server evidence;
+- verify webhook signatures against the raw request body using environment-specific secrets;
+- persist provider event IDs under durable unique constraints;
+- use provider idempotency keys for outbound writes and internal idempotency for side effects;
+- handle duplicate, concurrent, retry, replay, stale, and out-of-order events;
+- reconcile payments, subscriptions, refunds, disputes, payouts, and entitlements against canonical provider state;
+- separate payment, entitlement, and accounting/ledger state;
+- keep prices, quantities, usage, balances, and entitlements server-authoritative;
+- use integer minor units or safe decimal/money types;
+- minimize PCI scope with hosted/provider-controlled collection;
+- strictly separate sandbox/test and live credentials and environments;
+- protect refunds, payouts, connected accounts, KYC/capabilities, tax, dunning, and disputes where applicable;
+- maintain an audit trail for financial state transitions;
+- require human approval before enabling live money movement unless authority was explicitly delegated.
+
+See `references/payments.md` and `references/payments/production-payments.md`.
 
 ## Threat model
 
 For R2+ systems identify assets, actors, trust boundaries, entry points, threats, impact, likelihood, controls, residual risk, and verification. Map to STRIDE and OWASP guidance when appropriate. For AI systems also model prompt injection, indirect prompt injection, retrieval/cross-tenant leakage, tool overreach, unsafe arguments, data exfiltration, model/provider failure, and cost/abuse exhaustion.
+
+For payment systems explicitly model client fulfillment bypass, price tampering, webhook forgery, replay, duplicate/concurrent fulfillment, out-of-order events, provider outages, reconciliation drift, refund abuse, disputes/chargebacks, subscription drift, usage-meter manipulation, tax errors, payout/KYC failures, credential crossover, secret leakage, and ledger corruption. See `references/threat-model.md`.
 
 ## Accessibility
 
@@ -154,7 +174,9 @@ Use `node tools/leviathan-check.mjs` and, where applicable, `node tools/security
 
 For R3+ systems, the security evidence bundle MUST include, where applicable: executed IDOR/cross-user/cross-tenant matrix; RLS/object-policy inventory and tests; direct server-side privileged-action tests; session-storage/rotation/revocation audit; OTP/recovery anti-enumeration and rate-limit tests; header/CSP/CORS/CSRF review; upload validation/storage-isolation test; webhook signature/replay/idempotency test; and secret scans covering repository history and build/CI artifacts.
 
-### Automatic security release blockers
+For every R3/R4 money-moving product, the payment evidence bundle MUST include applicable `PAY-*` results: forged webhook rejection; duplicate/replay safety; out-of-order convergence; fulfillment-only-on-trusted-provider-evidence; client-price/entitlement tampering; outbound idempotency; required-action/3DS; refunds; failed-payment/dunning; subscription lifecycle/proration; entitlement consistency; reconciliation with zero unexplained drift; sandbox/live separation; secret/card-data scanning; tax evidence; concurrent fulfillment; dispute/chargeback handling; payout/KYC/capability handling; metered usage integrity; payment rate-limit exercise; financial audit trail; and provider-outage/degraded behavior.
+
+## Automatic security and payment release blockers
 
 Unless an explicit, time-limited, owner-approved exception with compensating controls is recorded, the following block `RELEASE_APPROVED`:
 
@@ -166,11 +188,16 @@ Unless an explicit, time-limited, owner-approved exception with compensating con
 - any side-effecting webhook without required authenticity/signature verification;
 - any unresolved authentication or authorization bypass;
 - any cross-tenant data exposure;
-- any payment fulfillment path that trusts a client redirect instead of verified server/provider evidence.
+- any payment fulfillment path that trusts a client redirect instead of verified server/provider evidence;
+- any money-moving webhook without durable event-ID/idempotency protection;
+- any duplicate/concurrent payment side effect that can grant value twice;
+- any unexplained reconciliation drift;
+- any live credential exposed to test/staging or sandbox credential exposed to production;
+- any client-controlled price, balance, entitlement, or authoritative usage path;
+- any missing refund/payout authorization where applicable;
+- any raw card-data architecture without explicitly approved compliance controls.
 
 A valid exception must include owner, justification, affected scope, compensating controls, residual risk, creation date, and expiry date. Expired exceptions automatically become blockers.
-
-A critical security finding blocks release unless an explicitly documented human exception is allowed by the project risk policy. Security, payment, and data-isolation exceptions require an owner, justification, mitigation, expiry date, and residual-risk statement. Exceptions must not silently become permanent.
 
 ## Release decision
 
@@ -190,7 +217,8 @@ skills/                       external ecosystem integration
   packs/index.md
 references/                   stable Leviathan knowledge
   security/                   authz/RLS/session/XSS
-  payments/                   money-handling
+  payments.md                 canonical money policy
+  payments/                   payment implementation guides
   frontend/                   UX/accessibility/anti-slop
   product/                    trust/support/legal-risk
   scale/                      performance/reliability
@@ -201,3 +229,42 @@ evals/                        regression/adversarial evaluation
 ```
 
 The repository must not become a dump of third-party skill files. External skills are referenced, selected, reviewed, audited where available, and pinned rather than indiscriminately copied.
+
+## Version history
+
+### 2.4.0 — 2026-08-10
+
+- Added canonical `references/payments.md` covering one-time payments, subscriptions, usage billing, webhooks, reconciliation, dunning, tax, refunds, disputes, payouts/connected accounts, KYC/capabilities, entitlements, mobile billing, operations, evidence, and release blockers.
+- Added executable `PAY-001` through `PAY-023` verification probes to the testing protocol.
+- Expanded payment threat modeling for concurrency, provider outages, entitlement drift, tax, payout, metering, credential crossover, and ledger risks.
+- Strengthened R3/R4 payment release blockers.
+- Bumped policy version to 6.
+
+### 2.3.0 — 2026-08-10
+
+- Added production-completeness matrix mapping failure modes to artifacts, evidence and risk-tier gates.
+- Added first-class UI state/resilience contract.
+- Added accessibility depth and internationalization/localization contract.
+- Added data integrity, concurrency and API contract.
+- Added hostile-upload/media contract.
+- Added operations, resilience and deployment contract.
+- Added trust/support/dark-pattern/content contract.
+- Added AI-product UX/safety contract.
+- Added explicit multi-tenancy/admin/impersonation contract.
+- Expanded payment, security, reliability and evidence requirements.
+
+### 2.2.0 — 2026-08-10
+
+- Hardened RLS/object authorization, sessions, MFA, rate limiting and browser security.
+- Added production payment architecture and evidence requirements.
+- Added product-specific DESIGN.md and contextual anti-slop review.
+- Added support/trust and reliability guidance.
+
+### 2.1.0 — 2026-08-10
+
+- Added skills.sh discovery, selection, lock/provenance and least-privilege integration.
+- Added universal host support beyond Claude.
+
+### 2.0.0 — 2026-08-10
+
+- Established canonical host-neutral policy, state machine, evidence model, security/accessibility/performance gates, observability, recovery, provenance and adversarial evaluation strategy.
