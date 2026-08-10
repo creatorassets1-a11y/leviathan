@@ -1,62 +1,41 @@
-# Copywriting - Human Copy Rules & Humanizer Pass
+# Copywriting: Specific, Product-True, Human-Readable Copy
 
-All user-facing copy passes a humanizer check before it ships. The full ruleset is
-bundled in this repo at `references/humanizer/humanizer.md` - use it for the pass.
-This file sets Leviathan's own writing rules and keeps a condensed quick-reference
-of the most common patterns.
+The bundled humanizer is an editing aid, not a detector of human authorship and not a guarantee
+that text is "human". Use it to catch repetitive AI-like patterns, then make the final copy fit
+the actual product, audience, culture, and brand. A project may intentionally keep a pattern when
+it improves clarity.
 
 ## Process
 
-1. Draft copy in the DESIGN.md voice, for the interviewed audience.
-2. Run the humanizer pass: load `references/humanizer/humanizer.md` and apply it to
-   the draft (the quick-reference below covers the most frequent offenders).
-3. Apply the read-aloud test: any sentence that could sit on a thousand other sites
-   gets rewritten or cut. "We help businesses grow" is nobody; "We reupholster
-   mid-century chairs in Douala, two-week turnaround" is somebody.
-4. Verify claims: every number, testimonial, and logo on the page is real or it goes.
+1. Draft in the `DESIGN.md` voice for the interviewed audience.
+2. Apply the bundled humanizer pass when appropriate.
+3. Read aloud and remove generic claims that could describe thousands of products.
+4. Verify every factual claim, number, testimonial, logo, endorsement, and comparison.
+5. Check translations, local terminology, accessibility, and legal wording where relevant.
 
 ## Voice rules
 
-- Specific beats general, always. Name the place, the price, the turnaround, the
-  limitation.
-- One idea per sentence in UI copy; body copy may breathe.
-- Buttons say what happens: "Book a fitting," not "Get started." "Submit" is a last
-  resort.
-- Error messages: what happened + what to do next, in the user's language, no codes
-  without translation.
-- Microcopy is where trust lives: form hints, empty states, confirmation emails get
-  the same care as the hero.
-- The audience answer governs register: a tool for developers may say "API key"; a
-  site for clothing customers may not say "SKU."
-- No em dashes anywhere (standing rule). Use periods, commas, or parentheses.
+- Specific beats general. Name the place, price, turnaround, limitation, or behavior when it
+  matters.
+- Buttons say what happens: "Book a fitting" is better than "Get started" when that is the action.
+- Errors explain what happened and what to do next. Avoid leaking sensitive technical details.
+- Empty states explain the next useful action.
+- The audience controls register and vocabulary.
+- Do not fabricate trust signals, customer stories, metrics, partnerships, or reviews.
+- No em dashes in repository-authored product copy under the project style rule.
 
-## Quick-reference: the most common AI-writing fingerprints
+## Common AI-writing fingerprints
 
-The full pattern catalog lives in `references/humanizer/humanizer.md`; these are the
-ones that show up in nearly every draft:
+The full catalog is in `references/humanizer/humanizer.md`. Review for inflated significance,
+repetitive rule-of-three phrasing, vague attribution, promotional adjective stacks, filler frames,
+uniform sentence structure, hedging, generic transformation language, and copy that makes claims
+without evidence.
 
-- **Inflated significance:** "elevate," "unleash," "seamless," "effortless,"
-  "empower," "revolutionize," "delve," "landscape," "realm," "testament to."
-  Replace with the plain verb or cut.
-- **Rule of three everywhere:** "fast, simple, and secure." Break the rhythm; two
-  items or four, or one strong claim.
-- **Negative parallelism:** "It's not just X, it's Y." Say Y.
-- **Superficial -ing analysis:** "...showcasing our commitment to excellence,
-  ensuring the best experience." Delete the participle tail; state the fact.
-- **Vague attribution:** "studies show," "experts agree," "many users report" - cite
-  it or cut it.
-- **Promotional adjectives stacked:** "our innovative, cutting-edge platform." One
-  concrete noun beats three adjectives.
-- **Filler frames:** "In today's fast-paced world," "When it comes to," "It's worth
-  noting that." Start at the content.
-- **Uniform sentence length.** Vary it. Short lands.
-- **Perfect symmetry between sections** (every feature described in exactly two
-  sentences + benefit clause). Let content have its natural shape.
-- **Hedging stacks:** "can help to potentially improve." Commit or cut.
-- **Em dashes** used as universal glue. Banned here regardless.
+Do not mechanically delete every flagged pattern. Preserve clarity and the product's authentic
+voice.
 
-## Legal-page exception
+## Legal copy
 
-Privacy, terms, and cookie pages keep their formal register (per
-`legal-compliance.md`); the humanizer pass there smooths only the plain-language
-summary boxes, never the operative text.
+Privacy, terms, and cookie pages must remain accurate and appropriately formal. Humanize only
+plain-language summaries where that is safe. Never rewrite operative legal text merely to make it
+sound more conversational.
