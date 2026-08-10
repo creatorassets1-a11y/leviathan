@@ -11,75 +11,57 @@ Leviathan helps AI coding agents ship software that is not merely functional, bu
 
 > Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable. Unknown is not passed. A test that was not run is not a test that passed.
 
-## What changed in 2.4.0
+## What changed in the production-hardening pass
 
-This release makes **payments and money movement a first-class production contract** rather than a high-level threat-model item. It adds canonical payment architecture, concrete provider/webhook invariants, subscription and metered-billing lifecycle rules, reconciliation, dunning, tax, refunds/disputes, marketplace payouts/KYC, mobile billing decisions, operational runbooks, executable `PAY-*` probes, and automatic release blockers.
+The production-hardening pass closes the remaining major protocol gaps by making privacy engineering, internationalization, admin/support tooling, stack selection, and operational handoff first-class contracts. It also wires those contracts into the PRD, skill entrypoint, evidence expectations, and release workflow.
 
-### Payments and money safety
+### Security and data
 
-- PSP state is the authoritative payment source; local payment/entitlement state is a reconcilable projection.
+- Deny-by-default RLS/object authorization, server-side privilege checks, session lifecycle, MFA/recovery, rate-limit exercise, upload isolation, webhook authenticity, and secret scanning are mandatory where applicable.
+- Privacy engineering covers living data inventory, minimization, consent enforcement, export/deletion/correction, retention automation, processors, residency, AI data flows, and executable privacy probes.
+- Personal-data policy claims must match actual implementation; missing evidence remains `not_run`, `not_available`, `simulated`, or `unknown`.
+
+### Payments
+
+- PSP state is authoritative; local payment/entitlement state is a reconcilable projection.
 - Client success redirects can never grant paid access or fulfill an order.
-- Webhooks must use raw-body signature verification, durable event-ID deduplication, idempotent side effects, replay protection, and out-of-order handling.
-- R3/R4 payment systems require reconciliation with zero unexplained drift, not merely a reconciliation job that ran.
-- One-time payments, subscriptions, trials, upgrades/downgrades, quantity changes, proration, cancellation timing, failed-payment/dunning and payment recovery are explicitly modeled.
-- Refunds, partial refunds, disputes/chargebacks and entitlement reversal require authorization and audit trails.
-- Tax treatment must be defined for served markets and evidenced in representative test invoices.
-- Marketplace/connected-account flows require onboarding/KYC/capability, payout, reserve/negative-balance and account-state handling where applicable.
-- Usage/metered billing must be server-authoritative, idempotent, abuse-resistant and reconcilable.
-- Sandbox/live credentials are strictly separated and payment secrets/card data are release-gated out of client bundles, logs and artifacts.
-- Payment initiation, refunds, payout operations and customer billing sessions receive abuse/rate-limit testing.
+- Webhooks require raw-body signature verification, durable event-ID deduplication, idempotent side effects, replay protection, and out-of-order handling.
+- R3/R4 payment systems require reconciliation with zero unexplained drift.
+- One-time payments, subscriptions, usage billing, refunds, disputes, tax, dunning, marketplace payouts/KYC, mobile billing decisions, and operational runbooks are covered where applicable.
 
-See `references/payments.md`, `references/payments/production-payments.md`, and `references/testing.md`.
+See `references/payments.md` and `references/testing.md`.
 
-### UI, UX, and accessibility
+### UX, accessibility, and localization
 
-- Every major async journey must account for loading/streaming, success, empty, validation error, server error, timeout, offline/reconnect, unauthorized, forbidden, rate-limited, partial-success/degraded, duplicate/in-flight, optimistic rollback, and retry-exhausted states where applicable.
-- Double-submit/race protection is required for mutations.
-- User-facing errors must explain what happened and the next safe action without leaking internals.
-- First-run/onboarding and progressive disclosure are required for products with meaningful workflows.
-- Accessibility explicitly covers dynamic `aria-live`, focus management, landmarks/headings, error association, touch targets, forced colors, reduced motion, and representative screen-reader journeys.
-- Internationalization/localization is a first-class contract when multiple locales or markets are targeted.
-- RTL, text expansion, locale formatting, pluralization, timezone/DST, sorting/search and missing-translation behavior must be considered.
+- Major async journeys cover loading, success, empty, validation error, server error, timeout, offline/reconnect, unauthorized, forbidden, rate-limited, partial/degraded, duplicate/in-flight, rollback, and retry-exhausted states where applicable.
+- Accessibility is tested on meaningful journeys, not only automated scans.
+- Internationalization externalizes strings, uses locale-aware formatting, supports fallback and text expansion, and requires RTL evidence where relevant.
 
-### Data, concurrency, uploads, and APIs
+See `references/i18n-and-l10n.md`.
 
-- Business invariants must be enforced with database constraints/transactions/authorization where appropriate, not application code alone.
-- Concurrency and duplicate/retry behavior must be designed for state-changing resources.
-- API contracts must define validation, errors, pagination, response authorization, rate limits, CORS, and versioning/non-public status.
-- Uploaded content is hostile input: validate content server-side, isolate storage, authorize every object operation, enforce quotas, and scan/process where risk warrants it.
-- Export/deletion, audit, retention, soft-delete and migration strategies must be explicit and tested where applicable.
+### Performance and reliability
 
-### Reliability and operations
+- Performance claims require product-specific budgets, repeated percentile measurements, realistic device/network evidence, and representative concurrency/load results.
+- Hot queries require query-plan/index evidence; N+1 behavior, pool saturation, queue failure, dependency degradation, and graceful recovery are tested.
+- Production observability requires structured correlation, safe redaction, health/readiness, golden signals, business/dependency metrics, actionable alerts, rollback, backup restore, and incident procedures.
 
-- Structured correlation IDs and safe redaction.
-- Business + technical telemetry.
-- Actionable alerts and human-readable runbooks.
-- Timeouts, exponential backoff with jitter, retry safety, circuit breakers, queues, dead-letter handling and safe replay where applicable.
-- Frontend error boundaries and structured backend error envelopes.
-- Environment separation, immutable build identity, feature flags/kill switches, migration rehearsal, rollback/forward-fix plans, restore evidence and RPO/RTO.
-- Load/concurrency and failure-injection testing when the risk/architecture warrants it.
+See `references/scale/performance-and-reliability.md`, `references/scale/performance-probes.md`, and `references/observability.md`.
 
-### Trust, content, and administration
+### Trust, support, and administration
 
-- Support/trust surfaces must match actual product behavior: Terms, Privacy, tracking notice, AUP/community rules, refunds/cancellation, contact, Help/FAQ, onboarding, accessibility, security/trust and status surfaces where appropriate.
-- No fabricated testimonials, logos, customers, awards, metrics, scarcity, endorsements or compliance claims.
-- No dark patterns.
-- Moderation and suspension must be server-side, auditable, proportionate and recoverable/appealable where appropriate.
-- Multi-tenant isolation is a data-layer requirement. Privileged impersonation must be time-limited, audited and constrained.
+- Terms, Privacy, tracking, AUP, refunds/cancellation, contact, Help/FAQ, guides, accessibility, security/trust, and status surfaces are generated according to actual product behavior and market risk.
+- Moderation/enforcement is server-side, auditable, attributable, and appealable where applicable.
+- Admin/support tooling uses least privilege, strong authentication, server-side authorization, append-only audit evidence, safe impersonation, billing controls, moderation workflows, privacy operations, anomaly detection, and access review.
 
-### AI-product safety
+See `references/legal-compliance.md`, `references/support-surfaces.md`, and `references/admin-and-support-tooling.md`.
 
-For products that themselves use AI:
+### Stack selection and handoff
 
-- accessible streaming and cancellation;
-- uncertainty/verification cues where meaningful;
-- edit/reject/regenerate/undo;
-- explicit model data/tool visibility;
-- least-privilege tool authorization independent of prompts;
-- per-user/tenant token/spend/rate limits;
-- prompt/indirect injection and retrieval-isolation tests;
-- human confirmation for irreversible/high-impact actions;
-- consequential-action audit trails and provider-failure fallbacks.
+- Stack choices are evidence-based and recorded with constraints, alternatives, operational consequences, and rationale.
+- Production systems require `HANDOFF.md`, `RUNBOOK.md`, `DECISIONS.md`, ownership, escalation, deployment/recovery procedures, known limitations, and maintainability instructions.
+- The original agent conversation is never the sole source of operational knowledge.
+
+See `references/stack-selection.md`, `references/handoff-and-operations.md`, `templates/HANDOFF.md`, `templates/RUNBOOK.md`, and `templates/DECISIONS.md`.
 
 ## Architecture
 
@@ -186,41 +168,38 @@ Core invariants:
 - sandbox/live credentials are isolated;
 - money uses safe arithmetic and authoritative server-side values.
 
-Run the payment evidence battery in `references/testing.md` (`PAY-001` through `PAY-023`). A passing checkout UI is not evidence of payment correctness.
+Run the payment evidence battery in `references/testing.md` (`PAY-*`). A passing checkout UI is not evidence of payment correctness.
 
-## Design and anti-slop
-
-`DESIGN.md` establishes information architecture, content hierarchy, product/brand rationale, typography, layout, motion, voice, responsive behavior, accessibility and complete UI-state coverage before substantial UI work.
-
-Anti-slop is contextual. Leviathan does not ban a font, color, framework or component library merely because AI often uses it. It detects unexplained generic patterns and requires product-specific rationale.
-
-Read `references/design-contract.md`.
-
-## Data, API, uploads
+## Data, API, uploads, privacy
 
 Read:
 
 - `references/data-integrity-api.md`
 - `references/uploads-media.md`
 - `references/multi-tenancy-admin.md`
+- `references/privacy-engineering.md`
 
 Never trust client-supplied ownership, tenant, role, price, balance, entitlement or security claims.
 
-## AI products
-
-Read `references/ai-product-safety.md` whenever the product itself uses AI. System prompts are never a security boundary; sensitive tool operations require independent server-side authorization.
-
-## Reliability and operations
-
-Read `references/operations-resilience.md`. Production systems require enough telemetry, recovery, deployment identity, dependency failure handling and runbook coverage to be operated by a human during failure.
-
 ## Trust and support
 
-Read `references/trust-support.md`. User-facing policy and support surfaces must be synchronized with actual behavior. Legal review is escalated when the risk warrants it; generated pages never prove legal compliance.
+Read `references/legal-compliance.md` and `references/support-surfaces.md`. User-facing policy and support surfaces must be synchronized with actual behavior. Legal review is escalated when the risk warrants it; generated pages never prove legal compliance.
 
 ## Internationalization
 
-Read `references/i18n-localization.md` whenever multiple locales/markets are targeted or the product may reasonably need localization.
+Read `references/i18n-and-l10n.md` whenever multiple locales/markets are targeted or the product may reasonably need localization.
+
+## Admin and support operations
+
+Read `references/admin-and-support-tooling.md` for multi-user products, billing, UGC, moderation, privacy requests, or any privileged support surface. All privileged actions are server-authorized and audited.
+
+## Stack selection
+
+Read `references/stack-selection.md` during Discover/PRD. Choose from requirements and operator constraints, not agent familiarity. Record alternatives and the decision in `DECISIONS.md`.
+
+## Reliability and operations
+
+Read `references/observability.md`, `references/cost-and-recovery.md`, and `references/handoff-and-operations.md`. Production systems require enough telemetry, recovery, deployment identity, dependency failure handling, ownership, and runbook coverage to be operated by a human during failure.
 
 ## Evidence
 
@@ -259,10 +238,9 @@ DESIGN.md
 SECURITY.md
 DECISIONS.md
 DEPENDENCIES.md
+HANDOFF.md
 RUNBOOK.md
 ```
-
-For money-moving products, `PRD.md` must contain the money-movement decisions described by `templates/PRD.md` and reference `references/payments.md`.
 
 No secrets belong in `.leviathan/`.
 
@@ -285,13 +263,23 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 
 ## Changelog
 
+### Production-hardening pass — 2026-08-10
+
+- Added canonical internationalization/localization contract with string externalization, locale formatting, translation workflow, RTL, legal/support localization, and `I18N-*` evidence.
+- Added secure admin/internal support tooling contract with least privilege, server-side authorization, auditability, impersonation controls, billing/privacy operations, moderation, anomaly detection, and `ADMIN-*` evidence.
+- Added evidence-based stack/language/framework selection guidance and required decision records.
+- Added final handoff, RUNBOOK, ownership, maintainability, and continuity requirements.
+- Added `HANDOFF.md`, `RUNBOOK.md`, and `DECISIONS.md` templates.
+- Added executable performance/scaling probe coverage and wired production contracts into the PRD and skill entrypoint.
+- Preserved existing security, payments, legal/trust, observability, scaling, and privacy contracts while making the remaining major operational surfaces first-class.
+
 ### 2.4.0 — 2026-08-10
 
 - Added canonical `references/payments.md` for production money movement.
 - Added one-time payment, subscription, usage-based, refund, dispute, tax, dunning and entitlement contracts.
 - Added marketplace/payout/connected-account/KYC guidance.
 - Added payment provider webhook state-machine and reconciliation requirements.
-- Added `PAY-001` through `PAY-023` executable payment verification probes.
+- Added `PAY-*` executable payment verification probes.
 - Added payment-specific threat-model cases and automatic release blockers.
 - Added `templates/PRD.md` with a required money-movement decision contract.
 - Bumped policy version from 5 to 6.
@@ -324,23 +312,6 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 ### 2.0.0 — 2026-08-10
 
 - Established canonical host-neutral policy, state machine, evidence model, security/accessibility/performance gates, observability, recovery, provenance and adversarial evaluation strategy.
-
-## Roadmap
-
-### 2.5
-
-- Stack-specific executable RLS/authz probes for major database providers.
-- Accessibility runner integration with representative screen-reader harnesses.
-- SBOM/dependency/license evidence runner.
-- Payment provider test-harness adapters.
-- Performance/load evidence adapters.
-- Mechanical copy/UI anti-slop scoring.
-- Skills.sh audit ingestion and hash pinning.
-- Automated UI-state matrix generation from routes/actions.
-
-### 3.0
-
-- Optional standalone orchestration runtime with deterministic transitions, policy packs, signed evidence, remote evidence storage, enterprise governance, and continuous project compliance.
 
 ## License and external content
 

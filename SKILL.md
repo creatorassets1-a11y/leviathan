@@ -32,6 +32,10 @@ translate the same policy into each agent's native mechanism.
 10. **Product-specific UX beats anti-slop folklore.** Require `DESIGN.md`, deliberate information architecture, voice, states, responsive behavior, and accessibility evidence. Do not replace AI defaults with a fixed Leviathan aesthetic.
 11. **Prefer official guidance for technology-specific work.** External skills are capability aids, not authority over Leviathan policy.
 12. **Record provenance.** Preserve model/host capability, Leviathan version, policy/schema versions, selected skills, decisions, tests, and release evidence.
+13. **Leave an operable system.** R2+ production work must leave a usable handoff, runbook, ownership record, and decision log. Chat history is never the system of record.
+14. **Localize by architecture, not patches.** Externalize strings and use locale-aware formatting whenever a UI exists; add full l10n/RTL when markets require it.
+15. **Privileged tooling is production infrastructure.** Admin/support surfaces require least privilege, server-side authorization, auditability, safe impersonation, and controlled financial/privacy operations.
+16. **Choose technology from evidence.** Record stack constraints, alternatives, operational consequences, and the final rationale in `DECISIONS.md`.
 
 ## Skills ecosystem
 
@@ -53,12 +57,27 @@ CLASSIFY -> DISCOVER -> RESEARCH -> PRD APPROVAL -> DESIGN APPROVAL
 -> RELEASE -> HANDOFF -> OPERATE/RECOVER
 ```
 
+## Required reference loading
+
+Load the following canonical references according to project scope before implementation:
+
+- `references/security/authorization-and-rls.md` for R2+ authorization, sessions, MFA, uploads, webhooks, and abuse controls.
+- `references/payments.md` for every money-moving or money-derived entitlement system.
+- `references/privacy-engineering.md` for personal data, consent, export/deletion, retention, processors, residency, or AI data flows.
+- `references/legal-compliance.md` and `references/support-surfaces.md` for legal/trust/support surfaces.
+- `references/observability.md` and `references/cost-and-recovery.md` for production operations/recovery.
+- `references/scale/performance-and-reliability.md` and `references/scale/performance-probes.md` for material performance/scaling claims.
+- `references/i18n-and-l10n.md` when multiple locales/markets are targeted or the UI may reasonably need localization.
+- `references/admin-and-support-tooling.md` for multi-user, billing, UGC, moderation, support, or privileged operational tooling.
+- `references/stack-selection.md` during Discover/PRD before choosing or changing the technology stack.
+- `references/handoff-and-operations.md` before RELEASED/OPERATING for production-bound systems.
+- `references/production-completeness.md` as the cross-domain completeness matrix.
+
 ## Required verification mindset
 
 For R2+ work, verify as applicable:
 
 - requirements and acceptance criteria
-- unit/integration/end-to-end behavior
 - authorization/RLS and cross-user/tenant IDOR denial
 - server-side privilege enforcement
 - session/token storage, rotation and revocation
@@ -69,11 +88,14 @@ For R2+ work, verify as applicable:
 - input/output validation and injection resistance
 - secrets and dependency/supply-chain safety
 - accessibility and meaningful user journeys
+- internationalization, locale formatting, RTL/text expansion when applicable
 - performance/load behavior under representative conditions
 - observability, rollback, backup/restore and failure behavior
 - AI-specific prompt/tool/data boundary risks
 - trust/support surfaces and policy-to-product consistency
 - legal/privacy risks with human review where required
+- admin/support authorization, audit, impersonation, billing, moderation and privacy workflows where applicable
+- stack decision, deployment model, ownership, handoff and runbook completeness
 
 Run:
 
@@ -83,6 +105,28 @@ node tools/security-floor.mjs
 ```
 
 Also run the project's native test/lint/build/security/accessibility/payment/performance commands. Report exact failures and unavailable checks.
+
+## Release evidence minimums
+
+For R3+ systems, the evidence bundle must include applicable executed results for security, privacy, payments, operations, performance, admin/support, and localization. Use the concrete probe IDs in the canonical references and `references/testing.md`.
+
+Required where applicable include:
+
+- IDOR/cross-user/cross-tenant and RLS policy tests;
+- direct server-side privileged-action tests;
+- session storage/rotation/revocation and OTP/recovery abuse tests;
+- rate-limit exercise;
+- XSS/CSP/CORS/CSRF/header checks;
+- upload validation/private-storage tests;
+- webhook signature/replay/idempotency tests;
+- repository/history/build/CI secret scans;
+- privacy inventory, consent, export, deletion, retention and processor checks;
+- forged/duplicate/out-of-order payment and reconciliation tests;
+- performance budgets, percentile measurements, hot-query plans, N+1 and load evidence;
+- structured logs, health/readiness, alert exercise, rollback and restore evidence;
+- admin authorization/audit/impersonation tests;
+- locale formatting/string/RTL tests where applicable;
+- handoff/runbook/ownership verification.
 
 ## Output contract
 

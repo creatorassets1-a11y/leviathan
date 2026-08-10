@@ -6,6 +6,7 @@
 - Audience:
 - Primary job to be done:
 - Markets/countries:
+- Target languages/locales:
 - Platforms:
 - Risk tier:
 - Owner:
@@ -236,6 +237,54 @@ For each critical journey record:
 
 Do not replace missing measurements with estimates. If the environment cannot reproduce the target workload, record the tested ceiling and limitation explicitly.
 
+## 5B. Internationalization / localization
+
+Complete this section when multiple locales/markets are targeted or the UI contains region-sensitive data. Read `references/i18n-and-l10n.md`.
+
+- Source language:
+- Supported language/region locales:
+- Locale fallback:
+- User locale preference and persistence:
+- Browser/OS locale default:
+- Date/time/timezone strategy:
+- Number/currency/unit formatting:
+- Plural/gender/message-format strategy:
+- RTL required?:
+- Text expansion/long-string testing:
+- Translation source/catalog format:
+- Translation review owner:
+- Legal/support translations:
+- Locale-specific URLs/SEO/hreflang:
+- Regional payment/tax/address adaptations:
+- Missing-translation behavior:
+- i18n evidence:
+
+Phase 0 minimum for an English-only MVP: externalize strings and use locale-aware formatting.
+
+## 5C. Stack and architecture selection
+
+Complete during Discover/PRD. Read `references/stack-selection.md`.
+
+- Existing codebase/stack:
+- Team/owner skills and maintenance constraints:
+- Delivery/time constraints:
+- Expected workload/latency:
+- Compliance/data residency constraints:
+- Operational model:
+- Budget/cost constraints:
+- Proposed stack:
+- Major alternatives:
+- Why the selected stack wins:
+- Deployment target:
+- Auth/security capability check:
+- Payment capability check where applicable:
+- Privacy/data lifecycle capability check:
+- Observability/recovery capability check:
+- Vendor lock-in/exit considerations:
+- Decision record location:
+
+Do not select a stack because it is popular or familiar to the agent. Record the rejected alternatives and rationale.
+
 ## 6. AI behavior
 
 If the product uses AI:
@@ -305,6 +354,29 @@ If users or UGC are present:
 - Human review recorded:
 - Known limitations:
 
+## 7A. Admin and internal support tooling
+
+Complete for multi-user products, products with payments/UGC/support, or any product requiring privileged operations. Read `references/admin-and-support-tooling.md`.
+
+- Admin/support roles:
+- Permission matrix:
+- Admin authentication/MFA:
+- Session timeout/re-authentication:
+- User lookup/data minimization:
+- Suspend/ban/reason/expiry:
+- Support ticket workflow:
+- Moderation/report/appeal workflow:
+- Refund/credit/grace/plan-adjustment limits:
+- Privacy export/deletion operations:
+- Security event visibility:
+- Impersonation required?:
+- Impersonation restrictions/time limit/audit:
+- Immutable/append-only audit log:
+- Admin action anomaly alerts:
+- Access review cadence:
+- Emergency admin revocation:
+- Admin evidence:
+
 ## 8. Non-functional requirements
 
 - Security:
@@ -315,16 +387,46 @@ If users or UGC are present:
 - Observability:
 - Scalability:
 - Privacy/data lifecycle: see §4A; no unsupported minimization, deletion, residency, or retention claim
-- Localization:
+- Localization: see §5B
+- Operability/handoff: see §10
 
 ## 9. Verification plan
 
-List exact evidence required before release. For privacy-sensitive products, include the applicable `PRIV-*` probes from `references/privacy-engineering.md`. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, and `SCALE-*` probes from `references/scale/performance-probes.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows.
+List exact evidence required before release. For privacy-sensitive products, include the applicable `PRIV-*` probes from `references/privacy-engineering.md`. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, `SCALE-*`, and `RELIABILITY-*` probes from `references/scale/performance-probes.md` and `references/scale/performance-and-reliability.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows. For admin tooling include the `ADMIN-*` matrix and audit/impersonation tests. For localization include the applicable `I18N-*` checks.
 
-## 10. Human approvals
+## 10. Handoff, ownership, and long-term maintainability
+
+Complete before `RELEASED`/`OPERATING` for R2+ production systems. Read `references/handoff-and-operations.md`.
+
+- `HANDOFF.md` location:
+- `RUNBOOK.md` location:
+- `DECISIONS.md` location:
+- Primary owner:
+- Backup/escalation owner:
+- Production/admin access list:
+- Access-review cadence:
+- Local/staging quick-start:
+- Architecture/data-flow description:
+- Environment differences:
+- Secret/configuration locations and rotation procedures:
+- CI/CD and promotion path:
+- Logs/metrics/traces/errors:
+- Backup/restore evidence:
+- Rollback evidence:
+- Test/dependency/SBOM procedure:
+- Legal/support/translation update procedure:
+- Data export/deletion procedure:
+- Region/environment creation procedure:
+- Vendor exit notes:
+- Known limitations/accepted risks:
+- Last handoff review:
+
+No project may depend on the original chat as the only operational documentation.
+
+## 11. Human approvals
 
 Record approval for real-money capture/payout, material security/privacy/legal risk, production credentials, destructive operations, and R4 deployment as applicable.
 
-## 11. Open decisions / exceptions
+## 12. Open decisions / exceptions
 
 Every exception must have owner, scope, rationale, compensating controls, residual risk, creation date, and expiry date.
