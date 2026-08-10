@@ -285,6 +285,230 @@ Complete during Discover/PRD. Read `references/stack-selection.md`.
 
 Do not select a stack because it is popular or familiar to the agent. Record the rejected alternatives and rationale.
 
+## 5D. Messaging, notifications and communications
+
+Complete when email, push, SMS, in-app notifications, or other outbound messaging exists. Read `references/email-notifications-messaging.md`.
+
+- Channels:
+- Transactional/security vs marketing classification:
+- Provider(s) and server-side credentials:
+- Template/version ownership:
+- Localization strategy:
+- User preferences/consent model:
+- Unsubscribe/suppression semantics:
+- Delivery/bounce/complaint tracking:
+- Outbox/queue design:
+- Retry/idempotency/dead-letter behavior:
+- Rate/spend limits:
+- Provider webhook authenticity:
+- Messaging evidence:
+
+## 5E. Onboarding and activation
+
+Complete for products with a meaningful first-run journey. Read `references/onboarding-and-activation.md`.
+
+- Activation outcome:
+- Shortest path to first value:
+- Required vs optional setup:
+- Progressive disclosure:
+- Skip/resume behavior:
+- Empty-state guidance:
+- Failure/offline/recovery path:
+- Activation event sequence:
+- Accessibility/mobile evidence:
+- Onboarding owner:
+
+## 5F. Feature flags and progressive delivery
+
+Complete when flags, experiments, staged rollout, or kill switches exist. Read `references/feature-flags-and-progressive-delivery.md`.
+
+- Flag inventory/owners:
+- Operational vs experiment vs entitlement flags:
+- Default/fail-safe behavior:
+- Targeting attributes:
+- Rollout stages:
+- Kill switch:
+- Audit log:
+- Expiry/review date:
+- Experiment hypothesis/metric/guardrails:
+- Rollback evidence:
+
+## 5G. Analytics and product telemetry
+
+Complete when product analytics or non-operational telemetry exists. Read `references/analytics-and-product-telemetry.md`.
+
+- Event taxonomy/schema version:
+- Identity strategy:
+- Consent/region gating:
+- Data minimization:
+- Retention/deletion:
+- Data dictionary/owner:
+- Ingestion validation:
+- Duplicate/out-of-order handling:
+- Analytics providers/processors:
+- AI telemetry minimization:
+- Analytics evidence:
+
+## 5H. Public surfaces and SEO
+
+Complete for public/indexable pages. Read `references/seo-and-public-surfaces.md`.
+
+- Indexable page inventory:
+- Title/description strategy:
+- Canonical URL strategy:
+- Sitemap/robots:
+- Structured data:
+- Social cards:
+- Locale URLs/hreflang:
+- Private-page indexing protection:
+- Public-page performance/accessibility evidence:
+
+## 5I. Database migrations and schema evolution
+
+Complete for production databases or material schema changes. Read `references/database-migrations-and-schema-evolution.md`.
+
+- Migration tool/process:
+- Expand/contract plan:
+- Backfill strategy/checkpointing:
+- Lock/traffic analysis:
+- Compatibility window:
+- Rollback/forward-recovery plan:
+- Backup/snapshot evidence:
+- Representative-data rehearsal:
+- Query-plan/replication impact:
+- Migration evidence:
+
+## 5J. Background jobs and queues
+
+Complete when asynchronous work exists. Read `references/background-jobs-and-queues.md`.
+
+- Queue/provider:
+- Job schemas/versions:
+- Idempotency keys:
+- Retry/backoff limits:
+- Dead-letter/quarantine:
+- Priority/fairness:
+- Concurrency/backpressure:
+- Queue lag alerts:
+- Replay tooling:
+- Outbox/transaction boundary:
+- Sensitive payload minimization:
+- Worker evidence:
+
+## 5K. Search and retrieval
+
+Complete when search/retrieval exists. Read `references/search.md`.
+
+- Source of truth:
+- Search engine/index:
+- Tenant/security metadata:
+- Permission/deletion propagation:
+- Ranking/relevance goals:
+- Query limits/timeouts:
+- Pagination:
+- Localization/tokenization:
+- Search evidence:
+
+## 5L. File/media pipeline
+
+Complete for uploads or media processing. Read `references/file-media-pipeline.md`.
+
+- Upload/quarantine path:
+- Validation/scanning:
+- Processing/transcoding/variants:
+- Worker limits:
+- Private/public delivery:
+- Signed URL policy:
+- CDN/cache invalidation:
+- Quotas/rate limits:
+- Metadata/EXIF handling:
+- Retention/deletion propagation:
+- Media evidence:
+
+## 5M. Multi-region and residency operations
+
+Complete when multiple regions or residency commitments exist. Read `references/multi-region-and-residency.md`.
+
+- Regions and authoritative data locations:
+- Vendor replication geography:
+- Routing:
+- Write authority:
+- Consistency model:
+- Replication lag:
+- Failover/failback:
+- Conflict handling:
+- Region-specific keys/access:
+- Residency evidence:
+
+## 5N. Developer experience and maintainability
+
+Complete for generated/handed-off repositories. Read `references/developer-experience.md`.
+
+- Supported runtime/tool versions:
+- Clean setup path:
+- Environment example:
+- Seed/demo data:
+- Test/lint/build commands:
+- Architecture docs:
+- Component/story docs where applicable:
+- Contribution workflow:
+- Migration/content/translation update workflow:
+- SBOM/dependency workflow:
+- New-developer verification:
+
+## 5O. Release communication
+
+Read `references/changelog-and-release-communication.md` for user-visible releases.
+
+- Changelog location:
+- User-facing release-note owner:
+- Material-change communication channels:
+- Billing/privacy/Terms notice process:
+- Support/internal release notes:
+- Deprecation/migration communication:
+
+## 5P. AI product evaluation
+
+Complete for material AI behavior. Read `references/ai-product-evaluation.md`.
+
+- Evaluation dataset/version:
+- Quality/safety/refusal metrics:
+- Prompt/model/config versions:
+- Tool/retrieval evaluation:
+- Human-review thresholds:
+- Rollout/rollback:
+- Cost/token budgets:
+- Provider fallback:
+- Privacy/deletion behavior:
+- AI evidence:
+
+## 5Q. Advanced accessibility
+
+Complete for complex/dynamic interfaces. Read `references/accessibility-advanced.md`.
+
+- Complex widgets:
+- Focus-management rules:
+- Live-region usage:
+- Form error association:
+- Zoom/reflow/forced-colors:
+- Reduced-motion:
+- Keyboard evidence:
+- Screen-reader evidence:
+
+## 5R. Testing strategy
+
+Read `references/testing-strategy.md` and define the appropriate test layers for the risk tier.
+
+- Unit coverage scope:
+- Integration/contract tests:
+- E2E critical journeys:
+- Security/negative tests:
+- Performance/load tests:
+- Visual regression:
+- Manual exploratory/accessibility tests:
+- R3/R4 independent review:
+- Evidence artifacts and owners:
+
 ## 6. AI behavior
 
 If the product uses AI:
@@ -388,15 +612,32 @@ Complete for multi-user products, products with payments/UGC/support, or any pro
 - Scalability:
 - Privacy/data lifecycle: see §4A; no unsupported minimization, deletion, residency, or retention claim
 - Localization: see §5B
+- Messaging/delivery reliability: see §5D
+- Onboarding/activation: see §5E
+- Progressive delivery/flags: see §5F
+- Analytics/privacy telemetry: see §5G
+- Public SEO/discoverability: see §5H
+- Migration safety: see §5I
+- Background jobs/queues: see §5J
+- Search: see §5K
+- Media pipeline: see §5L
+- Multi-region/residency: see §5M
+- Developer experience: see §5N
+- Release communication: see §5O
+- AI evaluation: see §5P
+- Advanced accessibility: see §5Q
+- Testing strategy: see §5R
 - Operability/handoff: see §10
 
 ## 9. Verification plan
 
-List exact evidence required before release. For privacy-sensitive products, include the applicable `PRIV-*` probes from `references/privacy-engineering.md`. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, `SCALE-*`, and `RELIABILITY-*` probes from `references/scale/performance-probes.md` and `references/scale/performance-and-reliability.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows. For admin tooling include the `ADMIN-*` matrix and audit/impersonation tests. For localization include the applicable `I18N-*` checks.
+List exact evidence required before release. For privacy-sensitive products, include applicable `PRIV-*` probes from `references/privacy-engineering.md`. For performance/scaling claims, include applicable `PERF-*`, `LOAD-*`, `DB-*`, `SCALE-*`, and `RELIABILITY-*` probes. For money-moving products include applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows. For admin tooling include the `ADMIN-*` matrix and audit/impersonation tests. For localization include applicable `I18N-*` checks.
+
+For the operational surfaces in §5D–§5R, explicitly assign evidence for messaging delivery/preferences; onboarding activation/recovery; feature-flag rollout/kill switch; analytics consent/schema/retention; SEO/indexability; migrations/backfills; jobs/queues; search isolation; media pipeline; region/failover/residency; developer setup; release communication; AI evaluation/tool safety; advanced accessibility; and the selected test layers.
 
 ## 10. Handoff, ownership, and long-term maintainability
 
-Complete before `RELEASED`/`OPERATING` for R2+ production systems. Read `references/handoff-and-operations.md`.
+Complete before `RELEASED`/`OPERATING` for R2+ production systems. Read `references/handoff-and-operations.md` and `references/developer-experience.md`.
 
 - `HANDOFF.md` location:
 - `RUNBOOK.md` location:

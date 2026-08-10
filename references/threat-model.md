@@ -25,6 +25,24 @@ Webhooks: signature validation, replay windows, idempotency, origin assumptions,
 Admin: privilege escalation, audit-log tampering, support impersonation.
 Minors: age-related privacy, contact/messaging abuse, profiling, location exposure.
 
+## Remaining production-surface special cases
+
+Messaging: provider compromise, recipient injection, template injection, duplicate sends, bounce/complaint poisoning, unsubscribe bypass, SMS abuse, push-lock-screen leakage, provider outage, retry spend explosion.
+Onboarding: account takeover during setup, consent bypass, privilege/entitlement granted from client state, duplicate setup side effects, abandoned-state leakage, dark-pattern coercion.
+Feature flags: fail-open defaults, client-controlled targeting, flag used as authorization, stale flags, unsafe experiment exposure, kill-switch failure, cohort privacy leakage.
+Analytics: covert tracking, consent bypass, raw PII/prompt leakage, identity-linkage abuse, retention failure, analytics becoming authoritative business state, high-cardinality cost explosion.
+SEO/public surfaces: private-page indexing, canonical leakage, structured-data deception, secret/internal URL exposure, public form/API abuse, cache poisoning.
+Database migrations: destructive locks, incompatible deploys, partial backfills, duplicate backfill effects, data loss, replication lag, rollback incompatibility, schema drift.
+Jobs/queues: duplicate delivery, poison messages, infinite retries, priority starvation, cross-tenant payload leakage, queue exhaustion, unsafe replay, lost outbox events.
+Search: cross-tenant index leakage, stale deleted records, query-language injection, expensive pathological queries, ranking manipulation, cache leakage.
+Media: malicious parsers, decompression bombs, public object enumeration, unsafe transformations, derivative-copy leakage, CDN cache persistence, storage exhaustion.
+Multi-region: split-brain, stale reads, conflicting writes, residency violation, backup geography mismatch, failover data loss, routing leaks, inconsistent authorization.
+Developer experience: hidden machine state, real credentials in seed data, undocumented privileged setup, dependency drift, unsafe local defaults, production config copied into development.
+Release communication: accidental disclosure, misleading security claims, uncommunicated breaking/billing/privacy changes, stale help content.
+AI evaluation: benchmark gaming, prompt/model drift, unsafe regression, evaluator leakage, tool bypass, human-review bypass, unbounded cost, provider/model behavior changes.
+Advanced accessibility: keyboard traps, focus theft, incorrect live-region announcements, inaccessible custom widgets, error information not exposed to assistive technology, zoom/reflow failure.
+Testing: false confidence from unit-only coverage, contract drift, missing negative tests, visual regressions, environment mismatch, flaky tests masking failures, untested recovery paths.
+
 ## Money-specific threat model
 
 For any R3/R4 payment system explicitly model these assets and boundaries:

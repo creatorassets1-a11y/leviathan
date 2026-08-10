@@ -1,7 +1,7 @@
 # LEVIATHAN Universal Specification
 
-Version: 2.4.0
-Policy version: 6
+Version: 2.5.0
+Policy version: 7
 Artifact schema version: 1
 Skills ecosystem integration: skills.sh
 
@@ -132,7 +132,7 @@ For payment systems explicitly model client fulfillment bypass, price tampering,
 
 ## Accessibility
 
-Build accessibility during implementation. Use semantic structure, labels, keyboard access, visible focus, accessible names, sufficient contrast, reduced-motion behavior, zoom/reflow, screen-reader checks, and platform-appropriate touch targets. Automated scanning is supplementary, never proof of full accessibility. Exercise meaningful user journeys, not only component snapshots.
+Build accessibility during implementation. Use semantic structure, labels, keyboard access, visible focus, accessible names, sufficient contrast, reduced-motion behavior, zoom/reflow, screen-reader checks, and platform-appropriate touch targets. For complex widgets and dynamic interfaces also apply `references/accessibility-advanced.md`: correct widget semantics, focus management, live-region discipline, complex-form error association, forced-colors/reflow considerations, and actual keyboard/screen-reader evidence.
 
 ## Product-specific design and copy
 
@@ -150,13 +150,34 @@ If moderation or sanctions exist, enforce them server-side with audit trails, re
 
 See `references/product/trust-and-support.md` and `references/legal-compliance.md`.
 
+## Operational product surfaces
+
+The following are first-class when applicable rather than optional polish:
+
+- `references/email-notifications-messaging.md`: transactional/marketing separation, delivery state, consent/preferences, provider webhooks, retries, suppression, and abuse/spend controls.
+- `references/onboarding-and-activation.md`: first-value definition, progressive disclosure, resumable onboarding, activation measurement, and degraded/recovery paths.
+- `references/feature-flags-and-progressive-delivery.md`: safe defaults, server-side authorization, progressive rollout, kill switches, experiment integrity, ownership and expiry.
+- `references/analytics-and-product-telemetry.md`: event taxonomy, consent, minimization, retention/deletion, data quality, and analytics isolation from authoritative state.
+- `references/seo-and-public-surfaces.md`: public indexability, metadata, canonicalization, structured data, locale URLs, social cards, accessibility and performance.
+- `references/database-migrations-and-schema-evolution.md`: expand/contract, bounded backfills, lock/replication analysis, rollback/forward recovery, and representative-data verification.
+- `references/background-jobs-and-queues.md`: idempotent jobs, bounded retries, dead letters, backpressure, fairness, observability and replay.
+- `references/search.md`: source-of-truth authorization, tenant isolation, index consistency, relevance, injection resistance and performance.
+- `references/file-media-pipeline.md`: quarantine/validation, scanning, safe transformation, private delivery, variants, quotas and deletion propagation.
+- `references/multi-region-and-residency.md`: region inventory, routing, consistency, failover/failback, residency, replication and vendor geography.
+- `references/developer-experience.md`: reproducible setup, seed data, docs, CI parity, architecture ownership and new-developer onboarding.
+- `references/changelog-and-release-communication.md`: user-visible release notes, material change communication, support alignment and provenance.
+- `references/ai-product-evaluation.md`: evaluation harnesses, prompt/model versioning, human review, tool/output validation, cost controls and provider failure.
+- `references/testing-strategy.md`: risk-based test layers, contracts, visual/manual evidence, and R2/R3/R4 depth.
+
+These requirements do not force every project to implement every surface. Scope is determined in Discover/PRD; omitted surfaces require explicit `not_applicable` or `out_of_scope` rationale.
+
 ## Performance, scale, and reliability
 
 Choose architecture from measured requirements. Consider stateless services, horizontal scaling, caching, queues, edge limits, connection pooling, safe database migrations, indexing, query-plan inspection, pagination, N+1 prevention, graceful degradation, and idempotent workers when justified.
 
 Define performance budgets per critical journey and report repeated p50/p75/p95 measurements where useful. Test realistic device/network conditions and representative concurrency for systems with material traffic. Define SLOs/SLIs where appropriate, RPO/RTO, health/readiness, alert ownership, rollback, backup/restore, and dependency failure behavior.
 
-See `references/scale/performance-and-reliability.md`.
+See `references/scale/performance-and-reliability.md` and the applicable operational references above.
 
 ## Operations and recovery
 
@@ -175,6 +196,8 @@ Use `node tools/leviathan-check.mjs` and, where applicable, `node tools/security
 For R3+ systems, the security evidence bundle MUST include, where applicable: executed IDOR/cross-user/cross-tenant matrix; RLS/object-policy inventory and tests; direct server-side privileged-action tests; session-storage/rotation/revocation audit; OTP/recovery anti-enumeration and rate-limit tests; header/CSP/CORS/CSRF review; upload validation/storage-isolation test; webhook signature/replay/idempotency test; and secret scans covering repository history and build/CI artifacts.
 
 For every R3/R4 money-moving product, the payment evidence bundle MUST include applicable `PAY-*` results: forged webhook rejection; duplicate/replay safety; out-of-order convergence; fulfillment-only-on-trusted-provider-evidence; client-price/entitlement tampering; outbound idempotency; required-action/3DS; refunds; failed-payment/dunning; subscription lifecycle/proration; entitlement consistency; reconciliation with zero unexplained drift; sandbox/live separation; secret/card-data scanning; tax evidence; concurrent fulfillment; dispute/chargeback handling; payout/KYC/capability handling; metered usage integrity; payment rate-limit exercise; financial audit trail; and provider-outage/degraded behavior.
+
+For applicable operational surfaces, the evidence bundle also includes messaging delivery/preference/retry tests; onboarding activation/recovery tests; feature-flag default/rollout/kill-switch tests; analytics consent/schema/retention tests; migration/backfill/recovery tests; worker duplicate/retry/dead-letter/lag tests; search authorization/index consistency tests; media validation/private-delivery/deletion tests; regional failover/residency tests; AI evaluation/tool/human-review tests; advanced accessibility journeys; and clean-environment developer setup.
 
 ## Automatic security and payment release blockers
 
@@ -196,6 +219,8 @@ Unless an explicit, time-limited, owner-approved exception with compensating con
 - any client-controlled price, balance, entitlement, or authoritative usage path;
 - any missing refund/payout authorization where applicable;
 - any raw card-data architecture without explicitly approved compliance controls.
+
+For the newly added operational surfaces, applicable release blockers include: bypassable marketing consent/unsubscribe; messaging credentials or uncontrolled retry spend; activation flows that grant privileged/paid state from client-only state; feature flags that bypass authorization or fail open; non-essential analytics without required consent; migrations without data-loss/recovery evidence; workers without bounded retry/dead-letter behavior for consequential work; search cross-tenant leakage; private media exposed publicly; unverified residency commitments; production projects dependent on undocumented agent state; consequential AI actions without evaluation/tool authorization controls; and core accessibility workflows that cannot be completed with keyboard access.
 
 A valid exception must include owner, justification, affected scope, compensating controls, residual risk, creation date, and expiry date. Expired exceptions automatically become blockers.
 
@@ -222,6 +247,21 @@ references/                   stable Leviathan knowledge
   frontend/                   UX/accessibility/anti-slop
   product/                    trust/support/legal-risk
   scale/                      performance/reliability
+  email-notifications-messaging.md
+  onboarding-and-activation.md
+  feature-flags-and-progressive-delivery.md
+  analytics-and-product-telemetry.md
+  seo-and-public-surfaces.md
+  database-migrations-and-schema-evolution.md
+  background-jobs-and-queues.md
+  search.md
+  file-media-pipeline.md
+  multi-region-and-residency.md
+  developer-experience.md
+  changelog-and-release-communication.md
+  ai-product-evaluation.md
+  accessibility-advanced.md
+  testing-strategy.md
 schemas/                      machine-readable contracts
 tools/                        dependency-free verification
 evals/                        regression/adversarial evaluation
@@ -231,6 +271,12 @@ evals/                        regression/adversarial evaluation
 The repository must not become a dump of third-party skill files. External skills are referenced, selected, reviewed, audited where available, and pinned rather than indiscriminately copied.
 
 ## Version history
+
+### 2.5.0 — 2026-08-10
+
+- Added first-class production contracts for messaging, onboarding/activation, feature flags/progressive delivery, privacy-aligned analytics, SEO/public surfaces, schema evolution, background jobs, search, media pipelines, multi-region/residency operations, developer experience, release communication, deeper AI evaluation, advanced accessibility, and risk-based testing strategy.
+- Integrated the new references into the agent entrypoint, canonical policy, release evidence model, and applicable release blockers.
+- Bumped policy version to 7.
 
 ### 2.4.0 — 2026-08-10
 
