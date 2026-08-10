@@ -1,35 +1,36 @@
 # Database Migrations & Schema Evolution
 
-## Principles
-- Treat schema changes as production changes with rollback/forward-recovery plans.
-- Back up/snapshot material data before risky migrations and test recovery.
-- Prefer backward-compatible expand/contract migrations for systems that cannot tolerate downtime.
+Canonical contract for evolving persistent schemas safely under real traffic.
 
-## Expand/contract
-1. Expand: add nullable/new structures without breaking old code.
-2. Deploy compatible application code that can read/write both forms as needed.
-3. Backfill in bounded, resumable, observable batches.
-4. Verify counts, constraints, query plans, application behavior, and replication/queue impact.
-5. Contract: remove old fields/indexes only after all readers/writers have migrated and the rollback window has passed.
+## Migration rules
 
-Never combine destructive column removal, large blocking rewrites, and application behavior changes without a justified maintenance strategy.
+- Every migration is versioned, reviewed, reproducible, and reversible or has a documented forward-recovery path.
+- Back up/snapshot material data before destructive changes when the platform supports it, and rehearse the migration on representative data.
+- Prefer expand -> migrate/backfill -> verify -> contract. Avoid changing application and schema assumptions atomically when old and new versions may coexist.
+- Add nullable/new structures first, deploy compatible code, backfill in bounded batches, verify invariants, then enforce constraints or remove old fields after a safe window.
+- Never run unbounded backfills in a request path.
 
-## Backfills
-Use checkpoints, idempotency, throttling, progress metrics, retries, and a dead-letter/manual recovery path. Avoid unbounded transactions. Define how partial completion is detected and repaired.
+## Zero-downtime patterns
 
-## Zero-downtime considerations
-Inspect lock behavior, index creation strategy, table size, traffic, connection pools, replication lag, and deployment sequencing. For high-risk migrations rehearse on production-like data.
+For large tables, avoid long blocking locks. Use concurrent index creation where supported, batched backfills, resumable jobs, progress metrics, and bounded transactions. Measure lock duration and replication lag. Schedule destructive operations when load and recovery capacity permit.
 
-## Verification
-- migration applies from a clean baseline;
-- migration applies from the latest supported production schema;
-- representative data is preserved;
-- application remains compatible during the transition;
-- backfill is idempotent and resumable;
-- query plans remain acceptable;
-- rollback or forward recovery is demonstrated;
-- backup/restore evidence exists for material data;
-- concurrent reads/writes are tested for risky migrations.
+Database changes must be compatible with workers, background jobs, read replicas, caches, analytics, and rollback versions. A rollback of application code must not assume a schema state that the migration has already removed.
 
-## Blockers
-Block release when a migration can silently lose material data, leaves no recovery path, requires unsafe long locks without an approved maintenance window, or cannot be verified on representative data.
+## Data integrity
+
+Encode invariants in database constraints, transactions, unique indexes, foreign keys, checks, or equivalent trusted mechanisms. Define behavior for duplicate/retry/concurrent writes. Verify counts, checksums, referential integrity, and business invariants after migration.
+
+## Evidence: MIG-* probes
+
+- **MIG-001 rehearsal:** run the migration on a production-like snapshot and record duration, locks, errors, and resource impact.
+- **MIG-002 mixed-version:** run old/new application versions against the transitional schema and verify compatibility.
+- **MIG-003 backfill:** execute a representative backfill with restart/resume and verify no duplicate or skipped records.
+- **MIG-004 invariant:** verify constraints and business invariants before/after.
+- **MIG-005 rollback/forward:** exercise the documented rollback or forward-fix path in an isolated environment.
+- **MIG-006 load:** exercise the migration while representative traffic is present and observe latency, locks, pool saturation, and replication lag.
+- **MIG-007 backup:** verify the required snapshot/backup exists and a restore path is usable before destructive work.
+- **MIG-008 cleanup:** verify old columns/indexes/code paths are removed only after the compatibility window and decision record.
+
+## Release blockers
+
+Block when a migration can corrupt data, requires an unbounded production lock without approved mitigation, cannot recover from a failed partial execution, or leaves rollback incompatible with the deployed schema.

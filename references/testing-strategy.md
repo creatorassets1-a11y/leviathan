@@ -1,38 +1,50 @@
-# Testing Strategy
+# Testing Strategy & Evidence Depth
 
-Testing depth follows risk, criticality, and failure cost rather than a fixed percentage target.
+Canonical strategy for deciding what to automate, what to exercise manually, and how evidence scales with risk.
 
-## Test layers
-- Unit tests for deterministic business logic, validation, permissions, money calculations, parsers, and state transitions.
-- Component/UI tests for states and interactions that are cheaper to verify below end-to-end.
-- Integration tests for database/auth/payment/provider boundaries.
-- API/contract tests for externally consumed request/response and webhook schemas.
-- End-to-end tests for critical user journeys and high-risk workflows.
-- Security/negative tests for authorization, tenant isolation, abuse, secrets, injection, and unsafe side effects.
-- Performance/load tests for systems with material traffic or performance claims.
-- Visual regression for design-system/public surfaces where visual stability matters.
-- Manual exploratory/accessibility review for areas automation cannot prove.
+## Test pyramid
 
-## Pyramid and risk
-Keep fast deterministic tests broad and expensive environment tests targeted. R3/R4 systems require strong negative and integration coverage around money, authz, privacy, admin, and external side effects. A high test count does not compensate for missing critical-path evidence.
+Prefer fast unit tests for pure logic, integration tests for database/provider boundaries, contract tests for APIs/events, and a smaller set of end-to-end tests for critical user journeys. Do not replace integration behavior with mocks when the integration itself is the risk.
+
+Use property/invariant tests for money, authorization, idempotency, parsing, and state machines where practical. Use load/failure tests when concurrency or dependency failure is material.
+
+## Risk-tier expectations
+
+- **R0:** lint/format and content validation as applicable.
+- **R1:** component/unit tests plus representative accessibility and journey checks.
+- **R2:** integration/API/authorization tests, negative cases, data integrity, migration and abuse controls as applicable.
+- **R3:** all applicable R2 evidence plus payment/privacy/operations/performance/admin/support probes and real provider sandbox exercises.
+- **R4:** R3 plus independent review, adversarial testing, stronger failure injection, recovery drills, and explicit human approvals.
 
 ## Contract testing
-Version API/webhook/event schemas. Verify consumers tolerate compatible changes and reject unsafe ones. Test duplicate, missing, unknown, delayed, and malformed events where relevant.
 
-## Visual testing
-Capture representative viewport/state combinations rather than every pixel of every page. Review dynamic/loading/error/permission/RTL states when applicable.
+For APIs and webhooks, version request/response/event schemas. Test validation, authorization, error envelopes, pagination, idempotency, retries, and backward compatibility. Provider adapters should have fixture-based tests for authentic and malicious events.
+
+## Visual regression
+
+Use screenshots or component-level visual regression when visual correctness is material. Include responsive widths, loading/error/empty/permission states, long text, dark/light themes, and localization/RTL where applicable. Visual comparison is evidence of rendering, not proof of accessibility.
 
 ## Manual evidence
-Record exact journey, environment, actor, input class, expected result, observed result, timestamp, and limitations. Manual tests are evidence, not a substitute for repeatable automation where automation is practical.
 
-## Release tiers
-R0/R1: targeted checks appropriate to scope.
-R2: unit/integration + critical journey + authorization/data checks.
-R3: R2 plus security, privacy/payment/operations evidence as applicable, critical E2E, negative tests, and production-like verification.
-R4: R3 plus independent review, adversarial scenarios, stronger rollback/recovery, and mandatory human approvals required by policy.
+Manual checks are mandatory where automation cannot establish the property: screen-reader journeys, human review of AI behavior, legal consistency, real restore drills, operational runbooks, user-facing support quality, and provider-specific payment behavior.
 
-## Evidence quality
-Prefer deterministic commands and artifacts. Record coverage gaps explicitly. Never report a test as passed merely because the code or configuration exists.
+## Flake and reproducibility
 
-## Blockers
-Block release when a critical requirement has no appropriate verification strategy, a contract-breaking change lacks consumer evidence, or high-risk behavior is covered only by a happy-path demo.
+Record test environment, seed/version, dependency versions, and timestamps for non-deterministic evidence. Flaky tests are findings when they can hide regressions. Do not repeatedly rerun until green without recording the failure.
+
+## Evidence: TEST-* probes
+
+- **TEST-001 pyramid coverage:** map each critical requirement to a unit/integration/e2e/manual test.
+- **TEST-002 negative matrix:** verify failure, unauthorized, timeout, duplicate, concurrent, and degraded states for critical journeys.
+- **TEST-003 contract:** execute API/webhook compatibility and invalid-input cases.
+- **TEST-004 visual:** run representative responsive/state/localization visual checks where applicable.
+- **TEST-005 accessibility:** combine automated scan with manual keyboard/assistive-tech evidence.
+- **TEST-006 load:** exercise expected peak/concurrency and record percentile/error/saturation results where applicable.
+- **TEST-007 failure injection:** force material dependency/worker/database failures and verify recovery.
+- **TEST-008 restore/rollback:** execute real restore and rollback procedures for production-bound systems.
+- **TEST-009 flake review:** inspect failed/retried tests and document whether failures are product defects, environment limitations, or test instability.
+- **TEST-010 traceability:** every release-blocking requirement maps to executed evidence or an explicit approved exception.
+
+## Release blockers
+
+Block when critical requirements have no executable evidence, only happy-path tests exist for stateful/high-risk flows, or manual evidence is omitted where automation cannot prove the property.

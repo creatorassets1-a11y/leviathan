@@ -1,32 +1,42 @@
 # Background Jobs, Workers & Queues
 
-Use queues for work that does not need to block the user request or needs independent retry/isolation.
+Canonical contract for asynchronous work such as email, exports, webhooks, reports, media processing, scheduled tasks, and heavy AI jobs.
 
 ## Job contract
-Every job has a stable ID, type/version, payload schema, owner, priority, timeout, retry policy, idempotency key, and observable lifecycle. Never put unnecessary secrets or personal data in queue payloads.
 
-## Reliability
-Workers must be idempotent. Expect at-least-once delivery, duplicates, delayed messages, crashes, and out-of-order work. Use bounded retries with exponential backoff/jitter. Poison messages move to a dead-letter/quarantine path with safe replay tooling. Avoid infinite retry loops.
+Every job defines: input schema, idempotency key, owner, priority, timeout, retry policy, maximum attempts, visibility/lease timeout, side effects, dead-letter behavior, retention, and replay procedure.
 
-## Scheduling and priority
-Define concurrency, per-tenant fairness, priority classes, rate limits, maximum runtime, and backpressure. Expensive AI/payment/email jobs require budget controls and abuse protection.
+Workers are stateless where possible. Do not put authoritative state only in memory. Persist enough job state to distinguish `QUEUED -> PROCESSING -> SUCCEEDED/FAILED/DLQ` and recover after process termination.
 
-## Data consistency
-Use an outbox/transactional enqueue pattern when a database state change and job must not diverge. For workflows spanning systems, use explicit state machines rather than assuming distributed transactions.
+## Idempotency and side effects
 
-## Observability
-Measure queue depth, age/lag, throughput, success/failure/retry rates, worker saturation, dead-letter count, and processing latency. Alert on user-impacting lag, not every transient retry.
+A job may execute more than once. Use database uniqueness, idempotency records, transactional outbox/inbox patterns, or provider idempotency keys to prevent duplicate consequential effects. A retry must not double-send money, grant entitlement twice, create duplicate exports, or send duplicate security messages.
 
-## Evidence
-- duplicate-job test;
-- crash/retry test;
-- poison/dead-letter test;
-- replay test;
-- backpressure/concurrency test;
-- queue-lag alert test;
-- authorization/tenant isolation test;
-- payload secret/PII scan;
-- graceful shutdown test.
+Prefer transactionally recording an intent/outbox event with the state change that requires asynchronous delivery. Workers consume the durable event and acknowledge only after safe completion.
 
-## Blockers
-Block production when retries can duplicate money/entitlements/messages, jobs have no bounded failure path, or sensitive queue payloads are exposed without justification.
+## Failure behavior
+
+Transient failures use bounded exponential backoff with jitter. Permanent validation failures go to a DLQ with a human-readable reason. Poison messages must not block unrelated work. Replay tooling must be authorization-protected, auditable, rate-limited, and idempotent.
+
+Use queues with priority classes where necessary. Never let low-priority bulk work starve security, payment, or customer-critical jobs.
+
+## Capacity and observability
+
+Track queue depth, oldest-job age, enqueue rate, completion rate, retry rate, failure/DLQ rate, worker utilization, processing duration, and dependency latency. Alert on user-impacting lag, not arbitrary queue size alone. Set concurrency limits based on downstream capacity.
+
+Gracefully handle shutdown: stop accepting new work, finish/lease current work within bounds, and make interrupted jobs safely retryable.
+
+## Evidence: JOB-* probes
+
+- **JOB-001 idempotency:** execute the same job concurrently/repeatedly and prove one consequential side effect.
+- **JOB-002 crash recovery:** terminate a worker during processing and verify safe retry/recovery.
+- **JOB-003 retry:** force transient failures and verify bounded backoff, jitter, and maximum attempts.
+- **JOB-004 poison/DLQ:** force permanent failure and verify isolation, DLQ visibility, and safe replay.
+- **JOB-005 priority:** fill the queue with bulk work and verify critical work receives its documented priority.
+- **JOB-006 lag telemetry:** verify queue age/depth/throughput metrics and alerts.
+- **JOB-007 authorization:** attempt replay or administrative job mutation as an ordinary user and verify denial.
+- **JOB-008 shutdown:** exercise deployment/restart during active jobs and verify no lost or duplicated consequential work.
+
+## Release blockers
+
+Block when retries can duplicate consequential effects, failed jobs disappear without operator visibility, DLQ/replay is unsafe, or queue growth can exhaust a critical dependency without a bounded control.
