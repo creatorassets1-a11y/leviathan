@@ -1,0 +1,58 @@
+name: Leviathan CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate repository structure
+        shell: bash
+        run: |
+          test -f LEVIATHAN.md
+          test -f SKILL.md
+          test -f AGENTS.md
+          test -f README.md
+          test -f schemas/leviathan-state.schema.json
+          test -f schemas/evidence.schema.json
+          test -f tools/leviathan-check.mjs
+      - name: Validate JSON
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          for p in ['schemas/leviathan-state.schema.json','schemas/evidence.schema.json','evals/evals.json']:
+              with open(p, encoding='utf-8') as f: json.load(f)
+              print('valid:', p)
+          PY
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Frontmatter and size checks
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          text = Path('SKILL.md').read_text(encoding='utf-8')
+          assert text.startswith('---\n') and '\n---\n' in text, 'SKILL.md frontmatter missing'
+          desc = text.split('description:',1)[1].split('\n---',1)[0]
+          assert len(desc) <= 1024, 'SKILL description is over host upload limit'
+          assert len(text.splitlines()) <= 350, 'SKILL.md is too large; move detail to references'
+          print('frontmatter/size checks passed')
+          PY
+      - name: Smoke test checker
+        shell: bash
+        run: |
+          tmp=$(mktemp -d)
+          mkdir -p "$tmp/.leviathan/evidence"
+          cp tools/leviathan-check.mjs "$tmp/"
+          printf '%s\n' '{"leviathan_version":"2.0.0","policy_version":2,"artifact_schema_version":1,"phase":"VERIFIED","risk_tier":"R1"}' > "$tmp/.leviathan/state.json"
+          printf '%s\n' '{"schema_version":1,"checks":[]}' > "$tmp/.leviathan/evidence/ledger.json"
+          (cd "$tmp" && node leviathan-check.mjs)
