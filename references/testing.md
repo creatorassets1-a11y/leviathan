@@ -190,6 +190,102 @@ Where AI is present, test user/retrieved prompt injection, tool-authorization by
 
 Expected result: untrusted model/content output cannot expand authorization or cause an unapproved consequential side effect.
 
+## Payment probe batteries
+
+For every R3/R4 product that accepts, moves, refunds, or grants value based on money, use `references/payments.md` as the canonical checklist and execute every applicable probe. Do not mark payment behavior as passed from code inspection alone when the behavior can be exercised in a provider sandbox/test environment.
+
+### PAY-001: forged webhook rejection
+
+Send an event with a missing, malformed, or invalid provider signature. Expected result: rejected without business side effects. Evidence records endpoint, event type, response, timestamp, and absence of side effects.
+
+### PAY-002: duplicate event idempotency
+
+Deliver the exact same provider event at least twice, including concurrent delivery where practical. Verify only one fulfillment, entitlement grant, email, ledger mutation, refund, or other side effect occurs. Confirm the provider event ID is protected by a durable uniqueness constraint.
+
+### PAY-003: replay/stale-event safety
+
+Replay an old valid event after newer canonical provider state exists. Verify the application does not roll the product backward or grant/revoke value incorrectly. Use provider re-fetch where required.
+
+### PAY-004: out-of-order convergence
+
+Deliver subscription/payment lifecycle events in an intentionally wrong order. Verify final internal state converges to current provider state and does not depend on event ordering.
+
+### PAY-005: fulfillment source-of-truth
+
+Complete a payment through the provider's sandbox. Verify entitlement/order fulfillment occurs only after trusted server/provider evidence. Repeat by visiting or manipulating the client success URL without a successful provider event and confirm no entitlement is granted.
+
+### PAY-006: client-price/entitlement tampering
+
+Alter price, currency, quantity, product/price ID, user ID, order ID, plan, balance, or entitlement fields in client requests. Verify the server derives authoritative values from trusted product/provider state and rejects unauthorized changes.
+
+### PAY-007: outbound idempotency
+
+Retry the same server-side create/update operation using the provider's idempotency mechanism. Verify it does not create duplicate payment objects/orders/subscriptions.
+
+### PAY-008: authentication-required payment
+
+Exercise the provider's required-action/3DS test path. Verify the application does not fulfill before trusted success and handles cancellation/failure/retry correctly.
+
+### PAY-009: refund correctness
+
+Execute full and partial refunds where supported. Verify authorization, provider state, internal ledger/audit record, entitlement behavior, duplicate-refund protection, and customer-visible status.
+
+### PAY-010: failed-payment/dunning
+
+Use official provider sandbox failure scenarios. Verify invoice/subscription state, retry/dunning behavior, notifications, grace-period rules, access restrictions, and restoration after successful recovery.
+
+### PAY-011: subscription lifecycle
+
+Use provider test clocks/sandbox lifecycle controls where available to test trial, renewal, upgrade, downgrade, quantity change, proration, payment failure, immediate cancellation, end-of-period cancellation, and recovery.
+
+### PAY-012: entitlement consistency
+
+Compare the current provider subscription/product state with internal entitlements. Verify every protected resource checks entitlements server-side and that stale local plan fields cannot authorize access.
+
+### PAY-013: reconciliation
+
+Run the production-style reconciliation job against a controlled sandbox dataset containing successes, failures, refunds, duplicates, missing local records, and stale records. Expected result: zero unexplained drift and a durable evidence artifact.
+
+### PAY-014: sandbox/live isolation
+
+Verify live credentials cannot be loaded by tests/staging and sandbox credentials cannot accidentally target production. Inspect configuration, deployment variables, webhook endpoints, client bundles, and logs.
+
+### PAY-015: secret/card-data scan
+
+Scan source, history, CI artifacts, build output, logs, telemetry and support exports for provider secrets, webhook secrets, PAN/CVC or other prohibited payment data. Verify no secret is client-visible.
+
+### PAY-016: tax verification
+
+For each materially served taxable jurisdiction, execute representative test invoices/checkout flows and record calculated tax, tax treatment, currency, rounding, and tax-ID/exemption behavior where applicable.
+
+### PAY-017: concurrent fulfillment
+
+Trigger two or more fulfillment paths simultaneously for the same payment/order. Verify database constraints/idempotency prevent double fulfillment, duplicate credits, duplicate inventory release, or duplicate emails with financial consequence.
+
+### PAY-018: disputes/chargebacks
+
+Where applicable, simulate provider dispute/chargeback events. Verify access/ledger behavior, audit trail, customer status, and reconciliation.
+
+### PAY-019: payout/KYC/capability
+
+For marketplace products, test connected-account onboarding, incomplete KYC, capability loss, payout failure, negative balance/reserve behavior, refund effects, and account restriction events.
+
+### PAY-020: metered billing integrity
+
+Where usage-based billing exists, attempt duplicate, delayed, missing, manipulated, and concurrent usage reports. Verify attribution, idempotency, caps/credits/overages, and provider reconciliation.
+
+### PAY-021: payment abuse/rate limits
+
+Exercise rate limits on payment initiation, checkout/session creation, Customer Portal session creation, coupon/promotion abuse, refund requests, and other money-sensitive endpoints. Verify limits are actually triggered and safely recoverable.
+
+### PAY-022: audit trail
+
+Verify durable audit records for entitlement grants/revocations, refunds, payout changes, reconciliation repairs, manual billing changes, and security-sensitive payment operations. Audit records must identify actor/time/reason and must not expose secrets.
+
+### PAY-023: provider outage/degraded behavior
+
+Simulate timeout/provider failure for payment creation, webhook delivery, reconciliation, and customer billing status. Verify no false success, duplicate retry side effects, or irreversible local state is created.
+
 ## Scenario matrix
 
 For each core flow test as applicable:
@@ -212,7 +308,7 @@ mobile viewport
 desktop viewport
 ```
 
-Payments additionally require idempotency, webhook authenticity, replay resistance, failure, refund, dispute/chargeback handling where applicable, and reconciliation scenarios.
+Payments additionally require the dedicated `PAY-*` probes above for idempotency, webhook authenticity, replay resistance, fulfillment source-of-truth, concurrent delivery, failure/dunning, subscription lifecycle, refunds, disputes/chargebacks, reconciliation, tax, sandbox/live separation, and payout/metered flows where applicable.
 
 ## AI-specific security tests
 
