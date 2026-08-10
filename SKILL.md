@@ -87,6 +87,7 @@ Load the following canonical references according to project scope before implem
 - `references/ai-product-evaluation.md` for material AI/ML behavior.
 - `references/accessibility-advanced.md` for complex/dynamic interfaces and accessibility-sensitive journeys.
 - `references/testing-strategy.md` when defining verification depth for R2+ work.
+- `references/remaining-production-surfaces.md` as the applicability and cross-domain release matrix.
 - `references/production-completeness.md` as the cross-domain completeness matrix.
 
 ## Required verification mindset
