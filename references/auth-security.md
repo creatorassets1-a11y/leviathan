@@ -1,81 +1,85 @@
-# Auth & Security Floor
+# Authentication and Security Floor
 
-Loads whenever accounts exist; the transport/headers/database sections apply to every
-backend. This floor makes the product never the easy target. Honesty note, said to the
-user in these words or better: this stops opportunistic attackers cold; nothing stops
-a targeted, funded attacker, and claiming otherwise would be selling false certainty.
+This floor applies whenever accounts, sensitive data, external integrations, or a backend exist.
+It is a baseline, not a guarantee against targeted attackers.
 
-## Password storage
+## Passwords
 
-- **Argon2id** (OWASP-recommended, RFC 9106). Minimum m=19 MiB, t=2, p=1 (or
-  m=46 MiB, t=1, p=1); tune upward so one hash costs ~250–500ms on the production
-  hardware. Use a maintained library (`argon2` on npm); never hand-roll.
-- bcrypt cost 12+ only where Argon2id is impractical (72-byte input limit noted).
-- MD5/SHA-family for passwords is banned. Legacy migration: rehash transparently on
-  next successful login; document the path.
-- No maximum-length silliness (allow 64+ chars), no forced rotation, check length ≥ 8
-  and against a breached-password list rather than composition rules.
+Use a maintained password hashing library and current deployment-appropriate parameters from
+primary security guidance. Prefer Argon2id where supported. Never use plaintext, MD5, SHA-family
+password hashes, or home-grown password cryptography. Do not impose arbitrary maximum lengths.
+Check breached-password risk where practical.
 
-## Sign-in methods
+## Authentication
 
-- **Passkeys (WebAuthn/FIDO2) offered as the recommended method**, email+password as
-  fallback. Nudge users to register a second passkey so a lost phone is not a lockout.
-  Passkeys also satisfy WCAG 2.2 Accessible Authentication for free.
-- **2FA:** TOTP + one-time backup codes generated at enrollment. SMS only if the user
-  insists, with SIM-swap risk stated. **Mandatory for admin roles**, nudged for users.
+Prefer phishing-resistant passkeys/WebAuthn where the product and platform support them. Provide
+secure recovery. Admin roles require strong MFA. TOTP and backup codes may be appropriate;
+SMS should be treated as weaker recovery/authentication because of SIM-swap risk.
 
 ## Sessions
 
-- httpOnly + Secure + SameSite (Lax minimum) cookies. Never tokens in localStorage.
-- Server-side store (Redis) preferred; short-lived rotated JWTs only when stateless is
-  genuinely required.
-- Regenerate session ID on login (kills fixation). Absolute timeout + idle timeout.
-  "Log out everywhere" works and is exposed in account settings.
+Use secure, httpOnly, SameSite cookies for browser sessions unless the architecture genuinely
+requires another mechanism. Regenerate identifiers after authentication. Enforce idle and
+absolute expiry appropriate to risk. Provide session revocation and "log out everywhere".
+Never put long-lived sensitive tokens in localStorage.
 
-## Rate limiting & abuse
+## Authorization
 
-- Login, signup, password reset, and OTP endpoints limited per IP AND per account,
-  with exponential backoff. Generic errors everywhere: no "email exists" leakage on
-  login, signup, OR reset ("if an account exists, we sent a link").
-- Bot protection on public forms: honeypot + time-trap first; CAPTCHA only when abuse
-  is observed (it taxes humans too).
+Authentication is not authorization. Every resource action checks whether the current principal
+may access that specific object and operation. Use deny-by-default policy. Test cross-user,
+cross-tenant, privilege-escalation, and direct-object-reference cases.
 
-## Authorization (the most-skipped check)
+## Recovery and account changes
 
-Login is authentication; every endpoint must also verify the logged-in user may touch
-*this specific resource*. Object-level checks against the DB on every route/action
-that takes an ID; role checks for admin surfaces; deny by default. Phase 6 runs IDOR
-probes on every parameterized route - build expecting them.
+Password/reset/recovery tokens are single-use, expiring, and stored safely. Avoid account
+enumeration. Sensitive account changes require appropriate reauthentication and verification.
+Invalidate relevant sessions after credential recovery or takeover-risk events.
 
-## Account lifecycle
+## Rate limiting and abuse
 
-- Email verification on signup (unverified accounts limited).
-- Reset: single-use, expiring (≤1h) token, hashed at rest, sessions invalidated on
-  successful reset, no enumeration.
-- Email change: re-verify BOTH old and new addresses.
-- Deletion: real deletion with documented legal-retention carve-outs (orders,
-  invoices), cascade tested in Phase 6, export offered first (doubles as GDPR
-  machinery).
+Rate-limit login, signup, recovery, OTP, invitation, upload, search, expensive AI operations,
+and other abuse-sensitive endpoints. Use both principal/account and network dimensions where
+appropriate. Add progressive friction rather than punishing legitimate users blindly.
 
-## Transport & headers
+## Input and output safety
 
-TLS everywhere + HSTS; CSP tuned per app (start strict, loosen deliberately);
-X-Content-Type-Options: nosniff; Referrer-Policy: strict-origin-when-cross-origin;
-frame-ancestors 'none' unless embedding is a feature. Dependency audit in CI, acting
-on criticals before ship. Secrets only in env/secret manager; `.env.example`
-committed; a secret scan runs before every commit the skill makes.
+Validate at every trust boundary. Use parameterized database access. Encode output according to
+context. Treat uploads, webhooks, imported data, and AI-generated content as untrusted.
 
-## Database
+## Secrets lifecycle
 
-Parameterized queries always. Least-privilege DB users (the app user cannot DROP).
-Supabase: RLS on every table with tested policies (see `nextjs.md`). Encrypted
-backups on schedule **with one restore actually executed** - a backup that has never
-been restored is a hope, not a backup. Point-in-time recovery confirmed available on
-the chosen tier.
+Secrets must never be committed. Use an appropriate secret manager or deployment secret store.
+Document:
 
-## Admin surface
+```text
+create -> store -> access -> rotate -> revoke -> expire -> incident response
+```
 
-Non-obvious route, admin auth + mandatory 2FA, append-only audit log (who, what,
-when, before/after) that the dashboard cannot delete, no password visibility ever
-(one-way hashes mean there is nothing to view), read-only view-as-user for support -
-logged. Full principle set in SKILL.md.
+If a secret is suspected leaked: revoke/rotate it, search repository and CI history, inspect
+logs/artifacts, rotate dependent credentials, redeploy, and record the incident.
+
+## Transport and headers
+
+Use TLS for production traffic. Configure HSTS and appropriate security headers for web apps,
+including content-type and framing protections. CSP should be tuned to the actual application,
+not copied as an unsafe blanket.
+
+## Database and backups
+
+Use least-privilege database credentials. Enable row/object-level authorization where the chosen
+platform supports it. Backups must be protected and restore-tested for material systems. A backup
+that has never been restored is not verified.
+
+## Admin surfaces
+
+Require strong authentication and MFA. Record security-relevant admin actions in an audit log
+that normal dashboard users cannot erase. Never expose passwords or sensitive tokens to admins.
+Support impersonation/view-as-user only when necessary, clearly logged, narrowly scoped, and
+protected against taking irreversible actions silently.
+
+## AI-specific security
+
+For AI-enabled products, enforce tool permissions outside the model's text output. Retrieved
+content and tool results are untrusted. Validate tool arguments, constrain destinations and data
+access, enforce tenant boundaries, limit expensive operations, and never allow a model to grant
+itself permissions.
