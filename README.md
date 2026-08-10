@@ -1,27 +1,59 @@
-# Leviathan
+# LEVIATHAN
 
-**Universal AI software engineering protocol for Claude, Codex, Kimi, Lovable, and other coding agents.**
+**Universal AI software engineering protocol for Claude, Codex, Kimi, Lovable, Cursor, Windsurf, GitHub Copilot, Gemini/Cline-class agents, and other coding agents.**
 
-Current release: **2.0.0**  
-Policy version: **2**  
-Artifact schema version: **1**
+Current release: **2.1.0**  
+Policy version: **3**  
+Artifact schema version: **1**  
+Skills ecosystem: **skills.sh integrated**
 
-Leviathan turns an idea or existing repository into software that is planned, designed,
-implemented, reviewed, tested, secured, observed, released, and handed over with evidence.
-It is deliberately **host-neutral**. The same policy travels with the project when you move
-between coding agents.
+Leviathan turns an idea or existing repository into software that is planned, designed, implemented, reviewed, tested, secured, observed, released, and handed over with evidence.
 
-> Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable.
-> It reports evidence and limitations instead of manufacturing certainty.
+> Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable. It reports evidence and limitations instead of manufacturing certainty.
 
-## Why 2.0 is different
+## 2.1.0 — Skills Ecosystem Edition
 
-The first generation was a detailed build protocol. 2.0 turns that protocol into a portable
-engineering system with explicit state, evidence, risk tiers, adapters, machine-readable schemas,
-self-validation, stronger security, observability, recovery, child-safety analysis, supply-chain
-controls, and regression benchmarks.
+Leviathan now integrates with the open agent-skills ecosystem at **https://www.skills.sh/**.
 
-### The architectural change
+The important design decision is that Leviathan **does not blindly copy every skill into the repository**. The catalog is large and continuously changing. Instead, Leviathan treats the ecosystem as a capability registry:
+
+```text
+skills.sh catalog
+      |
+      v
+ discover -> classify -> security/provenance review
+      |
+      v
+ map to Leviathan capability packs
+      |
+      v
+ select only what the project needs
+      |
+      v
+ record in .leviathan/skills.lock.json
+      |
+      v
+ manual/agent approval -> activate with least privilege
+```
+
+This provides broad ecosystem coverage without turning Leviathan into a stale, duplicated, or unsafe bundle of third-party instructions.
+
+### What 2.1 adds
+
+- skills.sh catalog synchronization
+- project-specific skill selection
+- machine-readable skill lock/provenance
+- third-party skill security and activation policy
+- native capability packs for agent workflow, architecture, frontend, design, browser QA, TDD, databases, security, AI engineering, observability, cloud, research, mobile, and growth/content
+- official-technology-maker skill preference
+- least-privilege skill activation
+- protection against malicious instructions embedded in skill content
+- licensing/non-vendoring rules
+- skill staleness and integrity tracking
+- skill-aware release provenance
+- clearer organization between universal policy, native references, external skills, schemas, tools, and evals
+
+## Core architecture
 
 ```text
 USER / PRODUCT OWNER
@@ -32,13 +64,15 @@ LEVIATHAN POLICY
         |
    state machine
         v
- research -> design -> build
+research -> design -> build
         |       |       |
         +-------+-------+
                 v
         independent review
                 |
-     security / a11y / performance
+   security / a11y / performance
+                |
+       skills + capability packs
                 |
          evidence ledger
                 |
@@ -47,25 +81,57 @@ LEVIATHAN POLICY
        release + operations
 ```
 
-The key idea is that **rules become state, checks, evidence, and gates**, rather than remaining
-only as prose instructions.
+The key idea is that rules become **state, checks, evidence, permissions, and gates**, rather than remaining only as prose instructions.
 
-## Supported agent model
+## Host-neutral model
 
-Leviathan does not require one vendor's agent API.
-
-| Agent / host | Adapter | Core mechanism |
+| Agent / host | Native entrypoint | Leviathan canonical policy |
 | --- | --- | --- |
-| Claude Code / Cowork | `CLAUDE.md` + `SKILL.md` | skills, subagents, hooks, shell |
-| OpenAI Codex | `AGENTS.md` | repository instructions + terminal/editing |
-| Kimi Code / CLI | `AGENTS.md` + `LEVIATHAN.md` | repository instructions + available tools |
-| Lovable | project instructions + repo artifacts | project knowledge, app/backend tools, preview |
-| Other coding agents | `AGENTS.md` + `LEVIATHAN.md` | strongest available native mechanism |
+| Claude Code / Cowork | `CLAUDE.md`, skills, hooks | `LEVIATHAN.md` |
+| OpenAI Codex | `AGENTS.md` | `LEVIATHAN.md` |
+| Kimi Code / CLI | repository instructions | `LEVIATHAN.md` |
+| Lovable | project instructions/knowledge | `LEVIATHAN.md` + portable artifacts |
+| Cursor / Windsurf / Copilot / Gemini / Cline | host instruction mechanism | `LEVIATHAN.md` |
+| Any future agent | strongest available native mechanism | `LEVIATHAN.md` |
 
-The adapter never creates a second policy. `LEVIATHAN.md` is canonical. See
-`references/adapters.md`.
+No vendor-specific file is allowed to become a competing policy.
 
-## The pipeline
+## Skills ecosystem integration
+
+Read:
+
+- `skills/README.md`
+- `skills/policy.md`
+- `skills/packs/index.md`
+
+Sync the current catalog:
+
+```bash
+node skills/catalog-sync.mjs --all
+```
+
+Select skills for a project:
+
+```bash
+node skills/apply.mjs --query "Next.js SaaS with Postgres authentication and payments"
+```
+
+This creates `.leviathan/skills.lock.json`. Selection does **not** automatically execute third-party instructions.
+
+### Trust hierarchy
+
+```text
+LEVIATHAN.md
+    > security floor
+    > project-approved decisions
+    > official technology guidance
+    > selected third-party skills
+    > generic agent defaults
+```
+
+Install counts and leaderboard position are discovery metadata, not proof of quality or safety. skills.sh itself warns that it cannot guarantee the quality or security of every listed skill, so Leviathan requires review before activation.
+
+## Pipeline
 
 ```text
 CLASSIFY
@@ -80,90 +146,58 @@ CLASSIFY
   -> HANDOFF / OPERATE
 ```
 
-Emergency fixes can enter implementation sooner, but the exception is recorded and the security
-and data-safety floors remain mandatory.
+Higher-risk systems require deeper discovery, threat modeling, independent review, stronger evidence, tighter permissions, and more human approval.
 
-## What 2.0 fixes
+## What Leviathan enforces conceptually
 
-### Prose-only gates
+### Evidence, not claims
 
-**Before:** the agent was told not to skip gates.  
-**Now:** `.leviathan/state.json` records phase state, schemas define the contract, and the
-portable checker validates it. Missing evidence is not a pass.
+A release claim needs:
 
-### Fake evidence risk
+```text
+command/tool action
++ actual result
++ timestamp
++ environment
++ artifact
++ limitations
+```
 
-**Before:** evidence was specified but not structurally enforced.  
-**Now:** `.leviathan/evidence/ledger.json` has a machine-readable schema, statuses, artifacts,
-commands, timestamps, and limitations.
+`not_run`, `not_available`, `simulated`, and `unknown` are never passes.
 
-### One-size-fits-all severity
+### Security
 
-**Before:** security, accessibility, and dependency findings were combined into one count.  
-**Now:** categories have separate release rules and security exceptions require an owner,
-justification, mitigation, expiration, approval, and residual risk.
+The baseline covers authentication, authorization/IDOR, sessions, secrets, rate limiting, validation, security headers, dependency/supply-chain controls, AI-specific threats, least privilege, backups, and recovery.
 
-### Security advice without enough automation
+### Accessibility
 
-**Now:** Leviathan explicitly requires authorization/IDOR probes, secret scans, dependency review,
-rate-limit exercise, AI-specific threat testing, safe secret lifecycle, and recovery procedures.
+Accessibility is built during implementation and verified with automated and manual checks: keyboard flows, focus, names/labels, contrast, zoom/reflow, reduced motion, screen-reader checks, and platform-appropriate interaction sizes.
 
-### Legal overconfidence
+### Performance
 
-**Before:** language could imply generated pages meant a product was legally covered.  
-**Now:** legal status is explicitly risk-assessment based and can require human legal review.
-Current rules must be rechecked against authoritative sources.
+Budgets come from the actual audience and product. Repeated measurements, representative device/network conditions, percentile reporting, and separate lab/real-user evidence are preferred.
 
-### Missing observability
+### AI engineering
 
-**Now:** production backends need safe structured logs, errors, health/readiness, metrics,
-alerts, deployment identity, rollback, incident response, and appropriate RPO/RTO.
+AI products receive additional checks for prompt injection, retrieval/context leakage, tool overreach, cross-tenant leakage, unsafe tool arguments, secret exposure, output validation, model/provider failure, and cost/abuse exhaustion.
 
-### Weak disaster recovery
+### Supply chain
 
-**Now:** material systems define backup/restore behavior, RPO/RTO, recovery steps, and actual
-restore verification.
+Dependencies, packages, plugins, MCP servers, hooks, and skills are treated as part of the software supply chain. Review provenance, lock versions, scan dependencies, track licenses, and minimize permissions.
 
-### Supply-chain gaps
+### Operations
 
-**Now:** dependency provenance, lockfiles, install-script review, vulnerability scanning, SBOM
-where supported, license tracking, secret scanning, and compromised-dependency response are part
-of the protocol.
-
-### Minor safety
-
-**Now:** projects involving minors can activate a dedicated safety mode covering age assurance,
-privacy, discoverability, messaging, location, moderation, reporting, and legal review.
-
-### Anti-slop becoming another template
-
-**Now:** Leviathan does not prescribe a single visual style. Anti-slop rules require deliberate,
-product-specific choices and brand rationale instead of banning a small list of colors/fonts.
-
-### No cost or rollback controls
-
-**Now:** projects can define agent time/token/tool-call budgets and use verified checkpoints.
-Failed changes return to the last known-good checkpoint instead of accumulating uncertain patches.
-
-### No build provenance
-
-Every generated project records Leviathan version, policy version, artifact schema version,
-host capabilities, decisions, evidence, and release information.
-
-### Weak self-testing
-
-Leviathan now has self-validation CI plus a benchmark/evaluation strategy covering security,
-accessibility, performance, requirements coverage, false claims, cost, human intervention,
-and adversarial prompt-injection attempts.
+Production systems define structured logs, errors, metrics, health checks, alerts, rollback, incident response, backup/restore, and appropriate RPO/RTO.
 
 ## Portable project artifacts
 
-A production build should contain:
+A production project should contain:
 
 ```text
 .leviathan/
   state.json
   decisions.json
+  skills.lock.json
   evidence/
     ledger.json
     checks/
@@ -179,189 +213,113 @@ DECISIONS.md
 DEPENDENCIES.md
 ```
 
-The `.leviathan/` directory contains no secrets. It is the audit trail for the build.
+`.leviathan/` contains the build audit trail and must not contain secrets.
 
-## Verification philosophy
-
-Leviathan refuses to say "working" merely because code looks plausible.
-
-A release claim needs evidence such as:
+## Repository organization
 
 ```text
-command/tool action
-+ actual result
-+ timestamp
-+ environment
-+ artifact
-+ limitations
+LEVIATHAN.md                    canonical universal policy
+AGENTS.md                       universal agent entrypoint
+CLAUDE.md                       Claude/repository maintenance adapter
+SKILL.md                        compact skill entrypoint
+
+skills/
+  README.md                     ecosystem integration
+  policy.md                     trust/activation/licensing rules
+  catalog-sync.mjs              skills.sh metadata sync
+  apply.mjs                     project-specific selector/lock writer
+  packs/index.md                stable capability taxonomy
+
+references/                     stable Leviathan knowledge
+schemas/                        machine-readable contracts
+tools/                          dependency-free verification
+evals/                          benchmark/adversarial evaluation
+.github/workflows/              Leviathan self-validation
 ```
 
-If the current agent cannot perform browser testing, real-device testing, payment capture,
-production deployment, or another required check, the report says **not available**. It does not
-pretend.
-
-## Security floor
-
-The security baseline includes strong password hashing using maintained primitives,
-passkeys/WebAuthn where appropriate, secure sessions and recovery, object-level authorization and
-IDOR testing, rate limiting, input/output validation, secret lifecycle and rotation, TLS/security
-headers, least-privilege database access, dependency/secret scanning, AI tool authorization,
-prompt-injection defenses, and backup restore verification for material systems.
-
-See `references/auth-security.md` and `references/threat-model.md`.
-
-## Accessibility and performance
-
-Accessibility is built during implementation and verified with both automated and manual checks.
-Typical checks include keyboard flows, focus, names/labels, contrast, zoom/reflow, reduced motion,
-and screen-reader spot tests.
-
-Performance budgets are chosen from the actual audience and product rather than from a convenient
-flagship device. Multiple measurements are preferred. Lab results and real-user evidence are
-reported separately.
-
-## AI-specific engineering
-
-If the product itself contains AI, Leviathan adds tests for prompt injection, retrieval/context
-leakage, tool overreach, cross-tenant leakage, unsafe tool arguments, secret exposure in prompts
-or logs, output validation, model/provider failure, and abuse/cost exhaustion.
-
-## Install / use
-
-### Generic
-
-Make the agent read:
-
-```text
-LEVIATHAN.md
-AGENTS.md
-```
-
-If the host supports skills, also install/use `SKILL.md`.
-
-### Claude Code
-
-Use the repository as a Claude skill or make the project's `CLAUDE.md` point to `LEVIATHAN.md`.
-
-### Codex
-
-Keep `AGENTS.md` in the repository and load `LEVIATHAN.md` as the canonical policy.
-
-### Kimi
-
-Use the repository instruction mechanism available in the Kimi environment and preserve
-`AGENTS.md` + `LEVIATHAN.md`.
-
-### Lovable
-
-Add the canonical policy to the project's supported instructions/knowledge and keep portable
-artifacts in the generated repository. If a verification capability is unavailable, record it
-instead of claiming it happened.
+Do not dump the entire external skills ecosystem into `skills/`. Reference and pin external capabilities instead.
 
 ## Self-checker
-
-The repository includes a dependency-free checker:
 
 ```bash
 node tools/leviathan-check.mjs
 ```
 
-It validates generated-project state/evidence, recommended handoff artifacts, and several
-secret/release safety conditions. It is intentionally small so any coding agent can run it.
-
-## Repository layout
-
-```text
-SKILL.md                         compact skill entrypoint
-LEVIATHAN.md                    canonical universal policy
-AGENTS.md                       universal repository entrypoint
-CLAUDE.md                       repository maintenance rules
-references/adapters.md          host adapters
-references/policy-engine.md     gates and release policy
-references/threat-model.md      structured threat modeling
-references/auth-security.md     security floor
-references/testing.md           verification protocol
-references/observability.md     production observability
-references/supply-chain.md      dependency/supply-chain security
-references/child-safety.md      minor-safety mode
-references/cost-and-recovery.md cost, rollback, disaster recovery
-references/benchmarking.md      self-evaluation and regression strategy
-schemas/                        portable state/evidence contracts
-tools/leviathan-check.mjs       dependency-free checker
-evals/                          benchmark/evaluation inputs
-.github/workflows/              Leviathan self-validation CI
-```
+The checker validates generated-project state/evidence, recommended handoff artifacts, and safety conditions. It is intentionally small enough for any supported coding agent to run.
 
 ## Release model
 
-Versioning has three layers:
+Leviathan uses three version layers:
 
-- **Leviathan version:** overall feature/behavior release.
-- **Policy version:** changes that alter gates, safety requirements, or required behavior.
-- **Artifact schema version:** changes to machine-readable project artifacts.
+- **Leviathan version** — feature/behavior release.
+- **Policy version** — changes to gates, safety requirements, or required behavior.
+- **Artifact schema version** — machine-readable contract changes.
 
-A gate-changing release must bump the policy version and include a migration note. A schema
-breaking change must bump the artifact schema version and include migration guidance.
+A gate-changing release bumps the policy version and includes migration guidance. A breaking artifact change bumps the artifact schema version.
 
 ## Changelog
 
-### 2.0.0 - 2026-08-10
+### 2.1.0 — 2026-08-10
+
+- Added first-class skills.sh ecosystem integration.
+- Added safe catalog synchronization without vendoring the external ecosystem.
+- Added project-specific skill selection and lock/provenance records.
+- Added third-party skill trust, security, licensing, staleness, and least-privilege policy.
+- Added stable Leviathan capability packs for cross-agent reuse.
+- Added skill-aware state/evidence/release requirements.
+- Reorganized repository guidance around policy, skills, references, schemas, tools, and evals.
+- Expanded universal agent coverage beyond Claude to Codex, Kimi, Lovable, Cursor, Windsurf, Copilot, Gemini/Cline-class agents, and future hosts.
+
+### 2.0.0 — 2026-08-10
 
 - Reframed Leviathan as a universal, host-neutral AI coding-agent protocol.
 - Added canonical `LEVIATHAN.md` and universal `AGENTS.md` entrypoint.
-- Added cross-agent adapter guidance for Claude, Codex, Kimi, Lovable, and other hosts.
 - Added explicit state-machine and evidence-ledger architecture.
 - Added machine-readable state and evidence schemas.
-- Added dependency-free `leviathan-check.mjs` gate/evidence checker.
-- Added self-validation GitHub Actions workflow.
+- Added dependency-free checker and self-validation CI.
 - Split security, accessibility, dependency, and performance release policies.
 - Added structured threat modeling and AI-specific security testing.
-- Added production observability requirements.
-- Added supply-chain/SBOM/provenance guidance.
-- Added minor-safety mode.
-- Added cost budgets, build checkpoints, rollback, recovery, RPO/RTO, and vendor-exit guidance.
+- Added observability, supply-chain, minor-safety, cost, rollback, recovery, RPO/RTO, and provenance guidance.
 - Added benchmark and adversarial-evaluation strategy.
 - Reworked legal guidance to avoid false claims of legal compliance.
-- Strengthened authentication, authorization, secret lifecycle, and recovery guidance.
 - Reworked anti-slop guidance so Leviathan does not develop a recognizable house style.
-- Added versioned policy/schema model and build provenance requirements.
 
-### 1.1.1 - 2026-07-21
+### 1.1.1 — 2026-07-21
 
 - Tightened the Claude skill frontmatter description for host upload limits.
 
-### 1.1 - 2026-07-19
+### 1.1 — 2026-07-19
 
 - Bundled the humanizer ruleset and updated the documentation.
 
-### 1.0 - 2026-07-19
+### 1.0 — 2026-07-19
 
 - Initial lifecycle build protocol for websites and web applications.
 
 ## Roadmap
 
-### 2.1
-
-- More executable scanners for authorization, headers, dependency risk, accessibility, and
-  anti-slop checks.
-- Project migration/upgrade command for older Leviathan artifacts.
-- Expanded benchmark corpus and regression scoring.
-- More deployment/provider adapters.
-
 ### 2.2
 
-- Portable SBOM generation adapters.
-- More framework stacks and mobile/bot/extension guidance.
-- Structured incident-response and observability templates.
+- Automated authz/IDOR probes, dependency/SBOM checks, accessibility scanners, performance budgets, and anti-slop verification.
+- Skill audit ingestion and hash pinning through the skills.sh API where available.
+- More framework/provider adapters and project migration tooling.
+
+### 2.3
+
+- Full benchmark corpus and quantitative regression scoring across coding agents.
+- Signed provenance and artifact attestations.
+- Multi-agent scheduling and capability-aware delegation.
 
 ### 3.0
 
-- Optional standalone orchestration runtime with deterministic state transitions, artifact
-  signing, multi-agent scheduling, remote evidence storage, and policy packs.
+- Optional standalone orchestration runtime with deterministic state transitions, signed evidence, policy packs, remote evidence storage, and enterprise governance.
+
+## External ecosystem
+
+Leviathan uses the skills.sh ecosystem for discovery. See https://www.skills.sh/ and its documentation for the catalog, CLI, API, and security-audit model.
+
+Leviathan does not claim that any third-party skill is safe, current, compatible, licensed for redistribution, or appropriate for every project. Review before activation.
 
 ## Credits and license
 
-The bundled humanizer ruleset in `references/humanizer/` is vendored from
-[blader/humanizer](https://github.com/blader/humanizer) by Siqi Chen under its MIT license,
-with the license preserved in that directory. Everything else is covered by the repository
-`LICENSE`.
+The bundled humanizer ruleset in `references/humanizer/` is vendored from [blader/humanizer](https://github.com/blader/humanizer) by Siqi Chen under its MIT license, with the license preserved in that directory. Everything else is covered by the repository `LICENSE`.
