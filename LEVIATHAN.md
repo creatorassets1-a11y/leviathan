@@ -1,7 +1,7 @@
 # LEVIATHAN Universal Specification
 
-Version: 2.2.0
-Policy version: 4
+Version: 2.2.1
+Policy version: 4.1
 Artifact schema version: 1
 Skills ecosystem integration: skills.sh
 
@@ -72,31 +72,33 @@ Human confirmation is required before destructive database/storage operations, d
 
 ### Authorization and data isolation
 
-For every table containing user, tenant, account, private, payment, or security-sensitive data, authorization is deny-by-default and must be enforced at the trusted server/database boundary. Where row-level security exists, enable and verify RLS for applicable tables. Generate explicit policies and test owner/non-owner/anonymous/privileged/suspended actors as relevant.
+For **every table/resource containing user, tenant, account, organization, private, payment, or security-sensitive data**, the authorization posture is deny-by-default and must be enforced at the trusted server/database boundary. Where row-level/object-level security exists, enable and verify RLS/object policies for every applicable table/resource and explicitly cover SELECT/INSERT/UPDATE/DELETE/UPSERT behavior as applicable. Where the platform lacks RLS, application-level ownership checks are acceptable only when every access path is forced through the trusted authorization boundary and the architecture proves there is no direct/client bypass; record the compensating control and its negative tests.
 
-Every object-level endpoint must have negative authorization tests that change object IDs and user/tenant IDs. Test that permission removal invalidates previously valid access. Never authorize from UI state, client-controlled role fields, or unverified claims alone.
+Generate and review an authorization policy for every protected table/resource. Test anonymous, owner, non-owner, cross-tenant, suspended/deleted, and privileged actors as relevant. Every object-level endpoint must have negative authorization tests that change object IDs and user/tenant IDs and must demonstrate `403`, `404`, or an intentionally equivalent denial with no protected-data leakage and no unauthorized side effect. Test that permission removal invalidates previously valid access.
 
-Service/admin database credentials must never be shipped to browser/untrusted clients. Review RPC/functions for definer/invoker behavior, search-path risks, input validation, and privilege escalation.
+Privileged decisions MUST be made server-side from trusted authenticated session/database state. Frontend conditional rendering, client-side route guards, client-controlled role fields, or client-only JWT claims are never sufficient. Every privileged route, API handler, server action, RPC, edge function, and equivalent mutation must re-validate authorization before returning protected data or performing the action.
+
+Service/admin database credentials must never be shipped to browser/untrusted clients. Review RPC/functions for definer/invoker behavior, owner/search-path risks, input validation, and privilege escalation. `SECURITY DEFINER` is an exception requiring explicit justification, audited execution context, and caller/target authorization inside the function.
 
 See `references/security/authorization-and-rls.md`.
 
 ### Sessions and authentication
 
-Do not store long-lived sensitive browser tokens in `localStorage` or `sessionStorage`. Prefer secure server-side sessions and `HttpOnly`, `Secure`, appropriate `SameSite` cookies when applicable. Define idle and absolute timeouts. Rotate/revoke sessions after password changes, MFA changes, privilege elevation, and other high-risk events. Support logout-everywhere for security-sensitive accounts. Detect refresh-token reuse where applicable. Re-authenticate for sensitive actions.
+Prefer `HttpOnly`, `Secure`, `SameSite=Lax` or `Strict` cookies for browser sessions when appropriate. Never store long-lived sensitive access/refresh/session tokens in `localStorage`, `sessionStorage`, or non-HttpOnly browser-readable cookies. Regenerate session identifiers after login, privilege change, password change, and MFA enrollment. Define both idle and absolute timeouts, with shorter limits for high-privilege contexts. Rotate/revoke sessions after password/MFA/recovery/privilege changes and support logout-everywhere/session revocation. Refresh tokens must rotate on use and detect reuse where applicable. Re-authenticate for sensitive actions.
 
-Prefer phishing-resistant passkeys/WebAuthn for high-risk accounts. MFA enrollment, recovery, backup codes, OTPs, and device replacement are authentication-critical flows and require short expiry, single use, attempt limits, progressive rate limits, non-enumerating responses, and protected recovery.
+Prefer phishing-resistant passkeys/WebAuthn for high-risk accounts. Admin/high-privilege accounts require strong MFA. MFA enrollment, recovery, backup codes, device replacement, and OTPs require short expiry, single use, attempt limits, progressive rate limits, anti-enumeration, and protected recovery. OTPs must never be logged in plaintext. Successful recovery or credential changes must invalidate relevant other sessions.
 
 ### XSS, browser, and HTTP controls
 
-User content, Markdown, rich text, URLs, imported data, and AI output are untrusted. Do not use raw HTML sinks without an explicit maintained sanitizer and context-aware controls. Use a restrictive CSP with nonces/hashes where feasible. Review CORS, CSRF, HSTS, secure cookie flags, content-type protection, clickjacking protection, open redirects, sensitive data in URLs, and dynamic code execution.
+User content, Markdown, rich text, URLs, imported data, and AI output are untrusted. Do not use raw HTML sinks such as `dangerouslySetInnerHTML`/equivalents without a maintained sanitizer, context-aware controls, and documented justification. Use a restrictive application-specific CSP with nonces/hashes where feasible; avoid `unsafe-inline` and `unsafe-eval` unless explicitly justified. Review CORS, CSRF where required, HSTS, secure cookie flags, content-type protection, clickjacking/framing protection, open redirects, sensitive data in URLs, and dynamic code execution.
 
 ### Abuse resistance
 
-Rate-limit login, signup, password reset, verification/OTP, invitations, search/expensive operations, uploads, AI endpoints, payment initiation, webhooks, support/contact abuse, and public APIs as applicable. Use account/identity and network dimensions where appropriate. Evidence must exercise the limit; middleware presence alone is not proof.
+Rate-limit login, signup, password reset, verification/OTP, invitations, search/expensive operations, uploads, AI endpoints, payment initiation, webhooks, support/contact abuse, and public APIs as applicable. Use account/identity and network/IP/ASN dimensions where practical. Prefer progressive delays/challenges/temporary limits over permanent lockouts. Evidence must actually trigger the limit and record request count, response, timing, and reset behavior.
 
 ### Secrets and supply chain
 
-Use maintained cryptographic primitives. Scan working tree and history for secrets. Rotate exposed credentials and record the remediation. Lock dependencies, review provenance/install scripts, scan direct and transitive dependencies, generate an SBOM where tooling supports it, track licenses, and assess typosquatting, malicious/abandoned packages, unexpected provenance, MCP servers, hooks, plugins, and skills.
+Use maintained cryptographic primitives. No secrets in client bundles, client-exposed environment variables, source maps, logs, generated artifacts, or telemetry. Scan the working tree, repository history where available, CI artifacts/logs, and build output for secrets. Rotate exposed credentials and record remediation. Lock dependencies, review provenance/install scripts, scan direct/transitive dependencies, generate an SBOM where supported, track licenses, and assess typosquatting, malicious/abandoned packages, MCP servers, hooks, plugins, and skills.
 
 ## Payments floor
 
@@ -149,6 +151,24 @@ Estimate budgets for time, tokens/tool calls, research, external APIs, compute, 
 ## Verification floor
 
 Use `node tools/leviathan-check.mjs` and, where applicable, `node tools/security-floor.mjs`. These tools are evidence generators and pattern detectors, not magical proof. Stack-specific tools must be added for RLS, authz, accessibility, dependency/SBOM, payments, performance, and integration behavior.
+
+For R3+ systems, the security evidence bundle MUST include, where applicable: executed IDOR/cross-user/cross-tenant matrix; RLS/object-policy inventory and tests; direct server-side privileged-action tests; session-storage/rotation/revocation audit; OTP/recovery anti-enumeration and rate-limit tests; header/CSP/CORS/CSRF review; upload validation/storage-isolation test; webhook signature/replay/idempotency test; and secret scans covering repository history and build/CI artifacts.
+
+### Automatic security release blockers
+
+Unless an explicit, time-limited, owner-approved exception with compensating controls is recorded, the following block `RELEASE_APPROVED`:
+
+- any protected user/tenant table/resource lacking a deny-by-default object-level control or documented equivalent that cannot be bypassed;
+- any privileged action that can succeed using only client-side checks;
+- any long-lived sensitive token stored in browser storage or an exposed/non-HttpOnly browser location when inappropriate;
+- any authentication/OTP/recovery endpoint whose required rate limit was not exercised successfully;
+- any exposed secret, service-role key, or database-admin credential in client code/build artifacts;
+- any side-effecting webhook without required authenticity/signature verification;
+- any unresolved authentication or authorization bypass;
+- any cross-tenant data exposure;
+- any payment fulfillment path that trusts a client redirect instead of verified server/provider evidence.
+
+A valid exception must include owner, justification, affected scope, compensating controls, residual risk, creation date, and expiry date. Expired exceptions automatically become blockers.
 
 A critical security finding blocks release unless an explicitly documented human exception is allowed by the project risk policy. Security, payment, and data-isolation exceptions require an owner, justification, mitigation, expiry date, and residual-risk statement. Exceptions must not silently become permanent.
 
