@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/creatorassets1-a11y/leviathan/schemas/leviathan-state.schema.json",
+  "$id": "https://github.com/kuyamcliff/vibecode-max/schemas/leviathan-state.schema.json",
   "title": "Leviathan State",
   "type": "object",
   "required": ["leviathan_version", "policy_version", "artifact_schema_version", "phase", "risk_tier"],
