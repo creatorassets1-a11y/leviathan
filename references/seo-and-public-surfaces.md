@@ -1,29 +1,36 @@
-# SEO, Discoverability & Public Surfaces
+# SEO & Public Surfaces
 
-Apply when a product has publicly indexed pages, marketing pages, documentation, or shareable content.
+Apply to publicly indexed websites, marketing pages, documentation, public profiles, or any product where discoverability matters.
 
-## Requirements
-- Unique, accurate title and description metadata per indexable page.
-- Canonical URLs and intentional redirects; avoid duplicate/indexed parameter variants.
-- Sitemap and robots policy reflect the actual desired crawl surface.
-- Use semantic headings and meaningful link text. Public pages must meet accessibility and performance requirements.
-- Add appropriate structured data only when it truthfully describes visible content.
-- Configure Open Graph/social cards without leaking private content.
-- Use locale-specific URLs and `hreflang` where multiple public locales exist.
-- Keep authentication, account, private tenant, preview, admin, and sensitive search results out of public indexes.
-- Protect forms and public APIs from spam and abuse.
+## Technical SEO
 
-## Performance
-Public pages should be CDN/cache friendly where safe, ship minimal JS, optimize images/fonts, and meet the project's measured Core Web Vitals/journey budgets.
+Every indexable page has an intentional title, description, canonical URL, language metadata, and meaningful heading structure. Generate `sitemap.xml` and `robots.txt` intentionally. Use `hreflang`/locale URLs when multiple indexable locales exist. Avoid duplicate parameterized URLs and accidental staging/index pages.
 
-## Evidence
-- crawl/indexability review;
-- canonical/redirect/sitemap/robots validation;
-- structured-data validation where used;
-- social-card preview;
-- locale/hreflang test where applicable;
-- private-page noindex/access-control test;
-- mobile performance/accessibility measurement.
+Structured data is added only when the content actually qualifies for the schema. Do not fabricate reviews, ratings, prices, availability, organizations, or claims to manipulate search results.
 
-## Blockers
-Block release when private data can be indexed, canonicalization creates material duplication, structured data is misleading, or public pages expose secrets/internal URLs.
+## Public-page quality
+
+Public pages must be usable on mobile, keyboard accessible, fast under realistic network conditions, and resilient when analytics or third-party scripts fail. Avoid shipping unnecessary client JavaScript for static content.
+
+Social sharing metadata (Open Graph/Twitter-compatible metadata where relevant) must match the page. Images should have appropriate dimensions, alt behavior, and licensing/provenance.
+
+## Privacy and security
+
+Do not put private user data, tenant identifiers, secrets, internal IDs with security significance, or authorization decisions into public metadata, URLs, structured data, or server-rendered HTML. Public search indexing must be explicit for user-generated content.
+
+Respect deletion and privacy requests by removing public pages, indexes, caches, and generated metadata as required. Avoid analytics that silently bypass consent.
+
+## Evidence: SEO-* probes
+
+- **SEO-001 metadata:** inspect representative public pages for title, description, canonical, language, and heading structure.
+- **SEO-002 crawl:** verify sitemap/robots behavior and that private/staging pages are not indexed.
+- **SEO-003 locale:** verify hreflang/locale URLs and no conflicting canonicals where applicable.
+- **SEO-004 structured data:** validate schema and prove every claim is backed by actual page content.
+- **SEO-005 performance:** record public-page Core Web Vitals or equivalent journey measurements under realistic conditions.
+- **SEO-006 accessibility:** run the representative keyboard/semantic checks.
+- **SEO-007 privacy:** inspect rendered HTML, metadata, analytics, and URLs for private data.
+- **SEO-008 social cards:** verify representative share previews and image dimensions/content.
+
+## Release blockers
+
+Block when private pages are indexable, structured data contains fabricated claims, canonical/locale routing causes material duplication, or public surfaces leak sensitive data.

@@ -1,32 +1,38 @@
-# File & Media Pipeline
+# File & Media Pipelines
 
-This extends upload security into production processing, delivery, lifecycle, and cost control.
+Canonical contract for uploads that require processing, variants, scanning, CDN delivery, or long-term storage.
 
 ## Pipeline
-Prefer: upload → quarantine/private storage → validation/scanning → metadata extraction → safe transformation/re-encoding → durable object → CDN/signed delivery. Never expose a newly uploaded object publicly before validation when risk warrants quarantine.
 
-Validate size, content/signature, dimensions, codecs, archive behavior, filename/path, and declared type. Treat client metadata as untrusted. Apply quotas and rate limits. Scan malware where the risk tier/type warrants it. Strip unnecessary EXIF/location metadata from images where appropriate.
+Use an explicit pipeline such as `RECEIVED -> QUARANTINED -> VALIDATED -> SCANNED -> PROCESSED -> PUBLISHED`, with failure/retry states. Never make an untrusted upload immediately public before required validation/scanning.
 
-## Processing
-Workers must be idempotent and bounded. Generate required thumbnails/transcodes/variants asynchronously. Prevent decompression bombs, zip bombs, resource exhaustion, unsafe active content, and parser vulnerabilities. Record processing version so variants can be reproduced.
+Validate size, extension, detected content type, dimensions, archive structure, and business limits server-side. Sanitize filenames and object keys. Prevent path traversal, decompression bombs, malicious active formats, and resource exhaustion. Re-encode images where practical to strip metadata and normalize content.
 
-## Delivery
-Private objects use short-lived signed URLs or authenticated proxying. Public assets use immutable/versioned URLs where possible. Never construct filesystem paths directly from user input. Enforce object-level authorization at download time when content is private.
+## Storage and delivery
 
-## Lifecycle/privacy
-Define retention and deletion propagation for originals, variants, thumbnails, temporary files, CDN caches, search indexes, backups, and provider copies. Data export/deletion must account for all derived media.
+Private by default. Authorize every object read/write/delete against the owning principal/tenant. Use short-lived signed URLs or an authenticated proxy for private content. CDN caches must not turn private objects into public content; purge/invalidate on replacement/deletion where necessary.
 
-## Evidence
-- invalid/malicious/oversized type rejection;
-- path traversal test;
-- private-object cross-user access denial;
-- signed URL expiry test;
-- scan/quarantine test where applicable;
-- image metadata stripping/re-encoding test;
-- worker retry/idempotency test;
-- deletion propagation test;
-- CDN/cache invalidation test;
-- quota/rate-limit exercise.
+Generate variants asynchronously with bounded CPU/memory/time and idempotent processing. Store source and derived object relationships so deletion and retention can traverse them.
 
-## Blockers
-Block production when private media is publicly enumerable, untrusted content reaches dangerous parsers without controls, or deletion/retention semantics omit durable derived copies.
+## Scanning
+
+Use malware/content scanning when the risk tier or file type warrants it. Treat scan results as untrusted input too. Quarantine failed or unknown files. Do not rely on filename or browser `Content-Type` as proof of safety.
+
+## Retention
+
+Apply privacy and product retention rules to originals, derivatives, thumbnails, temporary processing files, failed uploads, quarantine storage, CDN caches, and backups. Track legal holds where applicable.
+
+## Evidence: MEDIA-* probes
+
+- **MEDIA-001 validation:** test oversize, wrong type, malformed, active, archive, and traversal payloads.
+- **MEDIA-002 private storage:** verify uploaded objects are not anonymously listable/readable when private.
+- **MEDIA-003 authorization:** attempt cross-user/tenant object operations and prove denial.
+- **MEDIA-004 scan/quarantine:** submit a controlled malicious-test signature or fixture and verify quarantine/blocked publication where scanning is required.
+- **MEDIA-005 processing:** force a processor failure and verify retry/DLQ behavior without duplicate variants.
+- **MEDIA-006 CDN:** verify private signed delivery and invalidation on deletion/replacement.
+- **MEDIA-007 retention:** verify expiry/deletion covers source, variants, temporary files, indexes, and caches.
+- **MEDIA-008 abuse:** exercise upload quotas and processing-cost limits.
+
+## Release blockers
+
+Block when untrusted media is public before required checks, private objects are accessible cross-tenant, processing can be abused without resource limits, or deletion leaves known public derivatives contrary to the retention contract.
