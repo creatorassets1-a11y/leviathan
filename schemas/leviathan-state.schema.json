@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/creatorassets1-a11y/leviathan/schemas/leviathan-state.schema.json",
+  "title": "Leviathan State",
+  "type": "object",
+  "required": ["leviathan_version", "policy_version", "artifact_schema_version", "phase", "risk_tier"],
+  "properties": {
+    "leviathan_version": {"type": "string"},
+    "policy_version": {"type": "integer", "minimum": 1},
+    "artifact_schema_version": {"type": "integer", "minimum": 1},
+    "phase": {"enum": ["CLASSIFY", "DISCOVERED", "RESEARCHED", "PRD_PENDING", "PRD_APPROVED", "DESIGN_APPROVED", "BUILDING", "REVIEWED", "VERIFIED", "RELEASE_APPROVED", "RELEASED", "OPERATING"]},
+    "risk_tier": {"enum": ["R0", "R1", "R2", "R3", "R4"]},
+    "emergency": {"type": "boolean"},
+    "human_approvals": {"type": "array", "items": {"type": "object", "required": ["action", "approved_at"], "properties": {"action": {"type": "string"}, "approved_at": {"type": "string"}, "actor": {"type": "string"}}}},
+    "gates": {"type": "object", "additionalProperties": {"enum": ["passed", "failed", "not_run", "not_available", "accepted_exception"]}}
+  },
+  "additionalProperties": true
+}
