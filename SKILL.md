@@ -12,7 +12,7 @@ description: >
   skill instructions as trusted by default.
 ---
 
-# Leviathan 2.2
+# Leviathan 2.5
 
 Leviathan is a **portable engineering protocol for AI coding agents**, not a Claude-only prompt.
 `LEVIATHAN.md` is canonical. `AGENTS.md` is the universal repository entrypoint. Host adapters
@@ -36,6 +36,7 @@ translate the same policy into each agent's native mechanism.
 14. **Localize by architecture, not patches.** Externalize strings and use locale-aware formatting whenever a UI exists; add full l10n/RTL when markets require it.
 15. **Privileged tooling is production infrastructure.** Admin/support surfaces require least privilege, server-side authorization, auditability, safe impersonation, and controlled financial/privacy operations.
 16. **Choose technology from evidence.** Record stack constraints, alternatives, operational consequences, and the final rationale in `DECISIONS.md`.
+17. **Operational product surfaces are first-class.** Messaging, onboarding, flags, analytics, search, jobs, media, migrations, public discovery, AI evaluation, advanced accessibility, and release communication must be designed and verified when applicable.
 
 ## Skills ecosystem
 
@@ -71,6 +72,21 @@ Load the following canonical references according to project scope before implem
 - `references/admin-and-support-tooling.md` for multi-user, billing, UGC, moderation, support, or privileged operational tooling.
 - `references/stack-selection.md` during Discover/PRD before choosing or changing the technology stack.
 - `references/handoff-and-operations.md` before RELEASED/OPERATING for production-bound systems.
+- `references/email-notifications-messaging.md` when email, in-app notifications, push, SMS, or other outbound messaging exists.
+- `references/onboarding-and-activation.md` for user-facing products with onboarding or a meaningful activation journey.
+- `references/feature-flags-and-progressive-delivery.md` whenever flags, experiments, staged rollout, or kill switches exist.
+- `references/analytics-and-product-telemetry.md` whenever product analytics or non-operational telemetry exists.
+- `references/seo-and-public-surfaces.md` for public/indexable pages.
+- `references/database-migrations-and-schema-evolution.md` for material schema changes or persistent production databases.
+- `references/background-jobs-and-queues.md` for asynchronous workers, scheduled jobs, queues, outbox processing, or retries.
+- `references/search.md` whenever search/retrieval over product data exists.
+- `references/file-media-pipeline.md` for file/media uploads, processing, transformation, or delivery.
+- `references/multi-region-and-residency.md` when multiple regions or residency commitments are in scope.
+- `references/developer-experience.md` for generated/handed-off repositories.
+- `references/changelog-and-release-communication.md` for user-visible releases and material behavior/policy changes.
+- `references/ai-product-evaluation.md` for material AI/ML behavior.
+- `references/accessibility-advanced.md` for complex/dynamic interfaces and accessibility-sensitive journeys.
+- `references/testing-strategy.md` when defining verification depth for R2+ work.
 - `references/production-completeness.md` as the cross-domain completeness matrix.
 
 ## Required verification mindset
@@ -91,10 +107,22 @@ For R2+ work, verify as applicable:
 - internationalization, locale formatting, RTL/text expansion when applicable
 - performance/load behavior under representative conditions
 - observability, rollback, backup/restore and failure behavior
-- AI-specific prompt/tool/data boundary risks
+- AI-specific prompt/tool/data boundary risks and evaluation evidence
 - trust/support surfaces and policy-to-product consistency
 - legal/privacy risks with human review where required
 - admin/support authorization, audit, impersonation, billing, moderation and privacy workflows where applicable
+- messaging delivery, consent/preferences, bounce/complaint handling, and retry safety where applicable
+- onboarding activation/recovery and measurement where applicable
+- feature-flag defaults, rollout, kill switch, audit, and experiment integrity where applicable
+- analytics schema, consent, retention, deletion, and telemetry minimization where applicable
+- public-page SEO/indexability/canonical/performance controls where applicable
+- migration/backfill safety and recovery where applicable
+- worker idempotency, dead letters, queue lag, and replay where applicable
+- search authorization, index consistency, relevance, and performance where applicable
+- media validation, private delivery, processing, and deletion where applicable
+- regional routing/residency/failover where applicable
+- generated-project quick-start and maintainability
+- release/changelog communication for material user-visible changes
 - stack decision, deployment model, ownership, handoff and runbook completeness
 
 Run:
@@ -108,7 +136,7 @@ Also run the project's native test/lint/build/security/accessibility/payment/per
 
 ## Release evidence minimums
 
-For R3+ systems, the evidence bundle must include applicable executed results for security, privacy, payments, operations, performance, admin/support, and localization. Use the concrete probe IDs in the canonical references and `references/testing.md`.
+For R3+ systems, the evidence bundle must include applicable executed results for security, privacy, payments, operations, performance, admin/support, localization, and the operational product surfaces listed in the loaded references. Use concrete probe IDs in the canonical references and `references/testing.md`.
 
 Required where applicable include:
 
@@ -126,6 +154,18 @@ Required where applicable include:
 - structured logs, health/readiness, alert exercise, rollback and restore evidence;
 - admin authorization/audit/impersonation tests;
 - locale formatting/string/RTL tests where applicable;
+- messaging delivery/preference/retry evidence where applicable;
+- onboarding activation/recovery evidence where applicable;
+- feature-flag rollout/kill-switch evidence where applicable;
+- analytics consent/schema/retention evidence where applicable;
+- migration/backfill/recovery evidence where applicable;
+- queue duplicate/retry/dead-letter/lag evidence where applicable;
+- search tenant-isolation/index consistency evidence where applicable;
+- media validation/private-delivery/deletion evidence where applicable;
+- multi-region failover/residency evidence where applicable;
+- AI evaluation/prompt/tool/human-review evidence where applicable;
+- advanced accessibility evidence where applicable;
+- developer quick-start and release communication checks;
 - handoff/runbook/ownership verification.
 
 ## Output contract
