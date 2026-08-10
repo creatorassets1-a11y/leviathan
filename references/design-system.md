@@ -1,95 +1,106 @@
-# Design System - Anti-Slop Rules & Token Generation
+# Design System: Deliberate, Accessible, Non-Generic UI
 
-AI slop is not one big mistake. It is a stack of small default decisions, each
-individually defensible, that together produce a look documented and detectable enough
-that over half of indie launch pages now trigger it. The fix is not talent, it is
-deliberateness: before any UI is built, write a `DESIGN.md` at the project root that
-replaces every default with a choice. Committing to a direction is the cure; the
-statistically safe average is the disease.
+AI slop is a convergence problem: repeated defaults produce interchangeable products. Leviathan's
+solution is deliberate product-specific design, not a new mandatory visual identity.
 
-## The recognizable-AI ban list
+## Design decision rule
 
-These patterns are banned as defaults. Any of them may appear only if the user
-explicitly asks for it after hearing why it reads as AI-made.
+Every major visual choice should have a reason tied to at least one of:
 
-- Purple-to-blue / violet gradients; gradient orbs; neon cyan or violet glow borders
-  on dark backgrounds.
-- Inter as the only typeface. (Inter is fine *in a pairing chosen on purpose*; alone
-  and by default it is a fingerprint.)
-- Glassmorphism on everything; frosted cards as the universal container.
-- Dark mode as an unrequested default. Ship it when the user asked or the audience
-  justifies it (developer tools, media viewing), never as a reflex.
-- Three feature cards in a row under a hero; hero + features + testimonials + pricing
-  as the universal page skeleton. If the content genuinely is three features, express
-  it with a different structure than the slop template.
-- One giant rounded icon (Lucide-class) floating above every heading.
-- Colored left borders on cards - described by designers as "as reliable a sign of AI
-  design as em dashes are for AI text." Banned outright.
-- Identical padding and border radius on every element; five different card styles on
-  one page.
-- The same fade-in-on-scroll applied to every element.
-- Plastic AI illustrations; fake diverse-team-at-laptop stock photos.
-- Fake testimonials, fake client logos, fake metrics. Non-negotiable, no exceptions.
-  Empty social-proof sections are cut until real proof exists, and the user is told why.
-- Default shadcn styling without customization - the library is designed to be
-  copy-pasted by agents, so its untouched output converges on the same look everywhere.
+- brand;
+- audience;
+- content;
+- product behavior;
+- platform constraints;
+- accessibility;
+- performance;
+- cultural/local context.
 
-## DESIGN.md - what it must lock
+A design can intentionally use common patterns when the reason is strong. Leviathan does not
+ban a color, font, component library, or layout merely because other AI products use it.
 
-Write it before building any UI. Every token in it is load-bearing: the build may not
-use a color, size, or duration that is not in DESIGN.md (hardcoded hex values and
-arbitrary spacing are build errors - this is the token-to-DOM rule).
+## Anti-slop signals
 
-1. **Direction.** One named aesthetic from `design-directions/`, chosen from the
-   interview and audience - not from what is easiest to generate. Name it in the file.
-2. **Palette.** Maximum one accent + a neutral ramp + semantic colors (success,
-   warning, danger, info). Every foreground/background pair checked against WCAG
-   contrast minimums (4.5:1 body text, 3:1 large text and UI components) at
-   token-generation time. Record the checked ratios in DESIGN.md.
-3. **Type.** A real pairing with personality, per the direction file. Free, fast,
-   self-hostable fonts; correct fallback stacks; `font-display: swap`; total payload
-   under 40KB subset and preloaded.
-4. **Shape.** One radius scale (e.g. 2/6/12), one shadow philosophy (or none -
-   borderless-first cards are the default), one border treatment.
-5. **Layout primitives.** One strong repeated primitive instead of five card styles.
-   Decide the grid, the section rhythm, and the one container pattern the whole
-   product reuses.
-6. **Motion.** Durations fast 150ms / base 250ms / slow 400ms; `ease-out` entrances;
-   never linear snaps. Animate only `transform` and `opacity`. Entrances staggered
-   with intention. Scroll triggers via IntersectionObserver. Every animation has a
-   `prefers-reduced-motion` variant with a dignified static fallback. Any effect that
-   cannot hold 60fps on a mid-range Android ships simplified, not janky.
-7. **Imagery.** Real photos, real product shots, honest illustration, or deliberate
-   abstraction. State which, and the treatment (duotone, grain, borders) so images
-   read as part of the system.
-8. **Voice.** Copy rules for this audience: register, sentence length, what gets
-   named plainly. The read-aloud test: any sentence that could sit on a thousand
-   other sites gets rewritten or cut. All copy passes the humanizer check.
+Review for overuse of:
 
-## Direction selection
+- generic gradient hero backgrounds;
+- repeated feature-card grids without content justification;
+- identical card/radius treatment everywhere;
+- stock/fake imagery that does not fit the product;
+- generic testimonials, logos, or metrics;
+- untouched component-library defaults;
+- repetitive scroll animations;
+- vague marketing copy;
+- arbitrary visual decisions with no rationale.
 
-Pick from `design-directions/` using the audience and brand-input answers:
+These are review signals, not absolute aesthetic laws. Real user requirements override them.
+Fake trust signals and deceptive scarcity are always prohibited.
 
-| Direction | Reach for it when |
-|---|---|
-| `editorial.md` | Content-led products, portfolios, studios, publications, anything where reading is the product |
-| `brutalist.md` | Bold small brands, creative tools, audiences that reward confidence over polish |
-| `industrial-mono.md` | Developer tools, technical products, dashboards, infrastructure |
-| `clean-product.md` | SaaS, e-commerce, services for broad mainstream audiences |
+## DESIGN.md contract
 
-Load exactly one. If the user supplied reference sites, map them to the nearest
-direction and note the deltas in DESIGN.md rather than inventing a hybrid from scratch.
+Write `DESIGN.md` before broad UI implementation. It should lock:
+
+1. visual direction and rationale;
+2. color tokens and semantic meanings;
+3. typography and fallback behavior;
+4. spacing and layout primitives;
+5. shape/border/shadow language;
+6. responsive behavior;
+7. motion and reduced-motion behavior;
+8. imagery rules;
+9. component states;
+10. content voice and examples;
+11. accessibility checks and contrast evidence;
+12. performance constraints.
+
+Tokens should be the source of truth for repeated visual values. Do not demand that every one-off
+layout measurement be promoted to a global token when doing so would make the code worse.
+
+## Accessibility
+
+Check contrast at token-generation time and again in representative rendered states. Include
+focus, hover, disabled, error, selected, and high-contrast/forced-color behavior where applicable.
+Do not rely on color alone to convey meaning.
+
+## Typography
+
+Choose typography from product requirements, not a ban list. Consider readability, language
+coverage, loading cost, licensing, fallbacks, and platform availability. Self-host or use a
+reliable source when appropriate.
+
+## Motion
+
+Motion must communicate hierarchy or state, not merely make the page feel animated. Respect
+`prefers-reduced-motion`. Test on representative low-power devices. Avoid animation that blocks
+interaction or causes layout instability.
+
+## Imagery
+
+Use real product imagery, licensed assets, honest illustration, or deliberate abstraction. Do
+not fabricate people, customers, partnerships, metrics, or endorsements.
+
+## Direction library
+
+The existing `design-directions/` files are starting references, not a closed list. A project may
+choose one, adapt one, or define a new direction. Record why.
 
 ## Sample-section gate
 
-Before the full build, render one real section (usually the hero plus one content
-section) with real copy in the locked tokens, and show it. The user approving a
-described direction and approving a rendered one are different events; only the second
-opens Phase 5.
+Before broad implementation for substantial UI projects, render a real section using real copy
+and the proposed tokens. Approval of a description is not the same as approval of the rendered
+design. Record the decision.
 
-## Enforcement in review
+## Verification
 
-The reviewer and qa passes re-check the ban list against the built UI, and the
-token-to-DOM rule against the stylesheets: any hex value or spacing not traceable to
-DESIGN.md fails the build. (An automated `audit_slop.py` lands in a later milestone;
-until then this check is manual and mandatory.)
+Review the built output for:
+
+- generic convergence;
+- token consistency where tokens are appropriate;
+- accessibility;
+- responsive behavior;
+- performance;
+- real content instead of placeholders;
+- honest trust signals.
+
+A visual pattern match is a finding only when it harms the product or violates a stated project
+requirement. The goal is distinctive, appropriate design, not novelty for novelty's sake.
