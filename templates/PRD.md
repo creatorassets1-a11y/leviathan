@@ -377,6 +377,139 @@ Complete for multi-user products, products with payments/UGC/support, or any pro
 - Emergency admin revocation:
 - Admin evidence:
 
+## 7B. Secondary production surfaces
+
+Complete the applicability matrix in `references/remaining-production-surfaces.md` during Discover. For each surface record `required`, `not_applicable`, or `deferred` with a reason.
+
+### Messaging
+
+- Email: yes/no
+- In-app notifications: yes/no
+- Push: yes/no
+- SMS: yes/no
+- Transactional vs marketing separation:
+- Delivery provider(s):
+- Template/version ownership:
+- Bounce/complaint/suppression handling:
+- Preferences/unsubscribe/quiet hours:
+- Message retention:
+- Delivery/retry/DLQ evidence:
+
+### Onboarding / activation
+
+- First valuable outcome:
+- Activation event:
+- Expected time-to-value:
+- Required vs optional setup:
+- Progressive profiling:
+- Resume/recovery behavior:
+- Onboarding analytics:
+- Accessibility/localization evidence:
+
+### Feature flags / experimentation
+
+- Flags used?:
+- Flag inventory/owners/expiry:
+- Safe defaults:
+- Kill switches:
+- Server-side authorization/entitlement separation:
+- Targeting dimensions:
+- Experiment hypothesis/primary metric/guardrails:
+- Rollout stages and abort thresholds:
+- Mixed-version/migration compatibility:
+
+### Analytics / product telemetry
+
+- Event taxonomy/version:
+- Identity/merge model:
+- Consent gate:
+- Allowed properties/data classification:
+- Processor:
+- Retention:
+- Server-authoritative business events:
+- Analytics evidence:
+
+### Database evolution
+
+- Migration strategy:
+- Expand/contract plan:
+- Backfill design/resume:
+- Lock/latency budget:
+- Mixed-version compatibility:
+- Invariant verification:
+- Rollback/forward-fix:
+- Restore/snapshot evidence:
+
+### Background jobs / queues
+
+- Job types:
+- Idempotency keys/invariants:
+- Retry/backoff/max attempts:
+- Queue priority:
+- DLQ/replay:
+- Lag/depth/throughput metrics:
+- Worker shutdown/restart behavior:
+- Capacity limits:
+
+### Search / media
+
+- Search provider/index:
+- Search authorization/tenant filter:
+- Relevance test set:
+- Index freshness/deletion:
+- Upload/media processing states:
+- Scan/quarantine:
+- Variant/CDN delivery:
+- Media retention/deletion:
+
+### Multi-region / residency
+
+- Regions:
+- Data residency requirements:
+- Actual storage/processing map:
+- Routing model:
+- Consistency model:
+- Failover model:
+- Replication lag/RPO:
+- Region-specific deletion/export:
+
+### Developer experience
+
+- Clean quick-start:
+- Local/staging bootstrap:
+- Seed/demo data:
+- Test/lint/build commands:
+- Component playground if useful:
+- Contribution workflow:
+- Migration workflow:
+
+### Release communication / public surfaces
+
+- Changelog/release notes:
+- Breaking/deprecation communication:
+- SEO/indexability requirements:
+- Sitemap/robots/canonical/hreflang:
+- Structured data:
+- Social metadata:
+- Public-page performance/accessibility:
+
+### AI lifecycle / advanced accessibility / testing
+
+- AI evaluation set/versioning:
+- Model/prompt/tool rollback:
+- Human-in-loop points:
+- AI cost/abuse guardrails:
+- Dynamic accessibility requirements:
+- Screen-reader/live-region/custom-widget evidence:
+- Test pyramid/contract/visual/load/failure strategy:
+- Required manual evidence:
+
+### Secondary-surface evidence
+
+Record all applicable probes: `MSG-*`, `ONB-*`, `FLAG-*`, `ANALYTICS-*`, `MIG-*`, `JOB-*`, `SEARCH-*`, `MEDIA-*`, `REGION-*`, `DX-*`, `REL-*`, `AI-EVAL-*`, `A11Y-*`, `SEO-*`, and `TEST-*`.
+
+Do not convert deferred or unavailable checks into passes.
+
 ## 8. Non-functional requirements
 
 - Security:
@@ -389,10 +522,11 @@ Complete for multi-user products, products with payments/UGC/support, or any pro
 - Privacy/data lifecycle: see §4A; no unsupported minimization, deletion, residency, or retention claim
 - Localization: see §5B
 - Operability/handoff: see §10
+- Secondary production surfaces: see §7B; no untested material messaging, worker, migration, flag, analytics, search, media, regional, AI, accessibility, SEO, or release-communication claim
 
 ## 9. Verification plan
 
-List exact evidence required before release. For privacy-sensitive products, include the applicable `PRIV-*` probes from `references/privacy-engineering.md`. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, `SCALE-*`, and `RELIABILITY-*` probes from `references/scale/performance-probes.md` and `references/scale/performance-and-reliability.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows. For admin tooling include the `ADMIN-*` matrix and audit/impersonation tests. For localization include the applicable `I18N-*` checks.
+List exact evidence required before release. For privacy-sensitive products, include the applicable `PRIV-*` probes from `references/privacy-engineering.md`. For performance/scaling claims, include the applicable `PERF-*`, `LOAD-*`, `DB-*`, `SCALE-*`, and `RELIABILITY-*` probes from `references/scale/performance-probes.md` and `references/scale/performance-and-reliability.md`. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows. For admin tooling include the `ADMIN-*` matrix and audit/impersonation tests. For localization include the applicable `I18N-*` checks. For secondary production surfaces include the applicable `MSG-*`, `ONB-*`, `FLAG-*`, `ANALYTICS-*`, `MIG-*`, `JOB-*`, `SEARCH-*`, `MEDIA-*`, `REGION-*`, `DX-*`, `REL-*`, `AI-EVAL-*`, `A11Y-*`, `SEO-*`, and `TEST-*` probes.
 
 ## 10. Handoff, ownership, and long-term maintainability
 
