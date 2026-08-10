@@ -1,6 +1,6 @@
 # Policy Engine
 
-The policy engine converts prose requirements into state, checks, evidence, and release gates. It is designed to work even when the host has no dedicated Leviathan runtime.
+The policy engine converts prose requirements into state, checks, evidence, and release gates. It is designed to work even when the host has no dedicated Vibecode Max runtime.
 
 ## Gate model
 
@@ -79,7 +79,7 @@ Only `passed` and valid `accepted_exception` may satisfy a release gate.
 5. Evaluate every mandatory gate.
 6. Evaluate exceptions and expiration.
 7. Require human approvals for configured risk boundaries.
-8. Produce `.leviathan/release.json`.
+8. Produce `.vibecode-max/release.json`.
 9. Set `RELEASED` only when all required gates pass.
 
 A missing check is a failed gate, not an implicit pass.

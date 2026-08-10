@@ -1,6 +1,6 @@
 # Privacy Engineering & Data Lifecycle Policy
 
-Leviathan is privacy-risk-aware, not a legal authority. This document defines engineering controls that make privacy commitments testable. It does not establish that a product is legally compliant. Jurisdiction-specific requirements must still be assessed under `references/legal-compliance.md`.
+Vibecode Max is privacy-risk-aware, not a legal authority. This document defines engineering controls that make privacy commitments testable. It does not establish that a product is legally compliant. Jurisdiction-specific requirements must still be assessed under `references/legal-compliance.md`.
 
 ## Core rule
 

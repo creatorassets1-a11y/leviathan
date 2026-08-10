@@ -15,7 +15,7 @@ Prefer structured JSON or equivalent key-value logs with stable fields:
 - service/component;
 - environment;
 - deployment/build/version identifier;
-- Leviathan policy/protocol version when applicable;
+- Vibecode Max policy/protocol version when applicable;
 - request_id/correlation_id;
 - trace_id/span_id when tracing exists;
 - event name/type;
@@ -58,7 +58,7 @@ Provide clear liveness and readiness semantics where the runtime supports them:
 
 Do not expose secrets, internal topology, or sensitive dependency details through public health endpoints.
 
-Every production deployment must have a machine-readable identity containing, where applicable: application version, source/build SHA, deployment timestamp, environment, Leviathan policy version, and migration/schema version.
+Every production deployment must have a machine-readable identity containing, where applicable: application version, source/build SHA, deployment timestamp, environment, Vibecode Max policy version, and migration/schema version.
 
 Operators must be able to determine which version is serving traffic.
 

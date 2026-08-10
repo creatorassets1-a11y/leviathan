@@ -8,7 +8,7 @@
 - Environment(s):
 - Current build/version:
 - Source/build SHA:
-- Leviathan policy version:
+- Vibecode Max policy version:
 - Database/schema version:
 - Primary owner:
 - On-call/contact:

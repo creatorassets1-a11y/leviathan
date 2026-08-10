@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Leviathan portable security-floor scanner.
+ * Vibecode Max portable security-floor scanner.
  * Static evidence helper: it does not prove security. It detects high-risk patterns
  * that require review and writes machine-readable findings when --json is used.
  */
@@ -11,7 +11,7 @@ const root = process.cwd();
 // tools/ holds this scanner's own source (and sibling checkers). Their code intentionally
 // contains the detection patterns as literal strings, so scanning it self-triggers every rule
 // with no security value; exclude it rather than report on the scanner's own implementation.
-const ignore = new Set(['.git', 'node_modules', '.next', 'dist', 'build', 'coverage', '.leviathan/evidence', 'tools']);
+const ignore = new Set(['.git', 'node_modules', '.next', 'dist', 'build', 'coverage', '.vibecode-max/evidence', 'tools']);
 const textExt = new Set(['.js','.jsx','.ts','.tsx','.mjs','.cjs','.vue','.svelte','.html','.css','.sql','.md','.json','.yaml','.yml']);
 const findings = [];
 
@@ -62,8 +62,8 @@ function scan(file, rel) {
 }
 
 walk(root);
-const summary = { generatedAt:new Date().toISOString(), scanner:'leviathan-security-floor', findings, counts: findings.reduce((a,f)=>(a[f.severity]=(a[f.severity]||0)+1,a),{}) };
-fs.mkdirSync(path.join(root,'.leviathan/evidence/checks'), {recursive:true});
-fs.writeFileSync(path.join(root,'.leviathan/evidence/checks/security-floor.json'), JSON.stringify(summary,null,2));
+const summary = { generatedAt:new Date().toISOString(), scanner:'vibecode-max-security-floor', findings, counts: findings.reduce((a,f)=>(a[f.severity]=(a[f.severity]||0)+1,a),{}) };
+fs.mkdirSync(path.join(root,'.vibecode-max/evidence/checks'), {recursive:true});
+fs.writeFileSync(path.join(root,'.vibecode-max/evidence/checks/security-floor.json'), JSON.stringify(summary,null,2));
 console.log(JSON.stringify(summary,null,2));
 process.exitCode = findings.some(f => f.severity === 'critical') ? 2 : 0;

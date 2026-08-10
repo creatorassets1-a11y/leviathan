@@ -2,7 +2,7 @@
 
 Payments are **R3 by default** and **R4** when the product materially moves money for third parties, operates a marketplace/payout system, handles regulated financial activity, or creates high-impact financial consequences.
 
-This is the canonical money-handling policy. `references/payments/production-payments.md` is the implementation-oriented companion. If a provider such as Stripe is used, provider documentation supplies implementation details, but Leviathan's safety invariants remain authoritative.
+This is the canonical money-handling policy. `references/payments/production-payments.md` is the implementation-oriented companion. If a provider such as Stripe is used, provider documentation supplies implementation details, but Vibecode Max's safety invariants remain authoritative.
 
 ## 1. Non-negotiable principles
 
@@ -400,7 +400,7 @@ At minimum, produce executed evidence for applicable flows:
 - `PAY-021` metered usage cannot be client-inflated and is idempotent where applicable;
 - `PAY-022` audit records exist for grants, revocations, refunds, and payouts.
 
-Each evidence record must include the standard Leviathan evidence fields and identify whether the result is `passed`, `failed`, `not_available`, or `not_run`.
+Each evidence record must include the standard Vibecode Max evidence fields and identify whether the result is `passed`, `failed`, `not_available`, or `not_run`.
 
 ## 19. Automatic release blockers
 

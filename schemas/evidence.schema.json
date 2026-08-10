@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/creatorassets1-a11y/leviathan/schemas/evidence.schema.json",
-  "title": "Leviathan Evidence",
+  "$id": "https://github.com/kuyamcliff/vibecode-max/schemas/evidence.schema.json",
+  "title": "Vibecode Max Evidence",
   "type": "object",
   "required": ["schema_version", "checks"],
   "properties": {

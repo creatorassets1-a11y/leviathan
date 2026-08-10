@@ -1,4 +1,4 @@
-# LEVIATHAN Frontend Design Gate
+# VIBECODE MAX Frontend Design Gate
 
 **Status:** Normative
 **Applies:** Non-trivial user-facing interfaces
@@ -103,9 +103,9 @@ Review for recognizable convergence patterns, including:
 These are findings, not universal aesthetic bans. A deliberate, documented choice can override a finding; the evidence must explain why.
 
 ## 7. Review against external standards
-When relevant skills are available, the agent SHOULD load and review against high-quality frontend review guidance such as Vercel-style web design/accessibility guidelines and reputable frontend-design skills through the LEVIATHAN skills trust process.
+When relevant skills are available, the agent SHOULD load and review against high-quality frontend review guidance such as Vercel-style web design/accessibility guidelines and reputable frontend-design skills through the Vibecode Max skills trust process.
 
-External skills may advise; `LEVIATHAN.md`, the project `DESIGN.md`, security policy, accessibility requirements, and evidence gates remain authoritative.
+External skills may advise; `VIBECODE-MAX.md`, the project `DESIGN.md`, security policy, accessibility requirements, and evidence gates remain authoritative.
 
 ## 8. Evidence required for Design gate
 For non-trivial UI, evidence should include as applicable:

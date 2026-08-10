@@ -104,7 +104,7 @@ Trigger these only when the classification warrants:
   compliance.
 - **Existing project** ("continue/fix/review my project"): the interview shrinks to
   gap analysis - read the codebase first, then ask only about what is undecided,
-  broken, or missing against the Leviathan floor.
+  broken, or missing against the Vibecode Max floor.
 
 ## Exit gate
 

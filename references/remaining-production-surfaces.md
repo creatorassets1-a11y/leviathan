@@ -36,7 +36,7 @@ This reference closes the next layer of production gaps after security, payments
 - Background work and provider callbacks are assumed retryable and duplicateable.
 - Public surfaces must not expose private data or unsupported claims.
 - Release and rollback decisions must remain compatible with database migrations, queues, feature flags, templates, translations, and external integrations.
-- Evidence states retain Leviathan semantics: `passed` requires executed evidence; `not_run`, `unknown`, `simulated`, and `not_available` do not pass.
+- Evidence states retain Vibecode Max semantics: `passed` requires executed evidence; `not_run`, `unknown`, `simulated`, and `not_available` do not pass.
 
 ## Cross-domain release blockers
 

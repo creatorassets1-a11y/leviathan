@@ -6,7 +6,7 @@
 - Purpose:
 - Primary users:
 - Current production version:
-- Leviathan policy version:
+- Vibecode Max policy version:
 
 ## 2. Ownership
 

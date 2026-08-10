@@ -12,7 +12,7 @@ Required as risk warrants:
 - queues for deferrable work, dead-letter handling, replay tooling, and idempotent consumers
 - frontend error boundaries and backend structured error envelopes
 - staging/production separation
-- immutable build identity including commit SHA, Leviathan version, policy version
+- immutable build identity including commit SHA, Vibecode Max version, policy version
 - feature flags and safe kill switches for high-risk rollouts
 - migration rehearsal and rollback/forward-fix plan
 - backup restore evidence, RPO/RTO, and disaster runbooks

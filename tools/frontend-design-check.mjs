@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * LEVIATHAN frontend design static check.
+ * VIBECODE MAX frontend design static check.
  * This is a detector, not proof of design quality or accessibility.
  * It emits findings so agents cannot silently convert unknowns into passes.
  */
@@ -43,7 +43,7 @@ for (const file of files) {
 
 const design = fs.existsSync(path.join(root, 'DESIGN.md')) || fs.existsSync(path.join(root, 'design.md'));
 const result = {
-  tool: 'leviathan/frontend-design-check',
+  tool: 'vibecode-max/frontend-design-check',
   version: 1,
   status: findings.length ? 'findings' : 'no_static_findings',
   designArtifactPresent: design,
@@ -55,7 +55,7 @@ const result = {
   findings,
 };
 
-const outDir = path.join(root, '.leviathan', 'evidence', 'checks');
+const outDir = path.join(root, '.vibecode-max', 'evidence', 'checks');
 fs.mkdirSync(outDir, { recursive: true });
 const out = path.join(outDir, 'frontend-design.json');
 fs.writeFileSync(out, JSON.stringify(result, null, 2) + '\n');

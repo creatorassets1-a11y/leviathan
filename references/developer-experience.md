@@ -1,6 +1,6 @@
 # Generated-Project Developer Experience
 
-Leviathan must optimize not only the runtime product but also the human experience of inheriting and changing the generated repository.
+Vibecode Max must optimize not only the runtime product but also the human experience of inheriting and changing the generated repository.
 
 ## Local setup
 

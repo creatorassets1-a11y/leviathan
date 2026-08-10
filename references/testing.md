@@ -1,6 +1,6 @@
 # Testing and Verification Protocol
 
-Leviathan's credibility rule is simple: **a claim is only as strong as its executed evidence**. The protocol is host-neutral and must work with Claude, Codex, Kimi, Lovable, and other agents.
+Vibecode Max's credibility rule is simple: **a claim is only as strong as its executed evidence**. The protocol is host-neutral and must work with Claude, Codex, Kimi, Lovable, and other agents.
 
 ## Verification order
 

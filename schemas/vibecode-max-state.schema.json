@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/creatorassets1-a11y/leviathan/schemas/leviathan-state.schema.json",
-  "title": "Leviathan State",
+  "$id": "https://github.com/kuyamcliff/vibecode-max/schemas/vibecode-max-state.schema.json",
+  "title": "Vibecode Max State",
   "type": "object",
-  "required": ["leviathan_version", "policy_version", "artifact_schema_version", "phase", "risk_tier"],
+  "required": ["vibecode_max_version", "policy_version", "artifact_schema_version", "phase", "risk_tier"],
   "properties": {
-    "leviathan_version": {"type": "string"},
+    "vibecode_max_version": {"type": "string"},
     "policy_version": {"type": "integer", "minimum": 1},
     "artifact_schema_version": {"type": "integer", "minimum": 1},
     "phase": {"enum": ["CLASSIFY", "DISCOVERED", "RESEARCHED", "PRD_PENDING", "PRD_APPROVED", "DESIGN_APPROVED", "BUILDING", "REVIEWED", "VERIFIED", "RELEASE_APPROVED", "RELEASED", "OPERATING"]},

@@ -1,21 +1,21 @@
-# LEVIATHAN
+# VIBECODE MAX
 
 **Universal, evidence-driven AI software engineering protocol for Claude Code, Codex, Kimi, Lovable, Cursor, Windsurf, Copilot, Gemini/Cline-class agents, and future coding agents.**
 
-**Current release:** 1.0.0  
+**Current release:** 1.1.0  
 **Policy:** 1  
-**Artifact schema:** 1  
+**Artifact schema:** 2  
 **Skills ecosystem:** skills.sh discovery + audited selection
 
-> **Status: version 1, brand new.** This is the initial release of Leviathan. It has not yet been field-tested across multiple real releases, so treat the policy as an evolving draft: expect gaps, apply judgment, and report what does not hold up in practice.
+> **Status: version 1, brand new.** This is the first policy line published under the Vibecode Max name. It has not yet been field-tested across multiple real releases, so treat the policy as an evolving draft: expect gaps, apply judgment, and report what does not hold up in practice.
 
-Leviathan helps AI coding agents ship software that is not merely functional, but **secure, correctly authorized, accessible, resilient, payment-safe, product-specific, observable, supportable, recoverable, scalable, and evidence-backed**.
+Vibecode Max helps AI coding agents ship software that is not merely functional, but **secure, correctly authorized, accessible, resilient, payment-safe, product-specific, observable, supportable, recoverable, scalable, and evidence-backed**.
 
-> Leviathan is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable. Unknown is not passed. A test that was not run is not a test that passed.
+> Vibecode Max is legal-risk-aware, not a lawyer. It is security-hardened, not magically unhackable. Unknown is not passed. A test that was not run is not a test that passed.
 
-## What 1.0.0 includes
+## What the 1.x line includes
 
-The initial release treats the full set of operational product surfaces as first-class, evidence-backed contracts when applicable:
+The 1.x line treats the full set of operational product surfaces as first-class, evidence-backed contracts when applicable:
 
 - Email, notifications and messaging: delivery state, consent/preferences, suppression, retries, provider webhooks, abuse and spend controls.
 - Onboarding and activation: first-value definition, progressive disclosure, resumable setup, recovery, and activation measurement.
@@ -37,12 +37,12 @@ The initial release treats the full set of operational product surfaces as first
 
 Security, payments, privacy, legal/trust, observability/recovery, scaling, internationalization, admin/support, stack selection, handoff, threat modeling, supply chain, and evidence gates remain mandatory according to project scope.
 
-See the canonical policy in `LEVIATHAN.md` and the compact agent entrypoint in `SKILL.md`.
+See the canonical policy in `VIBECODE-MAX.md` and the compact agent entrypoint in `SKILL.md`.
 
 ## Architecture
 
 ```text
-                         LEVIATHAN 1.0
+                       VIBECODE MAX 1.0
                               |
           +-------------------+-------------------+
           |                   |                   |
@@ -92,19 +92,19 @@ Higher-risk systems require deeper discovery, threat modeling, independent revie
 
 | Agent | Native adapter | Canonical policy |
 | --- | --- | --- |
-| Claude Code / Cowork | `CLAUDE.md`, skills, hooks | `LEVIATHAN.md` |
-| OpenAI Codex | `AGENTS.md` | `LEVIATHAN.md` |
-| Kimi | repository/agent instructions | `LEVIATHAN.md` |
-| Lovable | project knowledge/instructions + portable artifacts | `LEVIATHAN.md` |
-| Cursor / Windsurf / Copilot | host instruction system | `LEVIATHAN.md` |
-| Gemini/Cline-class agents | strongest native mechanism | `LEVIATHAN.md` |
-| Future agents | strongest native mechanism | `LEVIATHAN.md` |
+| Claude Code / Cowork | `CLAUDE.md`, skills, hooks | `VIBECODE-MAX.md` |
+| OpenAI Codex | `AGENTS.md` | `VIBECODE-MAX.md` |
+| Kimi | repository/agent instructions | `VIBECODE-MAX.md` |
+| Lovable | project knowledge/instructions + portable artifacts | `VIBECODE-MAX.md` |
+| Cursor / Windsurf / Copilot | host instruction system | `VIBECODE-MAX.md` |
+| Gemini/Cline-class agents | strongest native mechanism | `VIBECODE-MAX.md` |
+| Future agents | strongest native mechanism | `VIBECODE-MAX.md` |
 
 Vendor files are adapters, never competing policy sources.
 
 ## Skills ecosystem
 
-Leviathan uses skills.sh as a **dynamic discovery and provenance layer**, not as a blind bundle. External skills are untrusted implementation aids until selected and reviewed. Never execute third-party instructions merely because a skill is popular.
+Vibecode Max uses skills.sh as a **dynamic discovery and provenance layer**, not as a blind bundle. External skills are untrusted implementation aids until selected and reviewed. Never execute third-party instructions merely because a skill is popular.
 
 urlskills.sh documentationhttps://www.skills.sh/docs
 
@@ -113,11 +113,11 @@ node skills/catalog-sync.mjs --all
 node skills/apply.mjs --query "Next.js SaaS with Postgres authentication and payments"
 ```
 
-Selection creates `.leviathan/skills.lock.json` with source/provenance metadata. The canonical policy remains authoritative.
+Selection creates `.vibecode-max/skills.lock.json` with source/provenance metadata. The canonical policy remains authoritative.
 
 ## Security floor
 
-For R2+ systems, Leviathan expects explicit authorization boundaries, RLS where applicable, deny-by-default policies, cross-user/cross-tenant negative tests, server-side privileged checks, secure session lifecycle, protected MFA recovery, progressive rate-limit exercise, XSS/CSP defenses, secret/history scanning, dependency/supply-chain review, webhook verification, and backup/recovery evidence.
+For R2+ systems, Vibecode Max expects explicit authorization boundaries, RLS where applicable, deny-by-default policies, cross-user/cross-tenant negative tests, server-side privileged checks, secure session lifecycle, protected MFA recovery, progressive rate-limit exercise, XSS/CSP defenses, secret/history scanning, dependency/supply-chain review, webhook verification, and backup/recovery evidence.
 
 Run the portable pattern detector:
 
@@ -205,7 +205,7 @@ stable check ID
 ## Recommended project artifacts
 
 ```text
-.leviathan/
+.vibecode-max/
   state.json
   decisions.json
   skills.lock.json
@@ -225,12 +225,12 @@ HANDOFF.md
 RUNBOOK.md
 ```
 
-No secrets belong in `.leviathan/`.
+No secrets belong in `.vibecode-max/`.
 
 ## Self-check
 
 ```bash
-node tools/leviathan-check.mjs
+node tools/vibecode-max-check.mjs
 node tools/security-floor.mjs
 ```
 
@@ -238,7 +238,7 @@ A passing generic scanner does not prove application security. Stack-specific ev
 
 ## Versioning
 
-- **Leviathan version:** feature/behavior release.
+- **Vibecode Max version:** feature/behavior release.
 - **Policy version:** required gate/safety behavior.
 - **Artifact schema:** machine-readable contract.
 
@@ -246,9 +246,27 @@ Policy-changing releases include migration notes. Artifact-breaking releases bum
 
 ## Changelog
 
+### 1.1.0 (2026-08-10)
+
+Project rename from Leviathan to Vibecode Max. Gate behavior, evidence semantics, risk tiers, and
+phase names are unchanged, so the policy version stays at 1. The rename does change the on-disk
+artifact contract, so the artifact schema moves to 2.
+
+Migration from artifact schema 1:
+
+1. Rename the project artifact directory `.leviathan/` to `.vibecode-max/`.
+2. Rename the `leviathan_version` field to `vibecode_max_version` in `.vibecode-max/state.json`.
+3. Set `artifact_schema_version` to `2` in `.vibecode-max/state.json`.
+4. Repoint policy references: `LEVIATHAN.md` becomes `VIBECODE-MAX.md`,
+   `tools/leviathan-check.mjs` becomes `tools/vibecode-max-check.mjs`, and
+   `schemas/leviathan-state.schema.json` becomes `schemas/vibecode-max-state.schema.json`.
+5. Repoint schema `$id` URLs to `https://github.com/kuyamcliff/vibecode-max`.
+
+Evidence ledger records, gate identifiers, and skills lockfile contents carry over without edits.
+
 ### 1.0.0 (2026-08-10)
 
-Initial release. Version 1, brand new: this is the first published version of Leviathan, not yet
+Initial release, published under the project's former name, Leviathan. Version 1, brand new: not yet
 field-tested across multiple real releases. It establishes the canonical host-neutral policy, state
 machine, evidence model, risk tiers, security/payments/accessibility floors, and the full set of
 operational product surfaces (messaging, onboarding, feature flags, analytics, SEO, migrations,

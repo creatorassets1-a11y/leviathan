@@ -1,4 +1,4 @@
-# Leviathan Native Capability Packs
+# Vibecode Max Native Capability Packs
 
 These packs are provider-neutral. They capture stable engineering behavior regardless of which external skills are selected.
 
@@ -27,7 +27,7 @@ These packs are provider-neutral. They capture stable engineering behavior regar
 
 The current skills.sh directory is dynamic. At the time of the 2.2 policy update it prominently surfaced capabilities including `find-skills`, `frontend-design`, `improve-codebase-architecture`, `agent-browser`, `tdd`, `vercel-react-best-practices`, `web-design-guidelines`, `grill-me`, `design-taste-frontend`, `supabase-postgres-best-practices`, `impeccable`, `anti-ui-slop`, `ui-ux-pro-max`, `code-review`, `research`, `writing-plans`, `verification-before-completion`, and many official technology-maker skills.
 
-These are **examples, not a frozen allowlist**. Use the live skills.sh catalog and audit endpoints to discover current candidates. Map each selected skill to one or more native packs, record its stable ID/source/hash/audit status in the project lockfile, and apply only the parts compatible with Leviathan policy.
+These are **examples, not a frozen allowlist**. Use the live skills.sh catalog and audit endpoints to discover current candidates. Map each selected skill to one or more native packs, record its stable ID/source/hash/audit status in the project lockfile, and apply only the parts compatible with Vibecode Max policy.
 
 ## Selection rules
 
@@ -40,8 +40,8 @@ These are **examples, not a frozen allowlist**. Use the live skills.sh catalog a
 7. Pin the selected version/hash where the source exposes one.
 8. Record why the skill was selected and what permissions it receives.
 9. Remove/deactivate skills when their task is complete or their permissions are no longer needed.
-10. Leviathan's security floor, evidence rules, approvals, and state gates always outrank external skills.
+10. Vibecode Max's security floor, evidence rules, approvals, and state gates always outrank external skills.
 
 ## Pack contract
 
-An external skill may improve execution, but it cannot redefine a Leviathan gate. If a skill conflicts with the policy, the agent must follow Leviathan and record the conflict/decision in the evidence or decision record.
+An external skill may improve execution, but it cannot redefine a Vibecode Max gate. If a skill conflicts with the policy, the agent must follow Vibecode Max and record the conflict/decision in the evidence or decision record.

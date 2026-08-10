@@ -1,6 +1,6 @@
 # Legal, Trust, Compliance & User Support Surface Policy
 
-Leviathan is **legal-risk-aware, not a law firm**. It can identify requirements, map product behavior to obligations, generate implementation checklists, and flag where qualified legal review is required. It must never claim that generated pages or tests guarantee legal compliance.
+Vibecode Max is **legal-risk-aware, not a law firm**. It can identify requirements, map product behavior to obligations, generate implementation checklists, and flag where qualified legal review is required. It must never claim that generated pages or tests guarantee legal compliance.
 
 ## Freshness rule
 
@@ -139,7 +139,7 @@ If minors may use the product, activate `references/child-safety.md` and perform
 
 ## Regulated/high-impact products
 
-Health, finance, insurance, employment, education, housing, gambling, alcohol, weapons, critical infrastructure, biometric identification, high-impact automated decisions, and other regulated domains require stronger human-review gates. Leviathan may build technical controls, but it must clearly label unresolved legal/regulatory questions.
+Health, finance, insurance, employment, education, housing, gambling, alcohol, weapons, critical infrastructure, biometric identification, high-impact automated decisions, and other regulated domains require stronger human-review gates. Vibecode Max may build technical controls, but it must clearly label unresolved legal/regulatory questions.
 
 ## Legal status labels
 
