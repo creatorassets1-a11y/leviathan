@@ -4,20 +4,20 @@ This reference closes the next layer of production gaps after security, payments
 
 | Surface | Canonical reference | Required when |
 |---|---|---|
-| Email/notifications/messaging | `references/email-notifications.md` | product sends email, push, SMS, or in-app messages |
-| Onboarding/activation | `references/onboarding-activation.md` | product has accounts or meaningful workflows |
-| Feature flags/experimentation | `references/feature-flags-progressive-delivery.md` | flags, experiments, staged rollout, or kill switches exist |
-| Analytics/product telemetry | `references/analytics-product-telemetry.md` | product measures user/product behavior |
-| Database migrations | `references/database-migrations.md` | persistent schema changes exist |
-| Background jobs/queues | `references/background-jobs.md` | asynchronous work exists |
+| Email/notifications/messaging | `references/email-notifications-messaging.md` | product sends email, push, SMS, or in-app messages |
+| Onboarding/activation | `references/onboarding-and-activation.md` | product has accounts or meaningful workflows |
+| Feature flags/experimentation | `references/feature-flags-and-progressive-delivery.md` | flags, experiments, staged rollout, or kill switches exist |
+| Analytics/product telemetry | `references/analytics-and-product-telemetry.md` | product measures user/product behavior |
+| Database migrations | `references/database-migrations-and-schema-evolution.md` | persistent schema changes exist |
+| Background jobs/queues | `references/background-jobs-and-queues.md` | asynchronous work exists |
 | Search | `references/search.md` | search/indexed retrieval exists |
-| File/media pipeline | `references/media-pipeline.md` | uploads require processing/CDN/variants/scanning |
-| Multi-region/residency operations | `references/multi-region.md` | multiple regions/residency/failover is required |
+| File/media pipeline | `references/file-media-pipeline.md` | uploads require processing/CDN/variants/scanning |
+| Multi-region/residency operations | `references/multi-region-and-residency.md` | multiple regions/residency/failover is required |
 | Developer experience | `references/developer-experience.md` | generated project will be maintained by humans |
-| Release communication | `references/release-communication.md` | users/operators need material change notices |
+| Release communication | `references/changelog-and-release-communication.md` | users/operators need material change notices |
 | AI evaluation/lifecycle | `references/ai-product-evaluation.md` | product itself uses AI |
 | Advanced accessibility | `references/accessibility-advanced.md` | UI has dynamic/complex/custom widgets or high accessibility risk |
-| SEO/public surfaces | `references/seo-public-surfaces.md` | public/indexable pages exist |
+| SEO/public surfaces | `references/seo-and-public-surfaces.md` | public/indexable pages exist |
 | Testing strategy | `references/testing-strategy.md` | all R1+ products; depth scales with risk |
 
 ## Agent process
