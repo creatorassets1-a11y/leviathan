@@ -83,7 +83,8 @@ Missing required higher-risk legal surfaces, materially inaccurate policy text, 
 - contrast;
 - zoom/reflow;
 - reduced motion;
-- screen-reader spot checks using a platform-appropriate reader.
+- screen-reader spot checks using a platform-appropriate reader;
+- complex widget semantics/focus/live-region checks where applicable.
 
 Automated accessibility tools are not proof of full accessibility.
 
@@ -401,6 +402,120 @@ Verify durable audit records for entitlement grants/revocations, refunds, payout
 ### PAY-023: provider outage/degraded behavior
 
 Simulate timeout/provider failure for payment creation, webhook delivery, reconciliation, and customer billing status. Verify no false success, duplicate retry side effects, or irreversible local state is created.
+
+## Remaining production-surface probes
+
+### MSG-001: messaging preferences and classification
+
+Exercise transactional/security and marketing messages for a test account. Verify preferences suppress only eligible marketing messages, required security/account messages remain functional, and consent state is evaluated server-side.
+
+### MSG-002: delivery/retry/idempotency
+
+Force provider timeout, duplicate delivery status, bounce, complaint, unsubscribe, and worker retry. Verify bounded retries, durable message IDs, suppression state, dead-letter behavior, and no uncontrolled duplicate send.
+
+### MSG-003: messaging abuse budget
+
+Exceed user/destination/network send limits in a controlled environment. Verify progressive blocking and spend/volume alerts without leaking provider credentials.
+
+### ONB-001: first-run activation
+
+Create a fresh account and execute the intended shortest path to first value. Verify activation is recorded from authoritative product state, not a client-only flag, and all required setup is accessible and recoverable.
+
+### ONB-002: interruption/resume
+
+Interrupt onboarding with refresh, timeout, duplicate submission, and dependency failure. Verify resumability, safe retries, preserved valid input, and no duplicate side effects.
+
+### FLAG-001: safe defaults and authorization
+
+Delete/disable flag configuration and invoke the protected feature directly. Verify missing/unknown flag state cannot grant privileged or paid access and server-side authorization remains authoritative.
+
+### FLAG-002: progressive rollout/kill switch
+
+Move a controlled cohort through rollout stages, trigger guardrails, activate the kill switch, and roll back. Verify audit entries, targeting, deterministic behavior, and recovery.
+
+### ANALYTICS-001: consent/data minimization
+
+For a test account with analytics consent off and on, compare emitted non-essential events. Verify required consent gates behavior, payloads contain only approved fields, and identity is not unnecessarily exposed.
+
+### ANALYTICS-002: schema/retention/deletion
+
+Send malformed, duplicate, and out-of-order events. Verify validation and deduplication. Exercise a test user's deletion/export and confirm analytics records are deleted/anonymized according to policy.
+
+### SEO-001: public crawl surface
+
+Crawl public pages and verify titles, descriptions, canonical URLs, sitemap/robots behavior, structured data, social metadata, and locale/hreflang where applicable. Confirm private/account/admin/search-result surfaces cannot be indexed or accessed anonymously.
+
+### DB-001: migration compatibility
+
+Apply the migration from clean and production-like schemas while representative reads/writes run. Verify compatibility, lock behavior, query plans, data integrity, and documented rollback/forward recovery.
+
+### DB-002: backfill recovery
+
+Interrupt a bounded backfill midway and resume it. Verify idempotency, checkpoints, no duplicate/corrupt data, progress observability, and safe completion.
+
+### JOB-001: duplicate/retry/dead-letter
+
+Deliver a job twice, crash the worker during processing, exceed retry limits, and replay from dead-letter. Verify idempotent consequential side effects, bounded retries, visible failure state, and safe replay.
+
+### JOB-002: queue lag/backpressure
+
+Generate controlled excess load. Verify queue lag/depth, worker saturation, priority/fairness, backpressure, user-facing degradation, and alert thresholds.
+
+### SEARCH-001: authorization/index consistency
+
+Create private documents for two users/tenants, index them, and search as each principal. Verify no cross-boundary result appears. Delete/change permissions and verify the documented propagation window removes inaccessible results.
+
+### SEARCH-002: query abuse/relevance
+
+Exercise pathological, injected, huge, and repeated queries. Verify bounded resource usage and safe rejection. Run representative relevance queries and record measured ranking/latency results.
+
+### MEDIA-001: validation/private delivery
+
+Upload malformed, oversized, misleading-type, path-traversal, and valid media. Verify validation/quarantine, safe processing, private-object authorization, signed URL expiry, and rate/quota enforcement.
+
+### MEDIA-002: lifecycle propagation
+
+Delete a test asset and verify original, variants, thumbnails, indexes, caches, temporary files, and provider copies follow the documented deletion/retention lifecycle.
+
+### REGION-001: residency inventory
+
+Trace a test data class through database, object storage, backups, logs, analytics, queues, search, AI, and processors. Compare observed geography with the documented residency commitment.
+
+### REGION-002: failover/failback
+
+Execute controlled regional failover and recovery. Verify routing, write authority, consistency/conflict handling, replication lag, idempotency, reconciliation, and failback runbook steps.
+
+### DX-001: clean-environment setup
+
+Using only repository documentation, configure a clean environment, run the app, seed safe demo data, run tests/build/lint, and make a small documented change. Record any hidden manual knowledge as a finding.
+
+### RELEASE-001: change communication
+
+For a controlled user-visible change, verify changelog/release note creation, support/internal communication, updated Help/Guide content, and additional billing/privacy/legal notices where the change materially affects them.
+
+### AI-EVAL-001: evaluation baseline
+
+Run the versioned AI evaluation set and record model/provider/prompt/config versions, quality/safety/refusal/tool/retrieval/cost metrics, thresholds, failures, and limitations. Compare against the approved baseline before release.
+
+### AI-EVAL-002: human review and rollback
+
+For consequential AI behavior, trigger the human-review threshold and verify reviewer evidence, audit trail, user appeal/correction path, progressive rollout, and rollback to the previous model/prompt/configuration.
+
+### A11Y-001: complex widget keyboard flow
+
+Complete each critical dialog/menu/tab/combobox/grid or other custom widget using keyboard only. Verify semantics, focus entry/exit/restoration, escape behavior, and no keyboard trap.
+
+### A11Y-002: dynamic status/form errors
+
+Trigger validation, async loading, success, and failure states. Verify screen-reader announcements are meaningful, focus is not stolen unnecessarily, and errors are programmatically associated with their fields.
+
+### TEST-001: risk-tier test plan
+
+Verify the project has selected test layers appropriate to R0–R4 and that critical requirements are covered by executable tests or explicit manual evidence. Record gaps rather than compensating with raw test-count claims.
+
+### TEST-002: contract and visual regression
+
+For changed API/event contracts, run consumer/producer compatibility tests. For important UI surfaces, run representative visual regression across required viewports/states and manually review dynamic/permission/error/RTL states where applicable.
 
 ## Scenario matrix
 
