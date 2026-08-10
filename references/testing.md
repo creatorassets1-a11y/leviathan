@@ -116,9 +116,26 @@ Automated accessibility tools are not proof of full accessibility.
 - licenses recorded;
 - CI actions and third-party integrations reviewed.
 
-### Operations
+### Operations and reliability
 
-Production backends need health/readiness checks, structured safe logs, error tracking, useful metrics, alerting, version/build identity, rollback instructions, and an incident path.
+For R3/R4 and production-bound R2 systems:
+
+- structured logs are active and queryable;
+- representative requests carry a trace/request/correlation ID;
+- health and readiness checks return expected states;
+- deployment/build identity is visible in telemetry;
+- golden-signal metrics and material business/dependency metrics exist;
+- at least one critical alert has an executable trigger and runbook;
+- controlled failures appear in error tracking without secret leakage;
+- retention, sampling, and redaction policies are documented;
+- material backup restore has been executed or the limitation is explicit;
+- rollback/recovery is written and executable;
+- SLO/RPO/RTO are recorded where applicable;
+- queue/worker/dependency failure visibility exists where applicable;
+- incident contact and escalation path exist;
+- AI observability exists where applicable without exposing prohibited data.
+
+A production release must not claim observability readiness from configuration inspection alone. Exercise the system and record observed evidence.
 
 ## Legal and support probe batteries
 
@@ -185,15 +202,7 @@ Expected result: every unauthorized operation is denied without leaking protecte
 
 ### SEC-RLS-001: policy verification
 
-Where RLS/object policy exists, enumerate protected tables/resources and their policies. Verify deny-by-default behavior and execute database/API tests with:
-
-- anonymous principal;
-- owner principal;
-- different user;
-- different tenant;
-- privileged backend context.
-
-Attempt select/read, insert, update, delete, and upsert paths as applicable. Test helper functions/RPCs and explicitly inspect privileged/`SECURITY DEFINER` execution paths.
+Where RLS/object policy exists, enumerate protected tables/resources and their policies. Verify deny-by-default behavior and execute database/API tests with anonymous, owner, different-user, different-tenant, and privileged backend contexts. Attempt select/read, insert, update, delete, and upsert paths as applicable. Test helper functions/RPCs and explicitly inspect privileged/`SECURITY DEFINER` execution paths.
 
 Evidence: policy inventory + executed results. Absence of an RLS-capable policy is a finding unless the architecture documents an equivalent enforced boundary.
 
@@ -203,29 +212,15 @@ For every admin/support/destructive endpoint, bypass the UI and invoke the endpo
 
 ### SEC-SESSION-001: browser/session storage audit
 
-Inspect application code and built client output for access/refresh tokens, service credentials, or other long-lived sensitive secrets in localStorage/sessionStorage, URLs, query strings, logs, analytics payloads, or client bundles.
-
-Verify session ID rotation after authentication and relevant privilege changes. Verify idle/absolute expiry, revocation, log-out-everywhere, and password/MFA/recovery-triggered invalidation where applicable.
+Inspect application code and built client output for access/refresh tokens, service credentials, or other long-lived sensitive secrets in localStorage/sessionStorage, URLs, query strings, logs, analytics payloads, or client bundles. Verify session ID rotation after authentication and relevant privilege changes, idle/absolute expiry, revocation, log-out-everywhere, and password/MFA/recovery-triggered invalidation where applicable.
 
 ### SEC-MFA-001: OTP and recovery abuse battery
 
-For each OTP/recovery flow verify:
-
-- short expiry;
-- single use;
-- failed-attempt counter;
-- account and network rate limits;
-- resend throttling;
-- enumeration resistance;
-- factor enrollment/removal protection;
-- lost-factor recovery protection;
-- session invalidation after takeover-risk recovery.
-
-Attempt expired, reused, guessed, over-limit, and cross-account challenges.
+For each OTP/recovery flow verify short expiry, single use, failed-attempt counter, account/network rate limits, resend throttling, enumeration resistance, factor enrollment/removal protection, lost-factor recovery protection, and session invalidation after takeover-risk recovery. Attempt expired, reused, guessed, over-limit, and cross-account challenges.
 
 ### SEC-RATE-001: rate-limit exercise
 
-For every listed abuse-sensitive endpoint, execute requests until the documented threshold is reached. Verify account/principal and network dimensions where both are required, progressive friction behavior, retry timing, and safe recovery. Record the actual request count, response status/headers, elapsed time, and reset behavior.
+For every listed abuse-sensitive endpoint, execute requests until the documented threshold is reached. Verify account/principal and network dimensions where both are required, progressive friction behavior, retry timing, and safe recovery. Record actual request count, response status/headers, elapsed time, and reset behavior.
 
 ### SEC-XSS-001: untrusted content battery
 
@@ -252,6 +247,64 @@ Scan source, git history where available, client bundles, generated artifacts, C
 Where AI is present, test user/retrieved prompt injection, tool-authorization bypass, cross-tenant retrieval leakage, unsafe arguments, sensitive data appearing in prompts/logs, output-to-execution paths, unbounded cost/tool loops, provider failure, and malicious documents attempting to alter system behavior.
 
 Expected result: untrusted model/content output cannot expand authorization or cause an unapproved consequential side effect.
+
+## Operations and reliability probe batteries
+
+### OPS-001: structured-log correlation
+
+Trigger a controlled request that reaches the backend. Locate the resulting structured log entries and verify stable timestamp, level, service, environment, version/build ID, event name, duration/status, and request/correlation ID. Where tracing exists, verify trace/span IDs are propagated. Verify sensitive fields are absent or redacted.
+
+### OPS-002: health/readiness semantics
+
+Exercise liveness and readiness endpoints under normal operation and a controlled dependency degradation. Verify liveness answers whether the process is alive and readiness prevents unsafe traffic when required dependencies make the instance unable to serve. Verify responses do not leak internal topology or secrets.
+
+### OPS-003: deployment identity
+
+Record the deployed version/build SHA and verify the same identity is visible in telemetry and, where safely exposed, the operational status endpoint. Deploy two known versions in a test/staging environment and confirm an operator can distinguish them.
+
+### OPS-004: golden-signal metrics
+
+Generate representative traffic containing success, client error, server error, slow request, and dependency failure cases. Verify request rate, error rate, latency distribution, and saturation metrics reflect the events. Verify business metrics exist for material workflows and that metric labels do not contain unbounded identifiers.
+
+### OPS-005: alert exercise and runbook
+
+For at least one critical alert, intentionally trigger the documented condition in a safe environment. Verify the alert fires at the expected severity, contains enough context to act, links to the correct runbook, and can be resolved without creating duplicate alerts. Record detection time and observed behavior.
+
+### OPS-006: error-tracking redaction
+
+Trigger a controlled application exception containing synthetic secret-like values and PII-like test data. Verify the error tracker receives enough diagnostic context but does not retain the sensitive values. Verify grouping prevents repeated identical failures from becoming an alert storm.
+
+### OPS-007: trace propagation
+
+For multi-service/queue systems, trigger a request that crosses at least two components. Verify the trace/correlation context is preserved across the boundary and the resulting trace can be followed end-to-end. Record any vendor boundary where propagation is unavailable.
+
+### OPS-008: dependency failure and retry behavior
+
+Inject a controlled timeout or error from a material external dependency. Verify timeout bounds, retry count/backoff/jitter, circuit/degraded behavior where applicable, idempotency protection, and user-facing recovery. Confirm non-idempotent side effects are not blindly duplicated.
+
+### OPS-009: queue/worker failure recovery
+
+Where asynchronous work exists, enqueue a controlled job and force a worker failure. Verify retry behavior, queue age/depth metrics, failure visibility, dead-letter behavior where applicable, and safe replay. Confirm replay cannot duplicate consequential side effects.
+
+### OPS-010: backup restore evidence
+
+For material persistent systems, perform a real restore into an isolated environment. Record backup identifier, restore duration, schema/version, data-integrity checks, observed RPO/RTO, and limitations. A successful backup creation alone is not a pass.
+
+### OPS-011: rollback exercise
+
+Deploy a known-good version followed by a controlled faulty version in a safe environment. Execute the documented rollback or forward-fix procedure. Verify database compatibility, worker behavior, health/readiness, critical workflows, deployment identity, and telemetry after recovery.
+
+### OPS-012: incident-response drill
+
+Simulate a material but controlled incident. Verify the responder can identify the owner, inspect the alert, correlate logs/metrics/traces, determine deployment identity, execute the first mitigation, communicate status, and record evidence. Capture missing steps as findings.
+
+### OPS-013: observability cost/cardinality review
+
+Inspect representative metric labels, log volume, trace sampling, and retention. Verify no unbounded identifiers are metric dimensions, errors/critical business events are retained according to policy, and telemetry spend/volume has an explicit review threshold where material.
+
+### OPS-014: AI telemetry safety
+
+Where AI is present, execute a representative request and verify model/provider/version, usage/token counts, latency, tool/retrieval metadata, outcome, and cost signals are observable without exposing raw secrets or unnecessary private prompts/outputs. Verify AI telemetry cannot bypass tenant or authorization boundaries.
 
 ## Payment probe batteries
 
