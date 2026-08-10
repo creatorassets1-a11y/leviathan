@@ -1,6 +1,6 @@
 # Support & Trust Surfaces
 
-Support is part of the product, not an afterthought. For non-trivial user-facing products, Leviathan requires a coherent path from first use to self-service help, recovery, contact, and escalation.
+Support is part of the product, not an afterthought. For non-trivial user-facing products, Vibecode Max requires a coherent path from first use to self-service help, recovery, contact, and escalation.
 
 ## Required surfaces
 

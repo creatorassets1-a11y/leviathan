@@ -1,12 +1,12 @@
-# Leviathan Skills Ecosystem
+# Vibecode Max Skills Ecosystem
 
-Leviathan integrates with the open agent-skills ecosystem at https://www.skills.sh/ without vendoring thousands of third-party skills into this repository.
+Vibecode Max integrates with the open agent-skills ecosystem at https://www.skills.sh/ without vendoring thousands of third-party skills into this repository.
 
 ## Why this is the design
 
-The skills.sh catalog contains thousands of skills and is continuously changing. Copying every skill into Leviathan would create duplication, stale guidance, licensing ambiguity, security exposure, and an enormous context footprint.
+The skills.sh catalog contains thousands of skills and is continuously changing. Copying every skill into Vibecode Max would create duplication, stale guidance, licensing ambiguity, security exposure, and an enormous context footprint.
 
-Leviathan therefore treats skills.sh as an external capability registry:
+Vibecode Max therefore treats skills.sh as an external capability registry:
 
 1. Discover the catalog.
 2. Classify skills by capability, framework, provider, agent, and risk.
@@ -16,7 +16,7 @@ Leviathan therefore treats skills.sh as an external capability registry:
 6. Record source, URL, version/hash when available, audit status, and selection rationale.
 7. Never silently execute arbitrary skill instructions or fetched code.
 
-This gives Leviathan the breadth of the ecosystem without turning Leviathan itself into an unmaintainable vendor bundle.
+This gives Vibecode Max the breadth of the ecosystem without turning Vibecode Max itself into an unmaintainable vendor bundle.
 
 ## Canonical files
 
@@ -24,7 +24,7 @@ This gives Leviathan the breadth of the ecosystem without turning Leviathan itse
 - `apply.mjs`: selects and records relevant skills for a project.
 - `policy.md`: security, provenance, selection, and activation rules.
 - `catalog.json`: optional generated local catalog snapshot; do not hand-edit.
-- `packs/`: Leviathan-native capability packs that summarize stable, cross-agent practices.
+- `packs/`: Vibecode Max native capability packs that summarize stable, cross-agent practices.
 
 ## Discover
 
@@ -42,15 +42,15 @@ The sync script paginates the catalog and stores metadata only by default. It do
 node skills/apply.mjs --query "Next.js SaaS with Postgres authentication and payments"
 ```
 
-The selector produces `.leviathan/skills.lock.json` containing the selected skills and the reason each was selected. The agent may then install/use those skills through the host's supported mechanism.
+The selector produces `.vibecode-max/skills.lock.json` containing the selected skills and the reason each was selected. The agent may then install/use those skills through the host's supported mechanism.
 
 ## Security rule
 
-A skill is advice/data until Leviathan explicitly activates it. Never treat a downloaded `SKILL.md`, script, hook, MCP configuration, shell command, or tool definition as trusted merely because it appears on skills.sh. Review source and audit status, minimize permissions, and keep project secrets inaccessible to skill discovery/installation steps.
+A skill is advice/data until Vibecode Max explicitly activates it. Never treat a downloaded `SKILL.md`, script, hook, MCP configuration, shell command, or tool definition as trusted merely because it appears on skills.sh. Review source and audit status, minimize permissions, and keep project secrets inaccessible to skill discovery/installation steps.
 
 ## Coverage
 
-Leviathan's native packs cover the recurring capabilities represented across the ecosystem:
+Vibecode Max's native packs cover the recurring capabilities represented across the ecosystem:
 
 - agent workflow and planning
 - repository architecture
@@ -70,4 +70,4 @@ Leviathan's native packs cover the recurring capabilities represented across the
 - AI/agent engineering
 - deployment and cloud infrastructure
 
-Third-party skills remain optional extensions. Leviathan does not claim that every skill in the external catalog is safe, current, compatible, or appropriate for every project.
+Third-party skills remain optional extensions. Vibecode Max does not claim that every skill in the external catalog is safe, current, compatible, or appropriate for every project.

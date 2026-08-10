@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Portable Leviathan checker. Run from a generated project root. */
+/** Portable Vibecode Max checker. Run from a generated project root. */
 import fs from 'node:fs';
 import path from 'node:path';
 const root = process.cwd();
@@ -8,13 +8,13 @@ const exists = p => fs.existsSync(path.join(root, p));
 const readJson = p => JSON.parse(fs.readFileSync(path.join(root, p), 'utf8'));
 function fail(msg) { errors.push(msg); }
 function warn(msg) { warnings.push(msg); }
-if (!exists('.leviathan/state.json')) fail('Missing .leviathan/state.json');
-if (!exists('.leviathan/evidence/ledger.json')) fail('Missing .leviathan/evidence/ledger.json');
+if (!exists('.vibecode-max/state.json')) fail('Missing .vibecode-max/state.json');
+if (!exists('.vibecode-max/evidence/ledger.json')) fail('Missing .vibecode-max/evidence/ledger.json');
 let state, ledger;
-try { if (exists('.leviathan/state.json')) state = readJson('.leviathan/state.json'); } catch (e) { fail(`Invalid state JSON: ${e.message}`); }
-try { if (exists('.leviathan/evidence/ledger.json')) ledger = readJson('.leviathan/evidence/ledger.json'); } catch (e) { fail(`Invalid evidence JSON: ${e.message}`); }
+try { if (exists('.vibecode-max/state.json')) state = readJson('.vibecode-max/state.json'); } catch (e) { fail(`Invalid state JSON: ${e.message}`); }
+try { if (exists('.vibecode-max/evidence/ledger.json')) ledger = readJson('.vibecode-max/evidence/ledger.json'); } catch (e) { fail(`Invalid evidence JSON: ${e.message}`); }
 if (state) {
-  for (const k of ['leviathan_version','policy_version','artifact_schema_version','phase','risk_tier']) if (!(k in state)) fail(`State missing required field: ${k}`);
+  for (const k of ['vibecode_max_version','policy_version','artifact_schema_version','phase','risk_tier']) if (!(k in state)) fail(`State missing required field: ${k}`);
   const allowed = ['CLASSIFY','DISCOVERED','RESEARCHED','PRD_PENDING','PRD_APPROVED','DESIGN_APPROVED','BUILDING','REVIEWED','VERIFIED','RELEASE_APPROVED','RELEASED','OPERATING'];
   if (state.phase && !allowed.includes(state.phase)) fail(`Invalid phase: ${state.phase}`);
 }
@@ -32,7 +32,7 @@ const suspicious = [/-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----/,/(?
 function scan(dir, depth=0) {
   if (depth > 5) return;
   for (const entry of fs.readdirSync(dir,{withFileTypes:true})) {
-    if (['.git','node_modules','.leviathan','dist','build'].includes(entry.name)) continue;
+    if (['.git','node_modules','.vibecode-max','dist','build'].includes(entry.name)) continue;
     const full=path.join(dir,entry.name);
     if (entry.isDirectory()) scan(full,depth+1); else {
       let text; try { text=fs.readFileSync(full,'utf8'); } catch { continue; }
@@ -47,7 +47,7 @@ if (releaseLike && ledger?.checks) {
   const blocking = ledger.checks.filter(c => ['failed','not_run','not_available','simulated','unknown'].includes(c.status) && ['security','secret','authorization','authz'].some(x => String(c.category||'').toLowerCase().includes(x)));
   if (blocking.length) fail(`Release-like state has unresolved security evidence: ${blocking.map(x=>x.id).join(', ')}`);
 }
-console.log(`Leviathan check: ${errors.length ? 'FAIL' : 'PASS'}`);
+console.log(`Vibecode Max check: ${errors.length ? 'FAIL' : 'PASS'}`);
 for (const x of warnings) console.log(`WARN: ${x}`);
 for (const x of errors) console.log(`ERROR: ${x}`);
 console.log(`Warnings: ${warnings.length} | Errors: ${errors.length}`);

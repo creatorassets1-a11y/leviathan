@@ -1,6 +1,6 @@
 # Design System: Deliberate, Accessible, Non-Generic UI
 
-AI slop is a convergence problem: repeated defaults produce interchangeable products. Leviathan's solution is deliberate product-specific design, not a mandatory visual identity.
+AI slop is a convergence problem: repeated defaults produce interchangeable products. Vibecode Max's solution is deliberate product-specific design, not a mandatory visual identity.
 
 ## Design gate: decide before code
 

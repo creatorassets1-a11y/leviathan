@@ -47,7 +47,7 @@ const selected = catalog.skills
     activation: 'manual_after_review',
   }));
 
-await fs.mkdir('.leviathan', { recursive: true });
+await fs.mkdir('.vibecode-max', { recursive: true });
 const lock = {
   schemaVersion: 1,
   source: 'skills.sh',
@@ -56,6 +56,6 @@ const lock = {
   policy: 'skills/policy.md',
   selected,
 };
-await fs.writeFile('.leviathan/skills.lock.json', `${JSON.stringify(lock, null, 2)}\n`);
+await fs.writeFile('.vibecode-max/skills.lock.json', `${JSON.stringify(lock, null, 2)}\n`);
 console.log(`Selected ${selected.length} skills for review.`);
 for (const skill of selected) console.log(`- ${skill.id}`);

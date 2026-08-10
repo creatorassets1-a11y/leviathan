@@ -1,6 +1,6 @@
 # Stack, Language, and Framework Selection
 
-Leviathan remains technology-agnostic. The agent must choose technology from product requirements, team constraints, operational reality, and measured needs rather than popularity or model familiarity.
+Vibecode Max remains technology-agnostic. The agent must choose technology from product requirements, team constraints, operational reality, and measured needs rather than popularity or model familiarity.
 
 ## 1. Decision principles
 

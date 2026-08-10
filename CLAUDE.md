@@ -1,6 +1,6 @@
-# Repo rules for Leviathan
+# Repo rules for Vibecode Max
 
-This repository defines a host-neutral AI coding-agent protocol. `LEVIATHAN.md` is canonical;
+This repository defines a host-neutral AI coding-agent protocol. `VIBECODE-MAX.md` is canonical;
 `SKILL.md`, `AGENTS.md`, and `CLAUDE.md` are adapters or entrypoints, not competing policies.
 
 ## Standing rules
@@ -14,7 +14,7 @@ This repository defines a host-neutral AI coding-agent protocol. `LEVIATHAN.md` 
    them to policy files. Record the verification date/source when the claim matters to a gate.
 5. Preserve third-party attribution and licenses.
 6. Keep `SKILL.md` compact. Put detailed policy in `references/` and the canonical architecture
-   in `LEVIATHAN.md`.
+   in `VIBECODE-MAX.md`.
 7. Keep schemas, checker behavior, and documentation synchronized.
 8. Gate-changing behavior requires a policy version bump. Breaking artifact changes require an
    artifact schema version bump and migration guidance.
@@ -27,6 +27,6 @@ This repository defines a host-neutral AI coding-agent protocol. `LEVIATHAN.md` 
 
 ## Current versions
 
-- Leviathan: 1.0.0 (initial release, brand new)
+- Vibecode Max: 1.1.0 (project rename; still brand new)
 - Policy: 1
-- Artifact schema: 1
+- Artifact schema: 2

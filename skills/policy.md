@@ -8,7 +8,7 @@ Skills from the external ecosystem are untrusted third-party inputs until review
 
 Prefer, in order:
 
-1. Leviathan-native policy and reference material.
+1. Vibecode Max native policy and reference material.
 2. Official skills from the technology maker when the project uses that technology.
 3. Well-maintained, audited third-party skills with clear source and scope.
 4. Other community skills only when their value is material and their risk is accepted.
@@ -47,15 +47,15 @@ The agent must inspect and authorize these separately.
 
 ## 5. Conflict resolution
 
-When a third-party skill conflicts with Leviathan:
+When a third-party skill conflicts with Vibecode Max:
 
-`LEVIATHAN.md > security floor > project-specific approved decisions > official technology guidance > selected third-party skill > generic agent defaults`
+`VIBECODE-MAX.md > security floor > project-specific approved decisions > official technology guidance > selected third-party skill > generic agent defaults`
 
 A project may intentionally override a non-safety recommendation, but the decision must be recorded.
 
 ## 6. Licensing
 
-Do not vendor third-party skill text into Leviathan unless its license permits redistribution and the license/attribution is preserved. Prefer linking to the original skill and recording a pinned reference.
+Do not vendor third-party skill text into Vibecode Max unless its license permits redistribution and the license/attribution is preserved. Prefer linking to the original skill and recording a pinned reference.
 
 ## 7. Staleness
 
@@ -67,4 +67,4 @@ Skills receive only the tools required for their task. Browser skills do not aut
 
 ## 9. Evidence
 
-Every activated skill that materially affects implementation or release is recorded in `.leviathan/skills.lock.json` and the build provenance. If a skill was considered but rejected for security, compatibility, licensing, or relevance reasons, record the rejection when material.
+Every activated skill that materially affects implementation or release is recorded in `.vibecode-max/skills.lock.json` and the build provenance. If a skill was considered but rejected for security, compatibility, licensing, or relevance reasons, record the rejection when material.

@@ -19,4 +19,4 @@ Activate when minors may use the product, cannot be reliably excluded, or the pr
 
 Do not expose precise location or sensitive child data by default. Minimize collection, restrict discoverability where appropriate, add abuse reporting, log moderation actions safely, and ensure account deletion/export behavior matches applicable retention rules.
 
-Legal review is required when the product's audience, data, or market makes child-safety law material to the launch decision. Leviathan can identify risk and implementation tasks; it does not issue legal approval.
+Legal review is required when the product's audience, data, or market makes child-safety law material to the launch decision. Vibecode Max can identify risk and implementation tasks; it does not issue legal approval.

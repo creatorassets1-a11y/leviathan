@@ -1,6 +1,6 @@
 # Benchmarking and Evolution
 
-Leviathan must test itself, not only the products it builds.
+Vibecode Max must test itself, not only the products it builds.
 
 ## Benchmark corpus
 
