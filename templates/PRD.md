@@ -83,16 +83,60 @@ If the product uses AI:
 
 ## 7. Trust, legal, and support
 
-- Terms:
-- Privacy:
-- Cookies/tracking:
-- AUP/community rules:
-- Refund/cancellation:
-- Contact/support:
-- Help/FAQ:
-- Accessibility statement:
-- Security/trust/status:
-- Jurisdiction-specific legal review:
+Complete `references/legal-compliance.md` and `references/support-surfaces.md` before release. Determine the required surface inventory during Discover, based on actual product behavior and target jurisdictions.
+
+### Legal and trust inventory
+
+- Terms of Service: required? status/version/last-updated:
+- Privacy Policy/Notice: required? status/version/last-updated:
+- Cookie/Tracking Notice: required? status/version/last-updated:
+- Acceptable Use/Community Guidelines: required? status/version/last-updated:
+- Refund/Cancellation Policy: required? status/version/last-updated:
+- Shipping/Returns Policy: required? status/version/last-updated:
+- Accessibility Statement: required? status/version/last-updated:
+- UGC/Takedown process: required? status/version/last-updated:
+- Security/Trust page: required? status/version/last-updated:
+- Status/Incident history: required? status/version/last-updated:
+
+### Support inventory
+
+- Help/FAQ/Knowledge Base:
+- Product Guide/Walkthrough:
+- Contact/Support channel:
+- Privacy/legal/accessibility request routes:
+- First-run/onboarding guidance:
+- Account recovery guidance:
+- Billing/payment-failure guidance:
+
+### Enforcement / moderation
+
+If users or UGC are present:
+
+- rules mapped to enforcement actions:
+- warning / soft-limit / suspension / ban:
+- server-side enforcement mechanism:
+- audit trail:
+- appeal/review path:
+- automated moderation and human-review policy:
+- notice/reason/transparency requirements by market:
+
+### Data rights
+
+- access/export:
+- deletion:
+- correction:
+- consent withdrawal:
+- retention/legal hold:
+- identity verification:
+
+### Legal decision record
+
+- Target jurisdictions assessed:
+- Legal status label:
+- Authoritative sources checked + dates:
+- Human reviewer required:
+- Human review recorded:
+- Known limitations:
 
 ## 8. Non-functional requirements
 
@@ -107,7 +151,7 @@ If the product uses AI:
 
 ## 9. Verification plan
 
-List exact evidence required before release. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`.
+List exact evidence required before release. For money-moving products include the applicable `PAY-*` probes from `references/testing.md`. For legal/trust/support surfaces, evidence must verify existence, links, reachability, implementation consistency, and required data-rights/enforcement flows.
 
 ## 10. Human approvals
 
