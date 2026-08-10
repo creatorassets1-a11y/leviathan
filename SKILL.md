@@ -36,6 +36,7 @@ translate the same policy into each agent's native mechanism.
 14. **Localize by architecture, not patches.** Externalize strings and use locale-aware formatting whenever a UI exists; add full l10n/RTL when markets require it.
 15. **Privileged tooling is production infrastructure.** Admin/support surfaces require least privilege, server-side authorization, auditability, safe impersonation, and controlled financial/privacy operations.
 16. **Choose technology from evidence.** Record stack constraints, alternatives, operational consequences, and the final rationale in `DECISIONS.md`.
+17. **Treat secondary production surfaces as first-class systems.** Messaging, onboarding, flags, analytics, migrations, workers, search, media, regions, developer experience, release communication, AI evaluation, advanced accessibility, SEO, and test strategy require explicit applicability decisions and evidence.
 
 ## Skills ecosystem
 
@@ -72,30 +73,47 @@ Load the following canonical references according to project scope before implem
 - `references/stack-selection.md` during Discover/PRD before choosing or changing the technology stack.
 - `references/handoff-and-operations.md` before RELEASED/OPERATING for production-bound systems.
 - `references/production-completeness.md` as the cross-domain completeness matrix.
+- `references/remaining-production-surfaces.md` during Discover for the applicability matrix below.
+- `references/email-notifications.md` when email, push, SMS, or in-app messaging exists.
+- `references/onboarding-activation.md` for account-based or meaningful multi-step products.
+- `references/feature-flags-progressive-delivery.md` when flags, experiments, staged rollout, or kill switches exist.
+- `references/analytics-product-telemetry.md` when product analytics or behavioral measurement exists.
+- `references/database-migrations.md` for persistent schema changes.
+- `references/background-jobs.md` when asynchronous jobs, queues, scheduled work, or worker processing exists.
+- `references/search.md` when search or indexed retrieval exists.
+- `references/media-pipeline.md` when uploads require processing, variants, scanning, or CDN delivery.
+- `references/multi-region.md` when multi-region deployment, residency, or regional failover is required.
+- `references/developer-experience.md` before production handoff of generated projects.
+- `references/release-communication.md` for public products or material user-facing releases.
+- `references/ai-product-evaluation.md` when the product itself uses AI.
+- `references/accessibility-advanced.md` for complex/dynamic/custom widgets or higher accessibility risk.
+- `references/seo-public-surfaces.md` for public/indexable pages.
+- `references/testing-strategy.md` for test strategy and risk-tier evidence depth.
 
 ## Required verification mindset
 
 For R2+ work, verify as applicable:
 
-- requirements and acceptance criteria
-- authorization/RLS and cross-user/tenant IDOR denial
-- server-side privilege enforcement
-- session/token storage, rotation and revocation
-- MFA/OTP/recovery abuse resistance
-- rate-limit exercise
-- XSS/CSP/browser trust boundaries
-- payment webhook signatures, idempotency, reconciliation and entitlement correctness
-- input/output validation and injection resistance
-- secrets and dependency/supply-chain safety
-- accessibility and meaningful user journeys
-- internationalization, locale formatting, RTL/text expansion when applicable
-- performance/load behavior under representative conditions
-- observability, rollback, backup/restore and failure behavior
-- AI-specific prompt/tool/data boundary risks
-- trust/support surfaces and policy-to-product consistency
-- legal/privacy risks with human review where required
-- admin/support authorization, audit, impersonation, billing, moderation and privacy workflows where applicable
-- stack decision, deployment model, ownership, handoff and runbook completeness
+- requirements and acceptance criteria;
+- authorization/RLS and cross-user/tenant IDOR denial;
+- server-side privilege enforcement;
+- session/token storage, rotation and revocation;
+- MFA/OTP/recovery abuse resistance;
+- rate-limit exercise;
+- XSS/CSP/browser trust boundaries;
+- payment webhook signatures, idempotency, reconciliation and entitlement correctness;
+- input/output validation and injection resistance;
+- secrets and dependency/supply-chain safety;
+- accessibility and meaningful user journeys;
+- internationalization, locale formatting, RTL/text expansion when applicable;
+- performance/load behavior under representative conditions;
+- observability, rollback, backup/restore and failure behavior;
+- AI-specific prompt/tool/data boundary risks;
+- trust/support surfaces and policy-to-product consistency;
+- legal/privacy risks with human review where required;
+- admin/support authorization, audit, impersonation, billing, moderation and privacy workflows where applicable;
+- stack decision, deployment model, ownership, handoff and runbook completeness;
+- messaging delivery/idempotency/consent, onboarding activation/recovery, feature-flag safety, analytics privacy, migration safety, job idempotency/DLQ, search isolation, media pipeline isolation, regional failure/residency, developer setup, release communication, AI evaluation, advanced accessibility, SEO, and testing traceability where applicable.
 
 Run:
 
@@ -108,7 +126,7 @@ Also run the project's native test/lint/build/security/accessibility/payment/per
 
 ## Release evidence minimums
 
-For R3+ systems, the evidence bundle must include applicable executed results for security, privacy, payments, operations, performance, admin/support, and localization. Use the concrete probe IDs in the canonical references and `references/testing.md`.
+For R3+ systems, the evidence bundle must include applicable executed results for security, privacy, payments, operations, performance, admin/support, localization, and all required secondary production surfaces. Use the concrete probe IDs in the canonical references and `references/testing.md`.
 
 Required where applicable include:
 
@@ -126,7 +144,8 @@ Required where applicable include:
 - structured logs, health/readiness, alert exercise, rollback and restore evidence;
 - admin authorization/audit/impersonation tests;
 - locale formatting/string/RTL tests where applicable;
-- handoff/runbook/ownership verification.
+- handoff/runbook/ownership verification;
+- `MSG-*`, `ONB-*`, `FLAG-*`, `ANALYTICS-*`, `MIG-*`, `JOB-*`, `SEARCH-*`, `MEDIA-*`, `REGION-*`, `DX-*`, `REL-*`, `AI-EVAL-*`, `A11Y-*`, `SEO-*`, and `TEST-*` probes where their surfaces are applicable.
 
 ## Output contract
 
