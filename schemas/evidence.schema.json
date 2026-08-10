@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/creatorassets1-a11y/leviathan/schemas/evidence.schema.json",
+  "title": "Leviathan Evidence",
+  "type": "object",
+  "required": ["schema_version", "checks"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "run_id": {"type": "string"},
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "timestamp"],
+        "properties": {
+          "id": {"type": "string"},
+          "category": {"type": "string"},
+          "severity": {"enum": ["info", "low", "medium", "high", "critical"]},
+          "status": {"enum": ["passed", "failed", "not_run", "not_available", "simulated", "unknown", "accepted_exception"]},
+          "command": {"type": "string"},
+          "timestamp": {"type": "string"},
+          "environment": {"type": "object"},
+          "exit_code": {"type": ["integer", "null"]},
+          "artifact": {"type": ["string", "null"]},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
